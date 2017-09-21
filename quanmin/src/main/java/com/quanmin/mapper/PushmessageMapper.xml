@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.quanmin.dao.mapper.PushmessageMapper">
+	<resultMap id="BaseResultMap" type="com.quanmin.model.Pushmessage">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="ticker" property="ticker" jdbcType="VARCHAR" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="text" property="text" jdbcType="VARCHAR" />
+		<result column="device_token" property="deviceToken" jdbcType="VARCHAR" />
+		<result column="phone_type" property="phoneType" jdbcType="VARCHAR" />
+		<result column="description" property="description" jdbcType="VARCHAR" />
+		<result column="status" property="status" jdbcType="INTEGER" />
+		<result column="user_type" property="userType" jdbcType="INTEGER" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="read_status" property="readStatus" jdbcType="VARCHAR" />
+		<result column="del_status" property="delStatus" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, ticker, title, text, device_token, phone_type,
+		description, status,
+		user_type,
+		user_id, type, read_status, del_status,
+		create_time, update_time
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.quanmin.model.PushmessageExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from t_pushmessage
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+
+
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from t_pushmessage
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		t_pushmessage
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.quanmin.model.PushmessageExample">
+		delete from t_pushmessage
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.quanmin.model.Pushmessage">
+		insert into t_pushmessage (id,
+		ticker, title,
+		text, device_token, phone_type,
+		description, status,
+		user_type,
+		user_id, type, read_status,
+		del_status, create_time,
+		update_time
+		)
+		values (#{id,jdbcType=INTEGER},
+		#{ticker,jdbcType=VARCHAR},
+		#{title,jdbcType=VARCHAR},
+		#{text,jdbcType=VARCHAR}, #{deviceToken,jdbcType=VARCHAR},
+		#{phoneType,jdbcType=VARCHAR},
+		#{description,jdbcType=VARCHAR},
+		#{status,jdbcType=INTEGER},
+		#{userType,jdbcType=INTEGER},
+		#{userId,jdbcType=INTEGER}, #{type,jdbcType=INTEGER},
+		#{readStatus,jdbcType=VARCHAR},
+		#{delStatus,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<insert id="insertSelective" useGeneratedKeys="true"
+		keyProperty="id" parameterType="com.quanmin.model.Pushmessage">
+		insert into t_pushmessage
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="ticker != null">
+				ticker,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="text != null">
+				text,
+			</if>
+			<if test="deviceToken != null">
+				device_token,
+			</if>
+			<if test="phoneType != null">
+				phone_type,
+			</if>
+			<if test="description != null">
+				description,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="userType != null">
+				user_type,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="readStatus != null">
+				read_status,
+			</if>
+			<if test="delStatus != null">
+				del_status,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="ticker != null">
+				#{ticker,jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="text != null">
+				#{text,jdbcType=VARCHAR},
+			</if>
+			<if test="deviceToken != null">
+				#{deviceToken,jdbcType=VARCHAR},
+			</if>
+			<if test="phoneType != null">
+				#{phoneType,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				#{description,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				#{status,jdbcType=INTEGER},
+			</if>
+			<if test="userType != null">
+				#{userType,jdbcType=INTEGER},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=INTEGER},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=INTEGER},
+			</if>
+			<if test="readStatus != null">
+				#{readStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="delStatus != null">
+				#{delStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.quanmin.model.PushmessageExample"
+		resultType="java.lang.Integer">
+		select count(*) from t_pushmessage
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update t_pushmessage
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=INTEGER},
+			</if>
+			<if test="record.ticker != null">
+				ticker = #{record.ticker,jdbcType=VARCHAR},
+			</if>
+			<if test="record.title != null">
+				title = #{record.title,jdbcType=VARCHAR},
+			</if>
+			<if test="record.text != null">
+				text = #{record.text,jdbcType=VARCHAR},
+			</if>
+			<if test="record.deviceToken != null">
+				device_token = #{record.deviceToken,jdbcType=VARCHAR},
+			</if>
+			<if test="record.phoneType != null">
+				phone_type = #{record.phoneType,jdbcType=VARCHAR},
+			</if>
+			<if test="record.description != null">
+				description = #{record.description,jdbcType=VARCHAR},
+			</if>
+			<if test="record.status != null">
+				status = #{record.status,jdbcType=INTEGER},
+			</if>
+			<if test="record.userType != null">
+				user_type = #{record.userType,jdbcType=INTEGER},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=INTEGER},
+			</if>
+			<if test="record.type != null">
+				type = #{record.type,jdbcType=INTEGER},
+			</if>
+			<if test="record.readStatus != null">
+				read_status = #{record.readStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="record.delStatus != null">
+				del_status = #{record.delStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.updateTime != null">
+				update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update t_pushmessage
+		set id = #{record.id,jdbcType=INTEGER},
+		ticker =
+		#{record.ticker,jdbcType=VARCHAR},
+		title =
+		#{record.title,jdbcType=VARCHAR},
+		text =
+		#{record.text,jdbcType=VARCHAR},
+		device_token =
+		#{record.deviceToken,jdbcType=VARCHAR},
+		phone_type =
+		#{record.phoneType,jdbcType=VARCHAR},
+		description =
+		#{record.description,jdbcType=VARCHAR},
+		status =
+		#{record.status,jdbcType=INTEGER},
+		user_type =
+		#{record.userType,jdbcType=INTEGER},
+		user_id =
+		#{record.userId,jdbcType=INTEGER},
+		type =
+		#{record.type,jdbcType=INTEGER},
+		read_status =
+		#{record.readStatus,jdbcType=VARCHAR},
+		del_status =
+		#{record.delStatus,jdbcType=VARCHAR},
+		create_time =
+		#{record.createTime,jdbcType=TIMESTAMP},
+		update_time =
+		#{record.updateTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.quanmin.model.Pushmessage">
+		update t_pushmessage
+		<set>
+			<if test="ticker != null">
+				ticker = #{ticker,jdbcType=VARCHAR},
+			</if>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="text != null">
+				text = #{text,jdbcType=VARCHAR},
+			</if>
+			<if test="deviceToken != null">
+				device_token = #{deviceToken,jdbcType=VARCHAR},
+			</if>
+			<if test="phoneType != null">
+				phone_type = #{phoneType,jdbcType=VARCHAR},
+			</if>
+			<if test="description != null">
+				description = #{description,jdbcType=VARCHAR},
+			</if>
+			<if test="status != null">
+				status = #{status,jdbcType=INTEGER},
+			</if>
+			<if test="userType != null">
+				user_type = #{userType,jdbcType=INTEGER},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=INTEGER},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=INTEGER},
+			</if>
+			<if test="readStatus != null">
+				read_status = #{readStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="delStatus != null">
+				del_status = #{delStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.quanmin.model.Pushmessage">
+		update
+		t_pushmessage
+		set ticker = #{ticker,jdbcType=VARCHAR},
+		title =
+		#{title,jdbcType=VARCHAR},
+		text = #{text,jdbcType=VARCHAR},
+		device_token = #{deviceToken,jdbcType=VARCHAR},
+		phone_type =
+		#{phoneType,jdbcType=VARCHAR},
+		description =
+		#{description,jdbcType=VARCHAR},
+		status = #{status,jdbcType=INTEGER},
+		user_type = #{userType,jdbcType=INTEGER},
+		user_id =
+		#{userId,jdbcType=INTEGER},
+		type = #{type,jdbcType=INTEGER},
+		read_status = #{readStatus,jdbcType=VARCHAR},
+		del_status =
+		#{delStatus,jdbcType=VARCHAR},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		update_time =
+		#{updateTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+	<select id="selectByUserId" resultMap="BaseResultMap">
+		SELECT
+		id,
+		ticker,
+		title,
+		text,
+		device_token,
+		phone_type,
+		description,
+		`status`,
+		user_type,
+		user_id,
+		type,
+		read_status,
+		del_status,
+		update_time,
+		<![CDATA[
+		CASE
+		WHEN TO_DAYS(NOW()) - TO_DAYS(create_time) >= 3 THEN
+		DATE_FORMAT(create_time, "%Y-%m-%d")
+		WHEN TO_DAYS(NOW()) - TO_DAYS(create_time) >= 2 THEN
+		CONCAT(
+		"前天",
+		DATE_FORMAT(create_time, "%H:%i")
+		)
+		WHEN TO_DAYS(NOW()) - TO_DAYS(create_time) >= 1 THEN
+		CONCAT(
+		"昨天",
+		DATE_FORMAT(create_time, "%H:%i")
+		)
+		WHEN TO_DAYS(NOW()) - TO_DAYS(create_time) >= 0
+		AND create_time - date_sub(NOW(), INTERVAL 60 MINUTE) < 0 THEN
+		CONCAT(
+		"今天",
+		DATE_FORMAT(create_time, "%H:%i")
+		)
+		WHEN create_time - date_sub(NOW(), INTERVAL 60 MINUTE) > 0 THEN
+		CONCAT(
+		CEIL(
+		DATE_FORMAT(
+		timediff(NOW(), create_time),
+		"%i"
+		)
+		),
+		"分钟以前"
+		)
+		END create_time
+		 ]]>
+		FROM
+		t_pushmessage
+		WHERE del_status=0
+		AND user_id=#{id,jdbcType=INTEGER}
+		ORDER BY
+		create_time DESC
+	</select>
+
+</mapper>

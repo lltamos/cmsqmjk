@@ -1,0 +1,632 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.quanmin.dao.mapper.BBSInformationMapper">
+    <resultMap id="BaseResultMap" type="com.quanmin.model.BBSInformation">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="user_id" property="userId" jdbcType="INTEGER"/>
+        <result column="user_name" property="userName" jdbcType="VARCHAR"/>
+        <result column="user_head_url" property="userHeadUrl" jdbcType="VARCHAR"/>
+        <result column="scannum" property="scannum" jdbcType="INTEGER"/>
+        <result column="commentnum" property="commentnum" jdbcType="INTEGER"/>
+        <result column="cover_url" property="coverUrl" jdbcType="VARCHAR"/>
+        <result column="publish" property="publish" jdbcType="INTEGER"/>
+        <result column="del_status" property="delStatus" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="ext1" property="ext1" jdbcType="VARCHAR"/>
+        <result column="ext2" property="ext2" jdbcType="VARCHAR"/>
+        <result column="ext3" property="ext3" jdbcType="VARCHAR"/>
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.quanmin.model.BBSInformation"
+               extends="BaseResultMap">
+        <result column="content" property="content" jdbcType="LONGVARCHAR"/>
+    </resultMap>
+
+    <resultMap id="ResultBBSInformationAndUser"
+               type="com.quanmin.model.custom.BBSInformationAndUser">
+        <id column="bbsInformationId" property="bbsInformationId" jdbcType="INTEGER"/>
+        <result column="userId" property="userId" jdbcType="INTEGER"/>
+        <result column="title" property="title" jdbcType="LONGVARCHAR"/>
+        <result column="content" property="content" jdbcType="LONGVARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
+        <result column="userHeadImageUrl" property="userHeadImageUrl"
+                jdbcType="VARCHAR"/>
+        <result column="commentnum" property="commentnum" jdbcType="VARCHAR"/>
+        <result column="scannum" property="scannum" jdbcType="VARCHAR"/>
+
+    </resultMap>
+
+
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                    and
+                                    #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem"
+                                             open="(" close=")" separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria"
+                     separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                    and
+                                    #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem"
+                                             open="(" close=")" separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+		id, title, user_id,user_name,user_head_url, scannum,
+		commentnum, cover_url,
+		publish, del_status,
+		create_time,
+		update_time,
+		ext1, ext2, ext3
+	</sql>
+    <sql id="Blob_Column_List">
+		content
+	</sql>
+    <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs"
+            parameterType="com.quanmin.model.BBSInformationExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from bbs_information
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByExample" resultMap="BaseResultMap"
+            parameterType="com.quanmin.model.BBSInformationExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from bbs_information
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+            parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from bbs_information
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		bbs_information
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+    <delete id="deleteByExample" parameterType="com.quanmin.model.BBSInformationExample">
+        delete from bbs_information
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.quanmin.model.BBSInformation">
+		insert into bbs_information
+		(id, title, user_id,
+		scannum, commentnum, cover_url,
+		publish,
+		del_status, create_time,
+		update_time, ext1, ext2,
+		ext3, content)
+		values
+		(#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR},
+		#{userId,jdbcType=INTEGER},
+		#{userName,jdbcType=VARCHAR},
+		#{userHeadUrl,jdbcType=VARCHAR},
+		#{scannum,jdbcType=INTEGER},
+		#{commentnum,jdbcType=INTEGER}, #{coverUrl,jdbcType=VARCHAR},
+		#{publish,jdbcType=INTEGER}, #{delStatus,jdbcType=INTEGER},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{ext1,jdbcType=VARCHAR}, #{ext2,jdbcType=VARCHAR},
+		#{ext3,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})
+	</insert>
+    <insert id="insertSelective" useGeneratedKeys="true"
+            keyProperty="id" parameterType="com.quanmin.model.BBSInformation">
+        insert into bbs_information
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="userHeadUrl != null">
+                user_head_url,
+            </if>
+            <if test="scannum != null">
+                scannum,
+            </if>
+            <if test="commentnum != null">
+                commentnum,
+            </if>
+            <if test="coverUrl != null">
+                cover_url,
+            </if>
+            <if test="publish != null">
+                publish,
+            </if>
+            <if test="delStatus != null">
+                del_status,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="ext1 != null">
+                ext1,
+            </if>
+            <if test="ext2 != null">
+                ext2,
+            </if>
+            <if test="ext3 != null">
+                ext3,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userHeadUrl != null">
+                #{userHeadUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="scannum != null">
+                #{scannum,jdbcType=INTEGER},
+            </if>
+            <if test="commentnum != null">
+                #{commentnum,jdbcType=INTEGER},
+            </if>
+            <if test="coverUrl != null">
+                #{coverUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="publish != null">
+                #{publish,jdbcType=INTEGER},
+            </if>
+            <if test="delStatus != null">
+                #{delStatus,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ext1 != null">
+                #{ext1,jdbcType=VARCHAR},
+            </if>
+            <if test="ext2 != null">
+                #{ext2,jdbcType=VARCHAR},
+            </if>
+            <if test="ext3 != null">
+                #{ext3,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.quanmin.model.BBSInformationExample"
+            resultType="java.lang.Integer">
+        select count(*) from bbs_information
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update bbs_information
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.title != null">
+                title = #{record.title,jdbcType=VARCHAR},
+            </if>
+            <if test="record.userId != null">
+                user_id = #{record.userId,jdbcType=INTEGER},
+            </if>
+            <if test="record.userName != null">
+                user_name = #{record.userName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.userHeadUrl != null">
+                user_head_url = #{record.userHeadUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="record.scannum != null">
+                scannum = #{record.scannum,jdbcType=INTEGER},
+            </if>
+            <if test="record.commentnum != null">
+                commentnum = #{record.commentnum,jdbcType=INTEGER},
+            </if>
+            <if test="record.coverUrl != null">
+                cover_url = #{record.coverUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="record.publish != null">
+                publish = #{record.publish,jdbcType=INTEGER},
+            </if>
+            <if test="record.delStatus != null">
+                del_status = #{record.delStatus,jdbcType=INTEGER},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.ext1 != null">
+                ext1 = #{record.ext1,jdbcType=VARCHAR},
+            </if>
+            <if test="record.ext2 != null">
+                ext2 = #{record.ext2,jdbcType=VARCHAR},
+            </if>
+            <if test="record.ext3 != null">
+                ext3 = #{record.ext3,jdbcType=VARCHAR},
+            </if>
+            <if test="record.content != null">
+                content = #{record.content,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExampleWithBLOBs" parameterType="map">
+        update bbs_information
+        set id = #{record.id,jdbcType=INTEGER},
+        title =
+        #{record.title,jdbcType=VARCHAR},
+        user_id =
+        #{record.userId,jdbcType=INTEGER},
+        user_name =
+        #{record.userName,jdbcType=VARCHAR},
+        user_head_url =
+        #{record.userHeadUrl,jdbcType=VARCHAR},
+        scannum =
+        #{record.scannum,jdbcType=INTEGER},
+        commentnum =
+        #{record.commentnum,jdbcType=INTEGER},
+        cover_url =
+        #{record.coverUrl,jdbcType=VARCHAR},
+        publish =
+        #{record.publish,jdbcType=INTEGER},
+        del_status =
+        #{record.delStatus,jdbcType=INTEGER},
+        create_time =
+        #{record.createTime,jdbcType=TIMESTAMP},
+        update_time =
+        #{record.updateTime,jdbcType=TIMESTAMP},
+        ext1 =
+        #{record.ext1,jdbcType=VARCHAR},
+        ext2 =
+        #{record.ext2,jdbcType=VARCHAR},
+        ext3 =
+        #{record.ext3,jdbcType=VARCHAR},
+        content =
+        #{record.content,jdbcType=LONGVARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update bbs_information
+        set id = #{record.id,jdbcType=INTEGER},
+        title =
+        #{record.title,jdbcType=VARCHAR},
+        user_id =
+        #{record.userId,jdbcType=INTEGER},
+        user_name =
+        #{record.userName,jdbcType=VARCHAR},
+        user_head_url =
+        #{record.userHeadUrl,jdbcType=VARCHAR},
+        scannum =
+        #{record.scannum,jdbcType=INTEGER},
+        commentnum =
+        #{record.commentnum,jdbcType=INTEGER},
+        cover_url =
+        #{record.coverUrl,jdbcType=VARCHAR},
+        publish =
+        #{record.publish,jdbcType=INTEGER},
+        del_status =
+        #{record.delStatus,jdbcType=INTEGER},
+        create_time =
+        #{record.createTime,jdbcType=TIMESTAMP},
+        update_time =
+        #{record.updateTime,jdbcType=TIMESTAMP},
+        ext1 =
+        #{record.ext1,jdbcType=VARCHAR},
+        ext2 =
+        #{record.ext2,jdbcType=VARCHAR},
+        ext3 = #{record.ext3,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.quanmin.model.BBSInformation">
+        update bbs_information
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="userName != null">
+                user_name = #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="userHeadUrl != null">
+                user_head_url = #{userHeadUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="scannum != null">
+                scannum = #{scannum,jdbcType=INTEGER},
+            </if>
+            <if test="commentnum != null">
+                commentnum = #{commentnum,jdbcType=INTEGER},
+            </if>
+            <if test="coverUrl != null">
+                cover_url = #{coverUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="publish != null">
+                publish = #{publish,jdbcType=INTEGER},
+            </if>
+            <if test="delStatus != null">
+                del_status = #{delStatus,jdbcType=INTEGER},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ext1 != null">
+                ext1 = #{ext1,jdbcType=VARCHAR},
+            </if>
+            <if test="ext2 != null">
+                ext2 = #{ext2,jdbcType=VARCHAR},
+            </if>
+            <if test="ext3 != null">
+                ext3 = #{ext3,jdbcType=VARCHAR},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.quanmin.model.BBSInformation">
+		update
+		bbs_information
+		set title = #{title,jdbcType=VARCHAR},
+		user_id =
+		#{userId,jdbcType=INTEGER},
+		user_name =
+		#{userName,jdbcType=VARCHAR},
+		user_head_url =
+		#{userHeadUrl,jdbcType=VARCHAR},
+		scannum =
+		#{scannum,jdbcType=INTEGER},
+		commentnum =
+		#{commentnum,jdbcType=INTEGER},
+		cover_url =
+		#{coverUrl,jdbcType=VARCHAR},
+		publish = #{publish,jdbcType=INTEGER},
+		del_status = #{delStatus,jdbcType=INTEGER},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		update_time =
+		#{updateTime,jdbcType=TIMESTAMP},
+		ext1 = #{ext1,jdbcType=VARCHAR},
+		ext2
+		= #{ext2,jdbcType=VARCHAR},
+		ext3 = #{ext3,jdbcType=VARCHAR},
+		content =
+		#{content,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+    <update id="updateByPrimaryKey" parameterType="com.quanmin.model.BBSInformation">
+		update
+		bbs_information
+		set title = #{title,jdbcType=VARCHAR},
+		user_id =
+		#{userId,jdbcType=INTEGER},
+		user_name =
+		#{userName,jdbcType=VARCHAR},
+		user_head_url =
+		#{userHeadUrl,jdbcType=VARCHAR},
+		scannum =
+		#{scannum,jdbcType=INTEGER},
+		commentnum =
+		#{commentnum,jdbcType=INTEGER},
+		cover_url =
+		#{coverUrl,jdbcType=VARCHAR},
+		publish = #{publish,jdbcType=INTEGER},
+		del_status = #{delStatus,jdbcType=INTEGER},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		update_time =
+		#{updateTime,jdbcType=TIMESTAMP},
+		ext1 = #{ext1,jdbcType=VARCHAR},
+		ext2
+		= #{ext2,jdbcType=VARCHAR},
+		ext3 = #{ext3,jdbcType=VARCHAR}
+		where id =
+		#{id,jdbcType=INTEGER}
+	</update>
+
+    <sql id="base_date">
+ <![CDATA[
+
+
+
+
+
+           CASE
+		WHEN TO_DAYS(NOW()) - TO_DAYS(bbs.create_time) >= 3 THEN
+		DATE_FORMAT(bbs.create_time, "%Y-%m-%d")
+		WHEN TO_DAYS(NOW()) - TO_DAYS(bbs.create_time) >= 2 THEN
+		CONCAT(
+		"前天",
+		DATE_FORMAT(bbs.create_time, "%H:%i")
+		)
+		WHEN TO_DAYS(NOW()) - TO_DAYS(bbs.create_time) >= 1 THEN
+		CONCAT(
+		"昨天",
+		DATE_FORMAT(bbs.create_time, "%H:%i")
+		)
+		WHEN TO_DAYS(NOW()) - TO_DAYS(bbs.create_time) >= 0
+		AND bbs.create_time - date_sub(NOW(), INTERVAL 60 MINUTE) < 0 THEN
+		CONCAT(
+		"今天",
+		DATE_FORMAT(bbs.create_time, "%H:%i")
+		)
+		WHEN bbs.create_time - date_sub(NOW(), INTERVAL 60 MINUTE) > 0 THEN
+		CONCAT(
+		CEIL(
+		DATE_FORMAT(
+		timediff(NOW(), bbs.create_time),
+		"%i"
+		)
+		),
+		"分钟以前"
+		)
+		END create_time ,
+
+
+
+
+
+        ]]>
+	</sql>
+
+    <sql id="Base_Info_Column_List">
+        bbs.id AS bbsInformationId,
+        bbs.title,
+        bbs.content,
+        bbs.scannum,
+        bbs.commentnum,
+        <include refid="base_date"/>
+        user.id AS userId,
+        user.name AS name,
+        user.nickname,
+        user.head_image_url
+        userHeadImageUrl
+    </sql>
+
+
+    <select id="showBBSList" resultMap="ResultBBSInformationAndUser"
+            parameterType="com.quanmin.model.custom.SearchCondition">
+        SELECT
+        <include refid="Base_Info_Column_List"/>
+        FROM
+        bbs_information bbs
+        LEFT JOIN
+        sys_user user ON user.id =
+        bbs.user_id
+        WHERE
+        bbs.del_status = 0
+        <if test="userId != null and userId !=''">
+            AND bbs.user_id=#{userId,jdbcType=INTEGER}
+        </if>
+        <if test="searchKey != null and searchKey !=''">
+            AND
+            (
+            bbs.title LIKE '%' #{searchKey,jdbcType=VARCHAR} '%'
+            OR
+            bbs.user_name LIKE '%' #{searchKey,jdbcType=VARCHAR} '%'
+            )
+        </if>
+        AND
+        bbs.publish = 0
+        AND user.id IS
+        NOT NULL
+        ORDER
+        BY bbs.create_time DESC
+    </select>
+
+</mapper>

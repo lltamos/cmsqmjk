@@ -1,0 +1,10 @@
+/target
+/sql
+/.settings
+/.metadata
+/RemoteSystemsTempFiles
+/*.tern-project
+/*.iml
+classes/
+/*.md
+/.idea

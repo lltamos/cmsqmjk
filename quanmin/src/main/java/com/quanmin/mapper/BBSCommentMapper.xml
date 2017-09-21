@@ -1,0 +1,519 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.quanmin.dao.mapper.BBSCommentMapper">
+	<resultMap id="BaseResultMap" type="com.quanmin.model.BBSComment">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="reply_id" property="replyId" jdbcType="INTEGER" />
+		<result column="parent_id" property="parentId" jdbcType="INTEGER" />
+		<result column="reply_name" property="replyName" jdbcType="VARCHAR" />
+		<result column="reply_head_url" property="replyHeadUrl"
+			jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="user_head_url" property="userHeadUrl" jdbcType="VARCHAR" />
+		<result column="bbs_information_id" property="bbsInformationId"
+			jdbcType="INTEGER" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="sort" property="sort" jdbcType="INTEGER" />
+		<result column="comment" property="comment" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="ext1" property="ext1" jdbcType="VARCHAR" />
+		<result column="ext2" property="ext2" jdbcType="VARCHAR" />
+		<result column="ext3" property="ext3" jdbcType="VARCHAR" />
+	</resultMap>
+
+
+	<resultMap id="CommentBaseResultMap" type="com.quanmin.model.custom.CommentInfo" >
+
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="reply_id" property="replyId" jdbcType="INTEGER" />
+		<result column="parent_id" property="parentId" jdbcType="INTEGER" />
+		<result column="reply_name" property="replyName" jdbcType="VARCHAR" />
+		<result column="reply_head_url" property="replyHeadUrl"
+			jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="INTEGER" />
+		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="user_head_url" property="userHeadUrl" jdbcType="VARCHAR" />
+		<result column="bbs_information_id" property="bbsInformationId"
+			jdbcType="INTEGER" />
+		<result column="type" property="type" jdbcType="INTEGER" />
+		<result column="sort" property="sort" jdbcType="INTEGER" />
+		<result column="comment" property="comment" jdbcType="VARCHAR" />
+		<result column="create_time" property="createTime" jdbcType="VARCHAR" />
+
+		<collection property="commentList"
+			column="{bbsInformationId=bbs_information_id,id=id}" ofType="com.quanmin.model.BBSComment"
+			select="selectByInformationIdAndType" />
+	</resultMap>
+
+
+
+
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, reply_id,parent_id, reply_name, reply_head_url,
+		user_id,
+		user_name,
+		user_head_url, bbs_information_id,
+		type, sort,
+		comment,
+		create_time, update_time, ext1, ext2, ext3
+	</sql>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.quanmin.model.BBSCommentExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from bbs_comment
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from bbs_comment
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		bbs_comment
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.quanmin.model.BBSCommentExample">
+		delete from bbs_comment
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.quanmin.model.BBSComment">
+		insert into bbs_comment (id,
+		reply_id,parent_id, reply_name,
+		reply_head_url, user_id, user_name,
+		user_head_url, bbs_information_id, type,
+		sort, comment, create_time,
+		update_time, ext1, ext2,
+		ext3)
+		values (#{id,jdbcType=INTEGER},
+		#{replyId,jdbcType=INTEGER},
+		#{replyName,jdbcType=VARCHAR},
+		#{replyHeadUrl,jdbcType=VARCHAR}, #{userId,jdbcType=INTEGER},
+		#{userName,jdbcType=VARCHAR},
+		#{userHeadUrl,jdbcType=VARCHAR},
+		#{bbsInformationId,jdbcType=INTEGER},
+		#{type,jdbcType=INTEGER},
+		#{sort,jdbcType=INTEGER}, #{comment,jdbcType=VARCHAR},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{ext1,jdbcType=VARCHAR},
+		#{ext2,jdbcType=VARCHAR},
+		#{ext3,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" parameterType="com.quanmin.model.BBSComment"
+		useGeneratedKeys="true" keyProperty="id">
+		insert into bbs_comment
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="replyId != null">
+				reply_id,
+			</if>
+			<if test="parentId != null">
+				parent_id,
+			</if>
+			<if test="replyName != null">
+				reply_name,
+			</if>
+			<if test="replyHeadUrl != null">
+				reply_head_url,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="userName != null">
+				user_name,
+			</if>
+			<if test="userHeadUrl != null">
+				user_head_url,
+			</if>
+			<if test="bbsInformationId != null">
+				bbs_information_id,
+			</if>
+			<if test="type != null">
+				type,
+			</if>
+			<if test="sort != null">
+				sort,
+			</if>
+			<if test="comment != null">
+				comment,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="ext1 != null">
+				ext1,
+			</if>
+			<if test="ext2 != null">
+				ext2,
+			</if>
+			<if test="ext3 != null">
+				ext3,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="replyId != null">
+				#{replyId,jdbcType=INTEGER},
+			</if>
+			<if test="parentId != null">
+				#{parentId,jdbcType=INTEGER},
+			</if>
+			<if test="replyName != null">
+				#{replyName,jdbcType=VARCHAR},
+			</if>
+			<if test="replyHeadUrl != null">
+				#{replyHeadUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=INTEGER},
+			</if>
+			<if test="userName != null">
+				#{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="userHeadUrl != null">
+				#{userHeadUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="bbsInformationId != null">
+				#{bbsInformationId,jdbcType=INTEGER},
+			</if>
+			<if test="type != null">
+				#{type,jdbcType=INTEGER},
+			</if>
+			<if test="sort != null">
+				#{sort,jdbcType=INTEGER},
+			</if>
+			<if test="comment != null">
+				#{comment,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="ext1 != null">
+				#{ext1,jdbcType=VARCHAR},
+			</if>
+			<if test="ext2 != null">
+				#{ext2,jdbcType=VARCHAR},
+			</if>
+			<if test="ext3 != null">
+				#{ext3,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.quanmin.model.BBSCommentExample"
+		resultType="java.lang.Integer">
+		select count(*) from bbs_comment
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update bbs_comment
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=INTEGER},
+			</if>
+			<if test="record.replyId != null">
+				reply_id = #{record.replyId,jdbcType=INTEGER},
+			</if>
+			<if test="record.parentId != null">
+				parent_id = #{record.parentId,jdbcType=INTEGER},
+			</if>
+			<if test="record.replyName != null">
+				reply_name = #{record.replyName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.replyHeadUrl != null">
+				reply_head_url = #{record.replyHeadUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=INTEGER},
+			</if>
+			<if test="record.userName != null">
+				user_name = #{record.userName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userHeadUrl != null">
+				user_head_url = #{record.userHeadUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="record.bbsInformationId != null">
+				bbs_information_id =
+				#{record.bbsInformationId,jdbcType=INTEGER},
+			</if>
+			<if test="record.type != null">
+				type = #{record.type,jdbcType=INTEGER},
+			</if>
+			<if test="record.sort != null">
+				sort = #{record.sort,jdbcType=INTEGER},
+			</if>
+			<if test="record.comment != null">
+				comment = #{record.comment,jdbcType=VARCHAR},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.updateTime != null">
+				update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.ext1 != null">
+				ext1 = #{record.ext1,jdbcType=VARCHAR},
+			</if>
+			<if test="record.ext2 != null">
+				ext2 = #{record.ext2,jdbcType=VARCHAR},
+			</if>
+			<if test="record.ext3 != null">
+				ext3 = #{record.ext3,jdbcType=VARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update bbs_comment
+		set id = #{record.id,jdbcType=INTEGER},
+		reply_id =
+		#{record.replyId,jdbcType=INTEGER},
+		parent_id =
+		#{record.parentId,jdbcType=INTEGER},
+		reply_name =
+		#{record.replyName,jdbcType=VARCHAR},
+		reply_head_url =
+		#{record.replyHeadUrl,jdbcType=VARCHAR},
+		user_id =
+		#{record.userId,jdbcType=INTEGER},
+		user_name =
+		#{record.userName,jdbcType=VARCHAR},
+		user_head_url =
+		#{record.userHeadUrl,jdbcType=VARCHAR},
+		bbs_information_id =
+		#{record.bbsInformationId,jdbcType=INTEGER},
+		type =
+		#{record.type,jdbcType=INTEGER},
+		sort =
+		#{record.sort,jdbcType=INTEGER},
+		comment =
+		#{record.comment,jdbcType=VARCHAR},
+		create_time =
+		#{record.createTime,jdbcType=TIMESTAMP},
+		update_time =
+		#{record.updateTime,jdbcType=TIMESTAMP},
+		ext1 =
+		#{record.ext1,jdbcType=VARCHAR},
+		ext2 =
+		#{record.ext2,jdbcType=VARCHAR},
+		ext3 = #{record.ext3,jdbcType=VARCHAR}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.quanmin.model.BBSComment">
+		update bbs_comment
+		<set>
+			<if test="replyId != null">
+				reply_id = #{replyId,jdbcType=INTEGER},
+			</if>
+			<if test="parentId != null">
+				parent_id = #{parentId,jdbcType=INTEGER},
+			</if>
+			<if test="replyName != null">
+				reply_name = #{replyName,jdbcType=VARCHAR},
+			</if>
+			<if test="replyHeadUrl != null">
+				reply_head_url = #{replyHeadUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=INTEGER},
+			</if>
+			<if test="userName != null">
+				user_name = #{userName,jdbcType=VARCHAR},
+			</if>
+			<if test="userHeadUrl != null">
+				user_head_url = #{userHeadUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="bbsInformationId != null">
+				bbs_information_id =
+				#{bbsInformationId,jdbcType=INTEGER},
+			</if>
+			<if test="type != null">
+				type = #{type,jdbcType=INTEGER},
+			</if>
+			<if test="sort != null">
+				sort = #{sort,jdbcType=INTEGER},
+			</if>
+			<if test="comment != null">
+				comment = #{comment,jdbcType=VARCHAR},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="ext1 != null">
+				ext1 = #{ext1,jdbcType=VARCHAR},
+			</if>
+			<if test="ext2 != null">
+				ext2 = #{ext2,jdbcType=VARCHAR},
+			</if>
+			<if test="ext3 != null">
+				ext3 = #{ext3,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.quanmin.model.BBSComment">
+		update bbs_comment
+		set
+		reply_id = #{replyId,jdbcType=INTEGER},
+		parent_id =
+		#{parentId,jdbcType=INTEGER},
+		reply_name =
+		#{replyName,jdbcType=VARCHAR},
+		reply_head_url =
+		#{replyHeadUrl,jdbcType=VARCHAR},
+		user_id = #{userId,jdbcType=INTEGER},
+		user_name = #{userName,jdbcType=VARCHAR},
+		user_head_url =
+		#{userHeadUrl,jdbcType=VARCHAR},
+		bbs_information_id =
+		#{bbsInformationId,jdbcType=INTEGER},
+		type = #{type,jdbcType=INTEGER},
+		sort = #{sort,jdbcType=INTEGER},
+		comment = #{comment,jdbcType=VARCHAR},
+		create_time = #{createTime,jdbcType=TIMESTAMP},
+		update_time =
+		#{updateTime,jdbcType=TIMESTAMP},
+		ext1 = #{ext1,jdbcType=VARCHAR},
+		ext2
+		= #{ext2,jdbcType=VARCHAR},
+		ext3 = #{ext3,jdbcType=VARCHAR}
+		where id =
+		#{id,jdbcType=INTEGER}
+	</update>
+
+
+	<!-- 根据消息id查看评论 -->
+	<select id="selectByInformationId" resultMap="CommentBaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from bbs_comment
+		where type=0 and bbs_information_id =
+		#{bbsInformationId,jdbcType=INTEGER}
+		order by create_time desc
+	</select>
+
+	<select id="selectByInformationIdAndType" parameterType="java.util.Map"
+		resultType="com.quanmin.model.BBSComment" resultMap="BaseResultMap" >
+		select
+		<include refid="Base_Column_List" />
+		from bbs_comment
+		where type=1 and bbs_information_id =
+		#{bbsInformationId,jdbcType=INTEGER} and parent_id =
+		#{id,jdbcType=INTEGER}
+		order by create_time asc
+	</select>
+
+
+	<select id="selectByInformationIdAndParentIdAndType" parameterType="com.quanmin.model.BBSComment"
+		resultType="java.lang.Integer" >
+		select
+		MAX(sort) sort
+		from bbs_comment
+		where type=1 and bbs_information_id =
+		#{bbsInformationId,jdbcType=INTEGER} and parent_id =
+		#{parentId,jdbcType=INTEGER}
+		order by create_time desc limit 0,1
+	</select>
+</mapper>

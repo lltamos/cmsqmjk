@@ -1,0 +1,541 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.quanmin.dao.mapper.RecuperateMapper">
+    <resultMap id="BaseResultMap" type="com.quanmin.model.Recuperate">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="cover_url" property="coverUrl" jdbcType="VARCHAR" />
+        <result column="store_price" property="storePrice" jdbcType="REAL" />
+        <result column="member_price" property="memberPrice" jdbcType="REAL" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+        <result column="ext1" property="ext1" jdbcType="VARCHAR" />
+        <result column="ext2" property="ext2" jdbcType="VARCHAR" />
+        <result column="ext3" property="ext3" jdbcType="VARCHAR" />
+        <result column="effective_date" property="effectiveDate"
+                jdbcType="TIMESTAMP" />
+        <result column="sort" property="sort" jdbcType="INTEGER" />
+        <result column="description" property="description" jdbcType="VARCHAR" />
+        <collection property="projectList" column="id"
+                    select="com.quanmin.dao.mapper.RecuperateMapper.selectProjectByRecuperateId">
+        </collection>
+    </resultMap>
+
+    <resultMap id="ProjectResultMap"
+               type="com.quanmin.model.custom.RecuperateAndProjectInfo">
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+        <result column="price" property="price" jdbcType="DECIMAL" />
+        <result column="info" property="info" jdbcType="VARCHAR" />
+        <result column="device" property="device" jdbcType="VARCHAR" />
+        <result column="attending_function" property="attendingFunction"
+                jdbcType="VARCHAR" />
+        <result column="ban" property="ban" jdbcType="VARCHAR" />
+        <result column="cover_url" property="coverUrl" jdbcType="VARCHAR" />
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+        <result column="times" property="times" jdbcType="VARCHAR" />
+        <result column="type" property="type" jdbcType="VARCHAR" />
+    </resultMap>
+    <resultMap id="ResultMapWithBLOBs" type="com.quanmin.model.Recuperate"
+               extends="BaseResultMap">
+        <result column="info" property="info" jdbcType="LONGVARCHAR" />
+    </resultMap>
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                    and
+                                    #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem"
+                                             open="(" close=")" separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria"
+                     separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                    and
+                                    #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem"
+                                             open="(" close=")" separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+        id, name, cover_url, store_price, member_price,
+        create_time, update_time,
+        ext1, ext2,
+        ext3, effective_date, sort,
+        description
+    </sql>
+    <sql id="Blob_Column_List">
+        info
+    </sql>
+    <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs"
+            parameterType="com.quanmin.model.RecuperateExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        from t_recuperate
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByExample" resultMap="BaseResultMap"
+            parameterType="com.quanmin.model.RecuperateExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List" />
+        from t_recuperate
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause" />
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+            parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        from t_recuperate
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete from
+        t_recuperate
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <delete id="deleteByExample" parameterType="com.quanmin.model.RecuperateExample">
+        delete from t_recuperate
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause" />
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.quanmin.model.Recuperate">
+        insert into t_recuperate (id,
+        name, cover_url,
+        store_price, member_price, create_time,
+        update_time,
+        ext1, ext2,
+        ext3, effective_date, sort,
+        description, info)
+        values
+        (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+        #{coverUrl,jdbcType=VARCHAR},
+        #{storePrice,jdbcType=REAL},
+        #{memberPrice,jdbcType=REAL}, #{createTime,jdbcType=TIMESTAMP},
+        #{updateTime,jdbcType=TIMESTAMP}, #{ext1,jdbcType=VARCHAR},
+        #{ext2,jdbcType=VARCHAR},
+        #{ext3,jdbcType=VARCHAR},
+        #{effectiveDate,jdbcType=TIMESTAMP}, #{sort,jdbcType=INTEGER},
+        #{description,jdbcType=VARCHAR}, #{info,jdbcType=LONGVARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.quanmin.model.Recuperate">
+        insert into t_recuperate
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="coverUrl != null">
+                cover_url,
+            </if>
+            <if test="storePrice != null">
+                store_price,
+            </if>
+            <if test="memberPrice != null">
+                member_price,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="ext1 != null">
+                ext1,
+            </if>
+            <if test="ext2 != null">
+                ext2,
+            </if>
+            <if test="ext3 != null">
+                ext3,
+            </if>
+            <if test="effectiveDate != null">
+                effective_date,
+            </if>
+            <if test="sort != null">
+                sort,
+            </if>
+            <if test="description != null">
+                description,
+            </if>
+            <if test="info != null">
+                info,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="coverUrl != null">
+                #{coverUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="storePrice != null">
+                #{storePrice,jdbcType=REAL},
+            </if>
+            <if test="memberPrice != null">
+                #{memberPrice,jdbcType=REAL},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ext1 != null">
+                #{ext1,jdbcType=VARCHAR},
+            </if>
+            <if test="ext2 != null">
+                #{ext2,jdbcType=VARCHAR},
+            </if>
+            <if test="ext3 != null">
+                #{ext3,jdbcType=VARCHAR},
+            </if>
+            <if test="effectiveDate != null">
+                #{effectiveDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sort != null">
+                #{sort,jdbcType=INTEGER},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="info != null">
+                #{info,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.quanmin.model.RecuperateExample"
+            resultType="java.lang.Integer">
+        select count(*) from t_recuperate
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause" />
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update t_recuperate
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.name != null">
+                name = #{record.name,jdbcType=VARCHAR},
+            </if>
+            <if test="record.coverUrl != null">
+                cover_url = #{record.coverUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="record.storePrice != null">
+                store_price = #{record.storePrice,jdbcType=REAL},
+            </if>
+            <if test="record.memberPrice != null">
+                member_price = #{record.memberPrice,jdbcType=REAL},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.ext1 != null">
+                ext1 = #{record.ext1,jdbcType=VARCHAR},
+            </if>
+            <if test="record.ext2 != null">
+                ext2 = #{record.ext2,jdbcType=VARCHAR},
+            </if>
+            <if test="record.ext3 != null">
+                ext3 = #{record.ext3,jdbcType=VARCHAR},
+            </if>
+            <if test="record.effectiveDate != null">
+                effective_date =
+                #{record.effectiveDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.sort != null">
+                sort = #{record.sort,jdbcType=INTEGER},
+            </if>
+            <if test="record.description != null">
+                description = #{record.description,jdbcType=VARCHAR},
+            </if>
+            <if test="record.info != null">
+                info = #{record.info,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByExampleWithBLOBs" parameterType="map">
+        update t_recuperate
+        set id = #{record.id,jdbcType=INTEGER},
+        name =
+        #{record.name,jdbcType=VARCHAR},
+        cover_url =
+        #{record.coverUrl,jdbcType=VARCHAR},
+        store_price =
+        #{record.storePrice,jdbcType=REAL},
+        member_price =
+        #{record.memberPrice,jdbcType=REAL},
+        create_time =
+        #{record.createTime,jdbcType=TIMESTAMP},
+        update_time =
+        #{record.updateTime,jdbcType=TIMESTAMP},
+        ext1 =
+        #{record.ext1,jdbcType=VARCHAR},
+        ext2 =
+        #{record.ext2,jdbcType=VARCHAR},
+        ext3 =
+        #{record.ext3,jdbcType=VARCHAR},
+        effective_date =
+        #{record.effectiveDate,jdbcType=TIMESTAMP},
+        sort =
+        #{record.sort,jdbcType=INTEGER},
+        description =
+        #{record.description,jdbcType=VARCHAR},
+        info =
+        #{record.info,jdbcType=LONGVARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update t_recuperate
+        set id = #{record.id,jdbcType=INTEGER},
+        name =
+        #{record.name,jdbcType=VARCHAR},
+        cover_url =
+        #{record.coverUrl,jdbcType=VARCHAR},
+        store_price =
+        #{record.storePrice,jdbcType=REAL},
+        member_price =
+        #{record.memberPrice,jdbcType=REAL},
+        create_time =
+        #{record.createTime,jdbcType=TIMESTAMP},
+        update_time =
+        #{record.updateTime,jdbcType=TIMESTAMP},
+        ext1 =
+        #{record.ext1,jdbcType=VARCHAR},
+        ext2 =
+        #{record.ext2,jdbcType=VARCHAR},
+        ext3 =
+        #{record.ext3,jdbcType=VARCHAR},
+        effective_date =
+        #{record.effectiveDate,jdbcType=TIMESTAMP},
+        sort =
+        #{record.sort,jdbcType=INTEGER},
+        description =
+        #{record.description,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause" />
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.quanmin.model.Recuperate">
+        update t_recuperate
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="coverUrl != null">
+                cover_url = #{coverUrl,jdbcType=VARCHAR},
+            </if>
+            <if test="storePrice != null">
+                store_price = #{storePrice,jdbcType=REAL},
+            </if>
+            <if test="memberPrice != null">
+                member_price = #{memberPrice,jdbcType=REAL},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ext1 != null">
+                ext1 = #{ext1,jdbcType=VARCHAR},
+            </if>
+            <if test="ext2 != null">
+                ext2 = #{ext2,jdbcType=VARCHAR},
+            </if>
+            <if test="ext3 != null">
+                ext3 = #{ext3,jdbcType=VARCHAR},
+            </if>
+            <if test="effectiveDate != null">
+                effective_date = #{effectiveDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sort != null">
+                sort = #{sort,jdbcType=INTEGER},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="info != null">
+                info = #{info,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.quanmin.model.Recuperate">
+        update
+        t_recuperate
+        set name = #{name,jdbcType=VARCHAR},
+        cover_url =
+        #{coverUrl,jdbcType=VARCHAR},
+        store_price =
+        #{storePrice,jdbcType=REAL},
+        member_price =
+        #{memberPrice,jdbcType=REAL},
+        create_time =
+        #{createTime,jdbcType=TIMESTAMP},
+        update_time =
+        #{updateTime,jdbcType=TIMESTAMP},
+        ext1 = #{ext1,jdbcType=VARCHAR},
+        ext2
+        = #{ext2,jdbcType=VARCHAR},
+        ext3 = #{ext3,jdbcType=VARCHAR},
+        effective_date = #{effectiveDate,jdbcType=TIMESTAMP},
+        sort =
+        #{sort,jdbcType=INTEGER},
+        description =
+        #{description,jdbcType=VARCHAR},
+        info = #{info,jdbcType=LONGVARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.quanmin.model.Recuperate">
+        update
+        t_recuperate
+        set name = #{name,jdbcType=VARCHAR},
+        cover_url =
+        #{coverUrl,jdbcType=VARCHAR},
+        store_price =
+        #{storePrice,jdbcType=REAL},
+        member_price =
+        #{memberPrice,jdbcType=REAL},
+        create_time =
+        #{createTime,jdbcType=TIMESTAMP},
+        update_time =
+        #{updateTime,jdbcType=TIMESTAMP},
+        ext1 = #{ext1,jdbcType=VARCHAR},
+        ext2
+        = #{ext2,jdbcType=VARCHAR},
+        ext3 = #{ext3,jdbcType=VARCHAR},
+        effective_date = #{effectiveDate,jdbcType=TIMESTAMP},
+        sort =
+        #{sort,jdbcType=INTEGER},
+        description = #{description,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <!-- 查询调理方案 -->
+    <select id="selectRecperateByInforId" resultMap="BaseResultMap">
+        SELECT
+        tr.id,
+        tr.`name`,
+        tr.info,
+        tr.cover_url AS coverUrl,
+        tr.member_price AS
+        memberPrice,
+        tr.store_price AS storePrice
+        FROM
+        `t_recuperate` tr
+        LEFT
+        OUTER JOIN t_hospitalstore_projectandrecuperate
+        thp ON tr.id =
+        thp.project_or_recuperate_id
+        WHERE
+        thp.type = 0
+        AND
+        thp.hospitalstore_id =
+        #{infoId,jdbcType=INTEGER};
+    </select>
+
+    <select id="selectProjectByRecuperateId" resultMap="ProjectResultMap"
+            parameterType="java.lang.Integer">
+		SELECT
+		tp.`name`,
+		tp.id,
+		tp.price,
+		tp.info,
+		tp.device,
+		tp.attending_function AS attendingFunction,
+		tp.ban,
+		tp.cover_url,
+		trp.type,
+		trp.times
+		FROM
+		`t_recuperate_project` trp
+		LEFT OUTER JOIN
+		t_project tp ON tp.id = trp.project_id
+		WHERE
+		trp.recuperate_id =
+		#{id,jdbcType=INTEGER}
+	</select>
+</mapper>

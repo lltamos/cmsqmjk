@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.quanmin.dao.mapper.AppointOrderMapper">
+    <select id="factorQueryList" parameterType="com.quanmin.model.jpapo.AppointOrder" resultType="java.util.HashMap">
+        SELECT * FROM appoint_order WHERE 1=1
+
+        <if test="null!=hospital and ''!=hospital">
+            AND hospital=#{hospital}
+        </if>
+        <if test="null!=office and ''!=office">
+            AND office=#{office}
+        </if>
+        <if test="null!=period and 0!=period">
+            AND period=#{period}
+        </if>
+        <if test="null!=orderStatus and 0!=orderStatus">
+            AND order_status=#{orderStatus}
+        </if>
+        <if test="null!=ext1 and ''!=ext1">
+            AND (
+            appoint_order_num LIKE CONCAT(CONCAT('%',#{ext1}), '%')
+            OR
+            hospital LIKE CONCAT(CONCAT('%',#{ext1}), '%')
+            OR
+            doctor LIKE CONCAT(CONCAT('%',#{ext1}), '%')
+            OR
+            see_hospital_address LIKE CONCAT(CONCAT('%',#{ext1}), '%')
+            )
+        </if>
+        ORDER BY create_time DESC
+    </select>
+</mapper>

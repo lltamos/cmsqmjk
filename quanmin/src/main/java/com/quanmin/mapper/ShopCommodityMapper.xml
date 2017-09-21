@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.quanmin.dao.mapper.ShopCommodityMapper">
+    <resultMap id="BaseResultMap" type="com.quanmin.model.jpapo.ShopCommodity">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="info" property="info" jdbcType="VARCHAR"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="cover_url" property="coverUrl" jdbcType="VARCHAR"/>
+        <result column="public_commodity_medicine_url" property="publicCommodityMedicineUrl" jdbcType="VARCHAR"/>
+        <result column="public_commodity_hard_url" property="publicCommodityHardUrl" jdbcType="VARCHAR"/>
+        <result column="total_num" property="totalNum" jdbcType="INTEGER"/>
+        <result column="price" property="price" jdbcType="DOUBLE"/>
+        <result column="total_num" property="totalNum" jdbcType="INTEGER"/>
+        <result column="total_sales_num" property="totalSalesNum" jdbcType="INTEGER"/>
+        <result column="type" property="type" jdbcType="INTEGER"/>
+    </resultMap>
+
+<!--根据类型查询-->
+    <select id="findByType" resultMap="BaseResultMap">
+		SELECT
+			id,
+			NAME,
+			info,
+			price,
+			cover_url ,
+			total_num ,
+			type,
+			public_commodity_medicine_url,
+			public_commodity_hard_url,
+			sum(total_sales_num) AS total_sales_num
+		FROM
+			shop_commodity
+		WHERE
+			type =#{type,jdbcType=INTEGER}
+		AND del_status =#{status,jdbcType=INTEGER}
+		AND STATUS =#{commodityStatus,jdbcType=INTEGER}
+		GROUP BY
+			number
+		ORDER BY
+			create_time DESC
+	</select>
+
+	<!--根据关键词查找-->
+    <select id="findBySearchkey" resultMap="BaseResultMap">
+		SELECT
+			id,
+			NAME,
+			info,
+			price,
+			cover_url ,
+			total_num ,
+			type,
+			public_commodity_medicine_url,
+			public_commodity_hard_url,
+			sum(total_sales_num) AS total_sales_num
+		FROM
+			shop_commodity
+		WHERE
+		 del_status =#{status,jdbcType=INTEGER}
+		AND STATUS =#{commodityStatus,jdbcType=INTEGER}
+		<if test="searchKey != null and searchKey != ''">
+			and	name like CONCAT(CONCAT('%',#{searchKey,jdbcType=VARCHAR}), '%')
+		</if>
+		GROUP BY
+			number
+		ORDER BY
+			create_time DESC
+	</select>
+
+	<!--查询所有-->
+    <select id="findAll" resultMap="BaseResultMap">
+		SELECT
+			id,
+			NAME,
+			info,
+			price,
+			type,
+			cover_url ,
+			total_num ,
+			public_commodity_medicine_url,
+			public_commodity_hard_url,
+			sum(total_sales_num) AS total_sales_num
+		FROM
+			shop_commodity
+		WHERE
+		 del_status =#{status,jdbcType=INTEGER}
+		AND STATUS =#{commodityStatus,jdbcType=INTEGER}
+		GROUP BY
+			number
+		ORDER BY
+			create_time DESC
+	</select>
+</mapper>

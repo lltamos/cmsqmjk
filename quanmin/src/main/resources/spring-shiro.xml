@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+	http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.2.xsd">
+
+	<!-- 配置shiro框架的过滤器工厂bean -->
+	<bean name="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
+		<!-- Shiro安全管理器 -->
+		<property name="securityManager" ref="securityManager"></property>
+		<!-- 要求登录时的链接 -->
+		<property name="loginUrl" value="/toindex.do"></property>
+		<!-- 登录成功后要跳转的连接 -->
+		<property name="successUrl" value="/index.jsp"></property>
+		<!-- 用户访问未对其授权的资源时，所显示的连接 -->
+		<property name="unauthorizedUrl" value="/toindex.do"></property>
+		<!-- anon,authc,authcBasic,user是第一组认证过滤器 perms,port,rest,roles,ssl是第二组授权过滤器 -->
+		<!-- 指定url级别拦截策略即拦截规则 -->
+		<property name="filterChainDefinitions">
+		<!-- 
+		anon:例子/admins/**=anon 没有参数，表示可以匿名使用。   
+		authc:例如/admins/user/**=authc表示需要认证(登录)才能使用，没有参数   
+		roles：例子/admins/user/**=roles[admin],参数可以写多个，多个时必须加上引号，并且参数之间用逗号分割，当有多个参数时，例如admins/user/**=roles["admin,guest"],每个参数通过才算通过，相当于hasAllRoles()方法。   
+		perms：例子/admins/user/**=perms[user:add:*],参数可以写多个，多个时必须加上引号，并且参数之间用逗号分割，例如/admins/user/**=perms["user:add:*,user:modify:*"]，当有多个参数时必须每个参数都通过才通过，想当于isPermitedAll()方法。   
+		rest：例子/admins/user/**=rest[user],根据请求的方法，相当于/admins/user/**=perms[user:method] ,其中method为post，get，delete等。   
+		port：例子/admins/user/**=port[8081],当请求的url的端口不是8081是跳转到schemal://serverName:8081?queryString,其中schmal是协议http或https等，serverName是你访问的host,8081是url配置里port的端口，queryString是你访问的url里的？后面的参数。   
+		authcBasic：例如/admins/user/**=authcBasic没有参数表示httpBasic认证   
+		ssl:例子/admins/user/**=ssl没有参数，表示安全的url请求，协议为https   
+		user:例如/admins/user/**=user没有参数表示必须存在用户，当登入操作时不做检查 
+		 -->
+			<value>
+				/css/** = anon
+				/img/** = anon
+				/images/** = anon
+				/jsp/** = anon
+				/js/** = anon
+				/tld/** = anon
+				/index.jsp = anon
+				/toindex.do = anon
+				/login.do=anon
+
+				<!-- 判断当前用户是否有"add"权限 -->
+				/user/addUser = perms["addUser"]
+				<!-- 判断当前验证是否通过 -->
+				/** = authc
+			</value>
+		</property>
+	</bean>
+
+
+	<!-- 配置ehcache缓存管理 :因为shiro的session是自己实现的，所以需要一个缓存框架 -->
+	<bean id="cacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+		<!-- 注入ehcache的配置文件 -->
+		<property name="cacheManagerConfigFile" value="classpath:ehcache.xml" />
+	</bean>
+
+
+	<!-- 配置安全管理器 -->
+	<bean name="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
+		<property name="realm" ref="realm"></property>
+		<property name="cacheManager" ref="cacheManager"></property>
+	</bean>
+
+	<!-- 注入realm -->
+	<bean name="realm" class="com.quanmin.shiro.CustomRealm"></bean>
+
+	<!-- 开启shiro框架注解支持放弃jdkproxy使用cglib -->
+	<!-- <bean name="defaultAdvisorAutoProxyCreator" class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"> 
+		<property name="proxyTargetClass" value="true"></property> </bean> -->
+
+	<!-- 配置shiro框架提供的切面类，用于创建代理对象 -->
+	<bean
+		class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor" />
+
+
+</beans>

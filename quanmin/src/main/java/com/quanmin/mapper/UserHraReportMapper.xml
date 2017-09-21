@@ -1,0 +1,420 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.quanmin.dao.mapper.UserHraReportMapper" >
+  <resultMap id="BaseResultMap" type="com.quanmin.model.UserHraReport" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="hra_user_id" property="hraUserId" jdbcType="INTEGER" />
+    <result column="hra_id" property="hraId" jdbcType="INTEGER" />
+    <result column="hra_user_name" property="hraUserName" jdbcType="VARCHAR" />
+    <result column="hra_report_time" property="hraReportTime" jdbcType="VARCHAR" />
+    <result column="hra_report_url" property="hraReportUrl" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="ext1" property="ext1" jdbcType="VARCHAR" />
+    <result column="ext2" property="ext2" jdbcType="VARCHAR" />
+    <result column="ext3" property="ext3" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <resultMap id="SysUserAndReportBaseResultMap" type="com.quanmin.model.custom.SysUserAndReportInfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="reportTime" property="reportTime" jdbcType="VARCHAR" />
+    <result column="reportUrl" property="reportUrl" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="TIMESTAMP" />
+    <result column="createDate" property="createDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, user_id, hra_user_id, hra_id, hra_user_name, hra_report_time, hra_report_url, 
+    create_time, update_time, ext1, ext2, ext3
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.quanmin.model.UserHraReportExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from t_user_hra_report
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_user_hra_report
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_user_hra_report
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.quanmin.model.UserHraReportExample" >
+    delete from t_user_hra_report
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.quanmin.model.UserHraReport" >
+    insert into t_user_hra_report (id, user_id, hra_user_id, 
+      hra_id, hra_user_name, hra_report_time, 
+      hra_report_url, create_time, update_time, 
+      ext1, ext2, ext3)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{hraUserId,jdbcType=INTEGER}, 
+      #{hraId,jdbcType=INTEGER}, #{hraUserName,jdbcType=VARCHAR}, #{hraReportTime,jdbcType=VARCHAR}, 
+      #{hraReportUrl,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{ext1,jdbcType=VARCHAR}, #{ext2,jdbcType=VARCHAR}, #{ext3,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.quanmin.model.UserHraReport" >
+    insert into t_user_hra_report
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="hraUserId != null" >
+        hra_user_id,
+      </if>
+      <if test="hraId != null" >
+        hra_id,
+      </if>
+      <if test="hraUserName != null" >
+        hra_user_name,
+      </if>
+      <if test="hraReportTime != null" >
+        hra_report_time,
+      </if>
+      <if test="hraReportUrl != null" >
+        hra_report_url,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="ext1 != null" >
+        ext1,
+      </if>
+      <if test="ext2 != null" >
+        ext2,
+      </if>
+      <if test="ext3 != null" >
+        ext3,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="hraUserId != null" >
+        #{hraUserId,jdbcType=INTEGER},
+      </if>
+      <if test="hraId != null" >
+        #{hraId,jdbcType=INTEGER},
+      </if>
+      <if test="hraUserName != null" >
+        #{hraUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="hraReportTime != null" >
+        #{hraReportTime,jdbcType=VARCHAR},
+      </if>
+      <if test="hraReportUrl != null" >
+        #{hraReportUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ext1 != null" >
+        #{ext1,jdbcType=VARCHAR},
+      </if>
+      <if test="ext2 != null" >
+        #{ext2,jdbcType=VARCHAR},
+      </if>
+      <if test="ext3 != null" >
+        #{ext3,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.quanmin.model.UserHraReportExample" resultType="java.lang.Integer" >
+    select count(*) from t_user_hra_report
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update t_user_hra_report
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.hraUserId != null" >
+        hra_user_id = #{record.hraUserId,jdbcType=INTEGER},
+      </if>
+      <if test="record.hraId != null" >
+        hra_id = #{record.hraId,jdbcType=INTEGER},
+      </if>
+      <if test="record.hraUserName != null" >
+        hra_user_name = #{record.hraUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hraReportTime != null" >
+        hra_report_time = #{record.hraReportTime,jdbcType=VARCHAR},
+      </if>
+      <if test="record.hraReportUrl != null" >
+        hra_report_url = #{record.hraReportUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createTime != null" >
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateTime != null" >
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.ext1 != null" >
+        ext1 = #{record.ext1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ext2 != null" >
+        ext2 = #{record.ext2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ext3 != null" >
+        ext3 = #{record.ext3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update t_user_hra_report
+    set id = #{record.id,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      hra_user_id = #{record.hraUserId,jdbcType=INTEGER},
+      hra_id = #{record.hraId,jdbcType=INTEGER},
+      hra_user_name = #{record.hraUserName,jdbcType=VARCHAR},
+      hra_report_time = #{record.hraReportTime,jdbcType=VARCHAR},
+      hra_report_url = #{record.hraReportUrl,jdbcType=VARCHAR},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
+      update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+      ext1 = #{record.ext1,jdbcType=VARCHAR},
+      ext2 = #{record.ext2,jdbcType=VARCHAR},
+      ext3 = #{record.ext3,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.quanmin.model.UserHraReport" >
+    update t_user_hra_report
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="hraUserId != null" >
+        hra_user_id = #{hraUserId,jdbcType=INTEGER},
+      </if>
+      <if test="hraId != null" >
+        hra_id = #{hraId,jdbcType=INTEGER},
+      </if>
+      <if test="hraUserName != null" >
+        hra_user_name = #{hraUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="hraReportTime != null" >
+        hra_report_time = #{hraReportTime,jdbcType=VARCHAR},
+      </if>
+      <if test="hraReportUrl != null" >
+        hra_report_url = #{hraReportUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ext1 != null" >
+        ext1 = #{ext1,jdbcType=VARCHAR},
+      </if>
+      <if test="ext2 != null" >
+        ext2 = #{ext2,jdbcType=VARCHAR},
+      </if>
+      <if test="ext3 != null" >
+        ext3 = #{ext3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.quanmin.model.UserHraReport" >
+    update t_user_hra_report
+    set user_id = #{userId,jdbcType=INTEGER},
+      hra_user_id = #{hraUserId,jdbcType=INTEGER},
+      hra_id = #{hraId,jdbcType=INTEGER},
+      hra_user_name = #{hraUserName,jdbcType=VARCHAR},
+      hra_report_time = #{hraReportTime,jdbcType=VARCHAR},
+      hra_report_url = #{hraReportUrl,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      ext1 = #{ext1,jdbcType=VARCHAR},
+      ext2 = #{ext2,jdbcType=VARCHAR},
+      ext3 = #{ext3,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="getUserReprotListBySearchCondition" resultMap="SysUserAndReportBaseResultMap"  parameterType="com.quanmin.model.custom.SearchCondition" >
+    SELECT
+        su.id AS id,
+        uhr.hra_report_time AS reportTime,
+        uhr.hra_report_url AS reportUrl,
+        su.`name` AS name,
+        su.phone AS phone,
+        su.sex AS sex,
+        su.age AS age,
+        su.address AS address,
+        su.create_date AS createDate
+    FROM
+        sys_user su
+    LEFT JOIN t_user_hra_report uhr ON su.id = uhr.user_id
+    WHERE
+        su.user_type = 0
+    AND uhr.id IS NOT NULL
+    <if test="age != '' and age != null">
+       <if test="age == 0">
+         AND su.age <![CDATA[<]]> #{age,jdbcType=INTEGER}
+       </if>
+       <if test="age == 1">
+         AND su.age BETWEEN 20 AND 25
+       </if>
+       <if test="age == 2">
+         AND su.age BETWEEN 25 AND 30
+       </if>
+       <if test="age == 3">
+         AND su.age BETWEEN 30 AND 35
+       </if>
+       <if test="age == 4">
+         AND su.age BETWEEN 35 AND 40
+       </if>
+       <if test="age == 5">
+         AND su.age BETWEEN 40 AND 45
+       </if>
+       <if test="age == 6">
+         AND su.age BETWEEN 45 AND 50
+       </if>
+       <if test="age == 7">
+         AND su.age BETWEEN 50 AND 55
+       </if>
+       <if test="age == 8">
+         AND su.age BETWEEN 55 AND 60
+       </if>
+       <if test="age == 9">
+         AND su.age BETWEEN 60 AND 65
+       </if>
+       <if test="age == 9">
+         AND su.age BETWEEN 65 AND 70
+       </if>
+       <if test="age == 10">
+         AND su.age BETWEEN 70 AND 75
+       </if>
+       <if test="age == 11">
+         AND su.age BETWEEN 75 AND 80
+       </if>
+       <if test="age == 12">
+         AND su.age>80
+       </if>
+    </if>
+    <!--&lt;!&ndash;<if test="departmentId != '' and departmentId != null">
+     AND d.id = #{departmentId,jdbcType=INTEGER}
+   </if>-->
+   <if test=" sex != '' and sex != null">
+     AND su.sex = #{sex,jdbcType=INTEGER}
+   </if>
+    <if test="searchKey != '' and searchKey != null">
+      and (su.username LIKE "%"  #{searchKey,jdbcType=VARCHAR} "%" OR su.name LIKE "%"
+      #{searchKey,jdbcType=VARCHAR}  "%" OR su.phone LIKE "%"
+      #{searchKey,jdbcType=VARCHAR}  "%")
+    </if>
+    <if test="area != '' and area != null">
+      and (su.address LIKE "%"  #{area,jdbcType=VARCHAR} "%")
+    </if>
+    <if test="checkDate != '' and checkDate != null">
+      and (uhr.hra_report_time=  #{checkDate,jdbcType=VARCHAR})
+    </if>
+    ORDER BY
+        uhr.hra_report_time DESC
+  </select>
+
+</mapper>

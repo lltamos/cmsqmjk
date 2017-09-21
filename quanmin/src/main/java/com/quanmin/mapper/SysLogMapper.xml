@@ -1,0 +1,586 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.quanmin.dao.mapper.SysLogMapper">
+    <!--统计活跃用户-->
+    <resultMap id="userCountResultMap" type="com.quanmin.model.custom.UserCountInfo">
+        <id column="title" property="title" jdbcType="VARCHAR"/>
+        <result column="number" property="number" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <resultMap id="BaseResultMap" type="com.quanmin.model.SysLog">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="app_name" property="appName" jdbcType="VARCHAR"/>
+        <result column="log_type" property="logType" jdbcType="INTEGER"/>
+        <result column="user_id" property="userId" jdbcType="VARCHAR"/>
+        <result column="method_name" property="methodName" jdbcType="VARCHAR"/>
+        <result column="request_params" property="requestParams" jdbcType="VARCHAR"/>
+        <result column="method_description" property="methodDescription" jdbcType="VARCHAR"/>
+        <result column="request_ip" property="requestIp" jdbcType="VARCHAR"/>
+        <result column="request_uri" property="requestUri" jdbcType="VARCHAR"/>
+        <result column="exception_code" property="exceptionCode" jdbcType="VARCHAR"/>
+        <result column="exception_description" property="exceptionDescription" jdbcType="VARCHAR"/>
+        <result column="version_id" property="versionId" jdbcType="VARCHAR"/>
+        <result column="phoneType" property="phonetype" jdbcType="VARCHAR"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+        <result column="ext1" property="ext1" jdbcType="VARCHAR"/>
+        <result column="ext2" property="ext2" jdbcType="VARCHAR"/>
+        <result column="ext3" property="ext3" jdbcType="VARCHAR"/>
+        <result column="type" property="type" jdbcType="VARCHAR"/>
+        <result column="phone_model" property="phoneModel" jdbcType="VARCHAR"/>
+        <result column="system_version" property="systemVersion" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <resultMap id="SysLogVOResultMap" type="com.quanmin.model.custom.SysLogVO" extends="BaseResultMap">
+        <result column="username" property="username" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Example_Where_Clause">
+        <where>
+            <foreach collection="oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Update_By_Example_Where_Clause">
+        <where>
+            <foreach collection="example.oredCriteria" item="criteria" separator="or">
+                <if test="criteria.valid">
+                    <trim prefix="(" suffix=")" prefixOverrides="and">
+                        <foreach collection="criteria.criteria" item="criterion">
+                            <choose>
+                                <when test="criterion.noValue">
+                                    and ${criterion.condition}
+                                </when>
+                                <when test="criterion.singleValue">
+                                    and ${criterion.condition} #{criterion.value}
+                                </when>
+                                <when test="criterion.betweenValue">
+                                    and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                                </when>
+                                <when test="criterion.listValue">
+                                    and ${criterion.condition}
+                                    <foreach collection="criterion.value" item="listItem" open="(" close=")"
+                                             separator=",">
+                                        #{listItem}
+                                    </foreach>
+                                </when>
+                            </choose>
+                        </foreach>
+                    </trim>
+                </if>
+            </foreach>
+        </where>
+    </sql>
+    <sql id="Base_Column_List">
+    id, app_name, log_type, user_id, method_name, request_params, method_description,
+    request_ip, request_uri, exception_code, exception_description, version_id, phoneType,
+    create_time, update_time, ext1, ext2, ext3, type, phone_model, system_version
+  </sql>
+    <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.quanmin.model.SysLogExample">
+        select
+        <if test="distinct">
+            distinct
+        </if>
+        <include refid="Base_Column_List"/>
+        from sys_log
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+        <if test="orderByClause != null">
+            order by ${orderByClause}
+        </if>
+    </select>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_log
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from sys_log
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+    <delete id="deleteByExample" parameterType="com.quanmin.model.SysLogExample">
+        delete from sys_log
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </delete>
+    <insert id="insert" parameterType="com.quanmin.model.SysLog">
+    insert into sys_log (id, app_name, log_type,
+    user_id, method_name, request_params,
+    method_description, request_ip, request_uri,
+    exception_code, exception_description, version_id,
+    phoneType, create_time, update_time,
+    ext1, ext2, ext3, type,
+    phone_model, system_version)
+    values (#{id,jdbcType=INTEGER}, #{appName,jdbcType=VARCHAR}, #{logType,jdbcType=INTEGER},
+    #{userId,jdbcType=VARCHAR}, #{methodName,jdbcType=VARCHAR}, #{requestParams,jdbcType=VARCHAR},
+    #{methodDescription,jdbcType=VARCHAR}, #{requestIp,jdbcType=VARCHAR}, #{requestUri,jdbcType=VARCHAR},
+    #{exceptionCode,jdbcType=VARCHAR}, #{exceptionDescription,jdbcType=VARCHAR}, #{versionId,jdbcType=VARCHAR},
+    #{phonetype,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+    #{ext1,jdbcType=VARCHAR}, #{ext2,jdbcType=VARCHAR}, #{ext3,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR},
+    #{phoneModel,jdbcType=VARCHAR}, #{systemVersion,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.quanmin.model.SysLog">
+        insert into sys_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="appName != null">
+                app_name,
+            </if>
+            <if test="logType != null">
+                log_type,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="methodName != null">
+                method_name,
+            </if>
+            <if test="requestParams != null">
+                request_params,
+            </if>
+            <if test="methodDescription != null">
+                method_description,
+            </if>
+            <if test="requestIp != null">
+                request_ip,
+            </if>
+            <if test="requestUri != null">
+                request_uri,
+            </if>
+            <if test="exceptionCode != null">
+                exception_code,
+            </if>
+            <if test="exceptionDescription != null">
+                exception_description,
+            </if>
+            <if test="versionId != null">
+                version_id,
+            </if>
+            <if test="phonetype != null">
+                phoneType,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="ext1 != null">
+                ext1,
+            </if>
+            <if test="ext2 != null">
+                ext2,
+            </if>
+            <if test="ext3 != null">
+                ext3,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="phoneModel != null">
+                phone_model,
+            </if>
+            <if test="systemVersion != null">
+                system_version,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="appName != null">
+                #{appName,jdbcType=VARCHAR},
+            </if>
+            <if test="logType != null">
+                #{logType,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="methodName != null">
+                #{methodName,jdbcType=VARCHAR},
+            </if>
+            <if test="requestParams != null">
+                #{requestParams,jdbcType=VARCHAR},
+            </if>
+            <if test="methodDescription != null">
+                #{methodDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="requestIp != null">
+                #{requestIp,jdbcType=VARCHAR},
+            </if>
+            <if test="requestUri != null">
+                #{requestUri,jdbcType=VARCHAR},
+            </if>
+            <if test="exceptionCode != null">
+                #{exceptionCode,jdbcType=VARCHAR},
+            </if>
+            <if test="exceptionDescription != null">
+                #{exceptionDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="versionId != null">
+                #{versionId,jdbcType=VARCHAR},
+            </if>
+            <if test="phonetype != null">
+                #{phonetype,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ext1 != null">
+                #{ext1,jdbcType=VARCHAR},
+            </if>
+            <if test="ext2 != null">
+                #{ext2,jdbcType=VARCHAR},
+            </if>
+            <if test="ext3 != null">
+                #{ext3,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneModel != null">
+                #{phoneModel,jdbcType=VARCHAR},
+            </if>
+            <if test="systemVersion != null">
+                #{systemVersion,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <select id="countByExample" parameterType="com.quanmin.model.SysLogExample" resultType="java.lang.Integer">
+        select count(*) from sys_log
+        <if test="_parameter != null">
+            <include refid="Example_Where_Clause"/>
+        </if>
+    </select>
+    <update id="updateByExampleSelective" parameterType="map">
+        update sys_log
+        <set>
+            <if test="record.id != null">
+                id = #{record.id,jdbcType=INTEGER},
+            </if>
+            <if test="record.appName != null">
+                app_name = #{record.appName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.logType != null">
+                log_type = #{record.logType,jdbcType=INTEGER},
+            </if>
+            <if test="record.userId != null">
+                user_id = #{record.userId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.methodName != null">
+                method_name = #{record.methodName,jdbcType=VARCHAR},
+            </if>
+            <if test="record.requestParams != null">
+                request_params = #{record.requestParams,jdbcType=VARCHAR},
+            </if>
+            <if test="record.methodDescription != null">
+                method_description = #{record.methodDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="record.requestIp != null">
+                request_ip = #{record.requestIp,jdbcType=VARCHAR},
+            </if>
+            <if test="record.requestUri != null">
+                request_uri = #{record.requestUri,jdbcType=VARCHAR},
+            </if>
+            <if test="record.exceptionCode != null">
+                exception_code = #{record.exceptionCode,jdbcType=VARCHAR},
+            </if>
+            <if test="record.exceptionDescription != null">
+                exception_description = #{record.exceptionDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="record.versionId != null">
+                version_id = #{record.versionId,jdbcType=VARCHAR},
+            </if>
+            <if test="record.phonetype != null">
+                phoneType = #{record.phonetype,jdbcType=VARCHAR},
+            </if>
+            <if test="record.createTime != null">
+                create_time = #{record.createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.updateTime != null">
+                update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="record.ext1 != null">
+                ext1 = #{record.ext1,jdbcType=VARCHAR},
+            </if>
+            <if test="record.ext2 != null">
+                ext2 = #{record.ext2,jdbcType=VARCHAR},
+            </if>
+            <if test="record.ext3 != null">
+                ext3 = #{record.ext3,jdbcType=VARCHAR},
+            </if>
+            <if test="record.type != null">
+                type = #{record.type,jdbcType=VARCHAR},
+            </if>
+            <if test="record.phoneModel != null">
+                phone_model = #{record.phoneModel,jdbcType=VARCHAR},
+            </if>
+            <if test="record.systemVersion != null">
+                system_version = #{record.systemVersion,jdbcType=VARCHAR},
+            </if>
+        </set>
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByExample" parameterType="map">
+        update sys_log
+        set id = #{record.id,jdbcType=INTEGER},
+        app_name = #{record.appName,jdbcType=VARCHAR},
+        log_type = #{record.logType,jdbcType=INTEGER},
+        user_id = #{record.userId,jdbcType=VARCHAR},
+        method_name = #{record.methodName,jdbcType=VARCHAR},
+        request_params = #{record.requestParams,jdbcType=VARCHAR},
+        method_description = #{record.methodDescription,jdbcType=VARCHAR},
+        request_ip = #{record.requestIp,jdbcType=VARCHAR},
+        request_uri = #{record.requestUri,jdbcType=VARCHAR},
+        exception_code = #{record.exceptionCode,jdbcType=VARCHAR},
+        exception_description = #{record.exceptionDescription,jdbcType=VARCHAR},
+        version_id = #{record.versionId,jdbcType=VARCHAR},
+        phoneType = #{record.phonetype,jdbcType=VARCHAR},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
+        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+        ext1 = #{record.ext1,jdbcType=VARCHAR},
+        ext2 = #{record.ext2,jdbcType=VARCHAR},
+        ext3 = #{record.ext3,jdbcType=VARCHAR},
+        type = #{record.type,jdbcType=VARCHAR},
+        phone_model = #{record.phoneModel,jdbcType=VARCHAR},
+        system_version = #{record.systemVersion,jdbcType=VARCHAR}
+        <if test="_parameter != null">
+            <include refid="Update_By_Example_Where_Clause"/>
+        </if>
+    </update>
+    <update id="updateByPrimaryKeySelective" parameterType="com.quanmin.model.SysLog">
+        update sys_log
+        <set>
+            <if test="appName != null">
+                app_name = #{appName,jdbcType=VARCHAR},
+            </if>
+            <if test="logType != null">
+                log_type = #{logType,jdbcType=INTEGER},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=VARCHAR},
+            </if>
+            <if test="methodName != null">
+                method_name = #{methodName,jdbcType=VARCHAR},
+            </if>
+            <if test="requestParams != null">
+                request_params = #{requestParams,jdbcType=VARCHAR},
+            </if>
+            <if test="methodDescription != null">
+                method_description = #{methodDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="requestIp != null">
+                request_ip = #{requestIp,jdbcType=VARCHAR},
+            </if>
+            <if test="requestUri != null">
+                request_uri = #{requestUri,jdbcType=VARCHAR},
+            </if>
+            <if test="exceptionCode != null">
+                exception_code = #{exceptionCode,jdbcType=VARCHAR},
+            </if>
+            <if test="exceptionDescription != null">
+                exception_description = #{exceptionDescription,jdbcType=VARCHAR},
+            </if>
+            <if test="versionId != null">
+                version_id = #{versionId,jdbcType=VARCHAR},
+            </if>
+            <if test="phonetype != null">
+                phoneType = #{phonetype,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ext1 != null">
+                ext1 = #{ext1,jdbcType=VARCHAR},
+            </if>
+            <if test="ext2 != null">
+                ext2 = #{ext2,jdbcType=VARCHAR},
+            </if>
+            <if test="ext3 != null">
+                ext3 = #{ext3,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="phoneModel != null">
+                phone_model = #{phoneModel,jdbcType=VARCHAR},
+            </if>
+            <if test="systemVersion != null">
+                system_version = #{systemVersion,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.quanmin.model.SysLog">
+    update sys_log
+    set app_name = #{appName,jdbcType=VARCHAR},
+    log_type = #{logType,jdbcType=INTEGER},
+    user_id = #{userId,jdbcType=VARCHAR},
+    method_name = #{methodName,jdbcType=VARCHAR},
+    request_params = #{requestParams,jdbcType=VARCHAR},
+    method_description = #{methodDescription,jdbcType=VARCHAR},
+    request_ip = #{requestIp,jdbcType=VARCHAR},
+    request_uri = #{requestUri,jdbcType=VARCHAR},
+    exception_code = #{exceptionCode,jdbcType=VARCHAR},
+    exception_description = #{exceptionDescription,jdbcType=VARCHAR},
+    version_id = #{versionId,jdbcType=VARCHAR},
+    phoneType = #{phonetype,jdbcType=VARCHAR},
+    create_time = #{createTime,jdbcType=TIMESTAMP},
+    update_time = #{updateTime,jdbcType=TIMESTAMP},
+    ext1 = #{ext1,jdbcType=VARCHAR},
+    ext2 = #{ext2,jdbcType=VARCHAR},
+    ext3 = #{ext3,jdbcType=VARCHAR},
+    type = #{type,jdbcType=VARCHAR},
+    phone_model = #{phoneModel,jdbcType=VARCHAR},
+    system_version = #{systemVersion,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+    <select id="activeUserCount" resultMap="userCountResultMap">
+    SELECT 'oneday' as title ,COUNT(1) as number FROM (SELECT user_id FROM sys_log WHERE  TO_DAYS(create_time) =TO_DAYS(NOW()) and user_id IS NOT NULL  GROUP BY user_id) as t
+    UNION
+    SELECT 'yesterday' as title, COUNT(1) as number  FROM (SELECT user_id FROM sys_log WHERE  TO_DAYS(create_time) =TO_DAYS(NOW())-1 and user_id IS NOT NULL  GROUP BY user_id) as t
+    UNION
+    SELECT 'sevenday' as title,COUNT(1) as number FROM  (SELECT user_id FROM sys_log WHERE  YEARWEEK(date_format(create_time,'%Y-%m-%d')) = YEARWEEK(now()) and user_id IS NOT NULL  GROUP BY user_id) as t
+    UNION
+    select 'onemonth' as title, COUNT(1) as number from  (SELECT user_id FROM sys_log WHERE  date_format(create_time,'%Y-%m')=date_format(now(),'%Y-%m')and user_id IS NOT NULL  GROUP BY user_id) as t
+    UNION
+    select 'allday' as title, COUNT(1) as number from   (SELECT user_id FROM sys_log WHERE  user_id IS NOT NULL  GROUP BY user_id) as t
+
+  </select>
+
+    <select id="addUserStatisticsCount" resultType="java.lang.String">
+        <if test="type==1">
+            SELECT date_format(t.create_time,'%H') from (SELECT create_time FROM sys_log WHERE user_id IS NOT NULL GROUP
+            BY user_id) as t where t.create_time is NOT NULL and
+            date_format(t.create_time,'%Y-%m-%d')=date_format(#{data,jdbcType=VARCHAR},'%Y-%m-%d') GROUP BY
+            date_format(t.create_time,'%H') ;
+        </if>
+
+        <if test="type==2">
+
+            SELECT date_format(t.create_time,'%d') from (SELECT create_time FROM sys_log WHERE user_id IS NOT NULL GROUP
+            BY user_id) as t where t.create_time is NOT NULL and
+            date_format(t.create_time,'%Y-%m')=date_format(#{data,jdbcType=VARCHAR},'%Y-%m') GROUP BY
+            date_format(t.create_time,'%d');
+        </if>
+
+        <if test="type==3">
+            SELECT date_format(t.create_time,'%m') from (SELECT create_time FROM sys_log WHERE user_id IS NOT NULL GROUP
+            BY user_id) as t where t.create_time is NOT NULL and
+            date_format(t.create_time,'%Y')=date_format(#{data,jdbcType=VARCHAR},'%Y') GROUP BY
+            date_format(t.create_time,'%m');
+
+        </if>
+
+        <if test="type==4">
+            SELECT date_format(t.create_time,'%Y') from (SELECT create_time FROM sys_log WHERE user_id IS NOT NULL GROUP
+            BY user_id) as t where t.create_time is NOT NULL GROUP BY date_format(t.create_time,'%Y');
+
+        </if>
+    </select>
+
+    <select id="addUserStatisticsMap" resultType="java.lang.Integer">
+        <!--查询小时-->
+        <if test="type==1">
+            SELECT COUNT(date_format(t.create_time,'%H')) from (SELECT create_time FROM sys_log WHERE user_id IS NOT
+            NULL GROUP BY user_id) as t where t.create_time is NOT NULL and
+            date_format(t.create_time,'%Y-%m-%d')=date_format(#{data,jdbcType=VARCHAR},'%Y-%m-%d') GROUP BY
+            date_format(t.create_time,'%H') ;
+        </if>
+        <!--查询天-->
+        <if test="type==2">
+            SELECT count(date_format(t.create_time,'%d')) from (SELECT create_time FROM sys_log WHERE user_id IS NOT
+            NULL GROUP BY user_id) as t where t.create_time is NOT NULL and
+            date_format(t.create_time,'%Y-%m')=date_format(#{data,jdbcType=VARCHAR},'%Y-%m') GROUP BY
+            date_format(t.create_time,'%d');
+        </if>
+        <if test="type==3">
+            SELECT count(date_format(t.create_time,'%m')) from (SELECT create_time FROM sys_log WHERE user_id IS NOT
+            NULL GROUP BY user_id, date_format(create_time, '%m')) as t where t.create_time is NOT NULL GROUP BY
+            date_format(t.create_time,'%m');
+        </if>
+        <if test="type==4">
+            SELECT count(date_format(t.create_time,'%Y')) from (SELECT create_time FROM sys_log WHERE user_id IS NOT
+            NULL GROUP BY user_id) as t where t.create_time is NOT NULL GROUP BY date_format(t.create_time,'%Y');
+        </if>
+    </select>
+
+
+    <select id="listLogByCondition" resultMap="SysLogVOResultMap"
+            parameterType="com.quanmin.model.custom.SearchCondition">
+        SELECT
+        sl.id,
+        sl.user_id,
+        sl.method_name,
+        sl.request_ip,
+        sl.request_params,sl.request_uri,
+        sl.method_description,
+        sl.create_time,
+        su.username
+        FROM
+        `sys_log` sl
+        LEFT JOIN sys_user su ON su.id = sl.user_id
+        WHERE
+        sl.type = 2
+
+        <if test="startTime != null and startTime != '' and endTime != null and endTime != ''">
+            AND (
+            sl.create_time &gt;= #{startTime,jdbcType=VARCHAR}
+            and
+            sl.create_time &lt;= #{endTime,jdbcType=VARCHAR}
+            )
+        </if>
+
+        <if test="searchKey != null and searchKey != ''">
+            and sl.method_description LIKE "%" #{searchKey,jdbcType=VARCHAR} "%"
+        </if>
+
+        <if test="userId != null and userId != ''">
+            and sl.user_id=#{userId,jdbcType=INTEGER}
+        </if>
+        ORDER BY
+        sl.create_time DESC
+
+    </select>
+
+</mapper>

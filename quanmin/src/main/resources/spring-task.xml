@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+			http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+    <!-- 总管理类 如果将lazy-init='false'那么容器启动就会执行调度程序 -->
+    <bean id="startQuertz" lazy-init="false" autowire="no"
+          class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+
+        <property name="triggers">
+            <list>
+                <ref bean="getHRAUserReportEveryDay" />
+                <ref bean="receiptScanTaskJobCron"/>
+            </list>
+        </property>
+    </bean>
+
+    <!-- ================================================================================= -->
+    <!-- 定时拉去报告数据-->
+    <!-- 要调用的工作类 -->
+    <bean id="everyDayClearPushMessage" class="com.quanmin.task.SysUserHRAReport" />
+    <!--扫描以超过收货时间的订单-->
+    <bean id="receiptScanTask" class="com.quanmin.task.ReceiptScanTask" />
+
+    <!--定时同步大数据平台项目信息-->
+    <!-- <bean id="EveryDayProjectInfoSyn" class="com.quanmin.task.ProjectSynTask" init-method="projectSyncho"></bean>-->
+
+    <!--定时同步大数据平台项目信息-->
+    <!--<bean id="EveryDayRecuperateInfoSyn" class="com.quanmin.task.RecuperateSynTask" init-method="recuperateSyncho"></bean>-->
+
+    <!-- 定义调用对象和调用对象的方法 -->
+    <bean id="getHRAUserReportJob"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!-- 调用的类 -->
+        <property name="targetObject" ref="everyDayClearPushMessage"/>
+        <!-- 调用类中的方法 -->
+        <property name="targetMethod" value="getHRAUserReport"/>
+    </bean>
+    <!-- 定义触发时间 -->
+    <bean id="getHRAUserReportEveryDay"
+          class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="getHRAUserReportJob"/>
+        <!-- cron表达式 -->
+        <property name="cronExpression" value="0 0 0/1 * * ? "/>
+    </bean>
+
+
+    <bean id="receiptScanTaskJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="receiptScanTask"/>
+        <property name="targetMethod" value="sweepTime"/>
+    </bean>
+    <bean id="receiptScanTaskJobCron" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="receiptScanTaskJob"/>
+        <property name="cronExpression" value="0 0/2 * * * ? *"/>
+    </bean>
+
+</beans>

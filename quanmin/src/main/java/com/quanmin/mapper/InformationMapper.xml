@@ -1,0 +1,809 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.quanmin.dao.mapper.InformationMapper">
+	<resultMap id="BaseResultMap" type="com.quanmin.model.Information">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="body_title" property="bodyTitle" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="comment" property="comment" jdbcType="VARCHAR" />
+		<result column="scannum" property="scannum" jdbcType="INTEGER" />
+		<result column="collectionsum" property="collectionsum"
+			jdbcType="INTEGER" />
+		<result column="cover_url" property="coverUrl" jdbcType="VARCHAR" />
+		<result column="publish" property="publish" jdbcType="INTEGER" />
+		<result column="publish_url" property="publishUrl" jdbcType="VARCHAR" />
+		<result column="publish_time" property="publishTime" jdbcType="TIMESTAMP" />
+		<result column="del_status" property="delStatus" jdbcType="INTEGER" />
+		<result column="last_operate_time" property="lastOperateTime"
+			jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+		<result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+	</resultMap>
+	
+	
+	<resultMap id="CMSBaseResultMap" type="com.quanmin.model.custom.CMSLableInformation">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="title" property="title" jdbcType="VARCHAR" />
+		<result column="body_title" property="bodyTitle" jdbcType="VARCHAR" />
+		<result column="user_id" property="userId" jdbcType="VARCHAR" />
+		<result column="comment" property="comment" jdbcType="VARCHAR" />
+		<result column="scannum" property="scannum" jdbcType="INTEGER" />
+		<result column="collectionsum" property="collectionsum"
+			jdbcType="INTEGER" />
+		<result column="cover_url" property="coverUrl" jdbcType="VARCHAR" />
+		<result column="publish" property="publish" jdbcType="INTEGER" />
+		<result column="publish_url" property="publishUrl" jdbcType="VARCHAR" />
+		<result column="publish_time" property="publishTime" jdbcType="VARCHAR" />
+		<result column="del_status" property="delStatus" jdbcType="INTEGER" />
+		<result column="last_operate_time" property="lastOperateTime"
+			jdbcType="TIMESTAMP" />
+		<result column="create_time" property="createTime" jdbcType="VARCHAR" />
+		<result column="update_time" property="updateTime" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<resultMap id="ResultMapWithBLOBs" type="com.quanmin.model.Information"
+		extends="BaseResultMap">
+		<result column="content" property="content" jdbcType="LONGVARCHAR" />
+	</resultMap>
+
+
+	<resultMap id="ShowIndexInformationResultMap" type="com.quanmin.model.custom.LableInformation"
+		extends="BaseResultMap">
+		<result column="content" property="content" jdbcType="LONGVARCHAR" />
+		<result column="labelName" property="labelName" jdbcType="VARCHAR" />
+		<result column="labelId" property="labelId" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Example_Where_Clause">
+		<where>
+			<foreach collection="oredCriteria" item="criteria" separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Update_By_Example_Where_Clause">
+		<where>
+			<foreach collection="example.oredCriteria" item="criteria"
+				separator="or">
+				<if test="criteria.valid">
+					<trim prefix="(" suffix=")" prefixOverrides="and">
+						<foreach collection="criteria.criteria" item="criterion">
+							<choose>
+								<when test="criterion.noValue">
+									and ${criterion.condition}
+								</when>
+								<when test="criterion.singleValue">
+									and ${criterion.condition} #{criterion.value}
+								</when>
+								<when test="criterion.betweenValue">
+									and ${criterion.condition} #{criterion.value}
+									and
+									#{criterion.secondValue}
+								</when>
+								<when test="criterion.listValue">
+									and ${criterion.condition}
+									<foreach collection="criterion.value" item="listItem"
+										open="(" close=")" separator=",">
+										#{listItem}
+									</foreach>
+								</when>
+							</choose>
+						</foreach>
+					</trim>
+				</if>
+			</foreach>
+		</where>
+	</sql>
+	<sql id="Base_Column_List">
+		id, title, body_title, user_id, comment, scannum,
+		collectionsum, cover_url, publish,
+		publish_url, publish_time,
+		del_status, last_operate_time, create_time,
+		update_time
+	</sql>
+	<sql id="Blob_Column_List">
+		content
+	</sql>
+	<select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs"
+		parameterType="com.quanmin.model.InformationExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from t_information
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByExample" resultMap="BaseResultMap"
+		parameterType="com.quanmin.model.InformationExample">
+		select
+		<if test="distinct">
+			distinct
+		</if>
+		<include refid="Base_Column_List" />
+		from t_information
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+		<if test="orderByClause != null">
+			order by ${orderByClause}
+		</if>
+	</select>
+	<select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		,
+		<include refid="Blob_Column_List" />
+		from t_information
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from
+		t_information
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<delete id="deleteByExample" parameterType="com.quanmin.model.InformationExample">
+		delete from t_information
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</delete>
+	<insert id="insert" parameterType="com.quanmin.model.Information">
+		insert into t_information (id,
+		title, body_title,
+		user_id, comment, scannum,
+		collectionsum, cover_url,
+		publish,
+		publish_url, publish_time,
+		del_status,
+		last_operate_time,
+		create_time,
+		update_time, content)
+		values
+		(#{id,jdbcType=INTEGER},
+		#{title,jdbcType=VARCHAR},
+		#{bodyTitle,jdbcType=VARCHAR},
+		#{userId,jdbcType=VARCHAR},
+		#{comment,jdbcType=VARCHAR},
+		#{scannum,jdbcType=INTEGER},
+		#{collectionsum,jdbcType=INTEGER},
+		#{coverUrl,jdbcType=VARCHAR},
+		#{publish,jdbcType=INTEGER},
+		#{publishUrl,jdbcType=VARCHAR},
+		#{publishTime,jdbcType=TIMESTAMP},
+		#{delStatus,jdbcType=INTEGER},
+		#{lastOperateTime,jdbcType=TIMESTAMP},
+		#{createTime,jdbcType=TIMESTAMP},
+		#{updateTime,jdbcType=TIMESTAMP},
+		#{content,jdbcType=LONGVARCHAR})
+	</insert>
+	<insert id="insertSelective" useGeneratedKeys="true"
+		keyProperty="id" parameterType="com.quanmin.model.Information">
+		insert into t_information
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="title != null">
+				title,
+			</if>
+			<if test="bodyTitle != null">
+				body_title,
+			</if>
+			<if test="userId != null">
+				user_id,
+			</if>
+			<if test="comment != null">
+				comment,
+			</if>
+			<if test="scannum != null">
+				scannum,
+			</if>
+			<if test="collectionsum != null">
+				collectionsum,
+			</if>
+			<if test="coverUrl != null">
+				cover_url,
+			</if>
+			<if test="publish != null">
+				publish,
+			</if>
+			<if test="publishUrl != null">
+				publish_url,
+			</if>
+			<if test="publishTime != null">
+				publish_time,
+			</if>
+			<if test="delStatus != null">
+				del_status,
+			</if>
+			<if test="lastOperateTime != null">
+				last_operate_time,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="updateTime != null">
+				update_time,
+			</if>
+			<if test="content != null">
+				content,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="title != null">
+				#{title,jdbcType=VARCHAR},
+			</if>
+			<if test="bodyTitle != null">
+				#{bodyTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				#{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="comment != null">
+				#{comment,jdbcType=VARCHAR},
+			</if>
+			<if test="scannum != null">
+				#{scannum,jdbcType=INTEGER},
+			</if>
+			<if test="collectionsum != null">
+				#{collectionsum,jdbcType=INTEGER},
+			</if>
+			<if test="coverUrl != null">
+				#{coverUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="publish != null">
+				#{publish,jdbcType=INTEGER},
+			</if>
+			<if test="publishUrl != null">
+				#{publishUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="publishTime != null">
+				#{publishTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="delStatus != null">
+				#{delStatus,jdbcType=INTEGER},
+			</if>
+			<if test="lastOperateTime != null">
+				#{lastOperateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				#{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				#{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="content != null">
+				#{content,jdbcType=LONGVARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<select id="countByExample" parameterType="com.quanmin.model.InformationExample"
+		resultType="java.lang.Integer">
+		select count(*) from t_information
+		<if test="_parameter != null">
+			<include refid="Example_Where_Clause" />
+		</if>
+	</select>
+	<update id="updateByExampleSelective" parameterType="map">
+		update t_information
+		<set>
+			<if test="record.id != null">
+				id = #{record.id,jdbcType=INTEGER},
+			</if>
+			<if test="record.title != null">
+				title = #{record.title,jdbcType=VARCHAR},
+			</if>
+			<if test="record.bodyTitle != null">
+				body_title = #{record.bodyTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="record.userId != null">
+				user_id = #{record.userId,jdbcType=VARCHAR},
+			</if>
+			<if test="record.comment != null">
+				comment = #{record.comment,jdbcType=VARCHAR},
+			</if>
+			<if test="record.scannum != null">
+				scannum = #{record.scannum,jdbcType=INTEGER},
+			</if>
+			<if test="record.collectionsum != null">
+				collectionsum = #{record.collectionsum,jdbcType=INTEGER},
+			</if>
+			<if test="record.coverUrl != null">
+				cover_url = #{record.coverUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="record.publish != null">
+				publish = #{record.publish,jdbcType=INTEGER},
+			</if>
+			<if test="record.publishUrl != null">
+				publish_url = #{record.publishUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="record.publishTime != null">
+				publish_time = #{record.publishTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.delStatus != null">
+				del_status = #{record.delStatus,jdbcType=INTEGER},
+			</if>
+			<if test="record.lastOperateTime != null">
+				last_operate_time =
+				#{record.lastOperateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.createTime != null">
+				create_time = #{record.createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.updateTime != null">
+				update_time = #{record.updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="record.content != null">
+				content = #{record.content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExampleWithBLOBs" parameterType="map">
+		update t_information
+		set title = #{title,jdbcType=VARCHAR},
+		body_title =
+		#{bodyTitle,jdbcType=VARCHAR},
+		user_id = #{userId,jdbcType=VARCHAR},
+		comment = #{comment,jdbcType=VARCHAR},
+		scannum =
+		#{scannum,jdbcType=INTEGER},
+		collectionsum =
+		#{collectionsum,jdbcType=INTEGER},
+		cover_url =
+		#{coverUrl,jdbcType=VARCHAR},
+		publish = #{publish,jdbcType=INTEGER},
+		publish_url = #{publishUrl,jdbcType=VARCHAR},
+		publish_time =
+		#{publishTime,jdbcType=TIMESTAMP},
+		del_status =
+		#{delStatus,jdbcType=INTEGER},
+		last_operate_time =
+		#{lastOperateTime,jdbcType=TIMESTAMP},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		update_time =
+		#{updateTime,jdbcType=TIMESTAMP},
+		content =
+		#{content,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByExample" parameterType="map">
+		update t_information
+		set id = #{record.id,jdbcType=INTEGER},
+		title =
+		#{record.title,jdbcType=VARCHAR},
+		body_title =
+		#{record.bodyTitle,jdbcType=VARCHAR},
+		user_id =
+		#{record.userId,jdbcType=VARCHAR},
+		comment =
+		#{record.comment,jdbcType=VARCHAR},
+		scannum =
+		#{record.scannum,jdbcType=INTEGER},
+		collectionsum =
+		#{record.collectionsum,jdbcType=INTEGER},
+		cover_url =
+		#{record.coverUrl,jdbcType=VARCHAR},
+		publish =
+		#{record.publish,jdbcType=INTEGER},
+		publish_url =
+		#{record.publishUrl,jdbcType=VARCHAR},
+		publish_time =
+		#{record.publishTime,jdbcType=TIMESTAMP},
+		del_status =
+		#{record.delStatus,jdbcType=INTEGER},
+		last_operate_time =
+		#{record.lastOperateTime,jdbcType=TIMESTAMP},
+		create_time =
+		#{record.createTime,jdbcType=TIMESTAMP},
+		update_time =
+		#{record.updateTime,jdbcType=TIMESTAMP}
+		<if test="_parameter != null">
+			<include refid="Update_By_Example_Where_Clause" />
+		</if>
+	</update>
+	<update id="updateByPrimaryKeySelective" parameterType="com.quanmin.model.Information">
+		update t_information
+		<set>
+			<if test="title != null">
+				title = #{title,jdbcType=VARCHAR},
+			</if>
+			<if test="bodyTitle != null">
+				body_title = #{bodyTitle,jdbcType=VARCHAR},
+			</if>
+			<if test="userId != null">
+				user_id = #{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="comment != null">
+				comment = #{comment,jdbcType=VARCHAR},
+			</if>
+			<if test="scannum != null">
+				scannum = #{scannum,jdbcType=INTEGER},
+			</if>
+			<if test="collectionsum != null">
+				collectionsum = #{collectionsum,jdbcType=INTEGER},
+			</if>
+			<if test="coverUrl != null">
+				cover_url = #{coverUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="publish != null">
+				publish = #{publish,jdbcType=INTEGER},
+			</if>
+			<if test="publishUrl != null">
+				publish_url = #{publishUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="publishTime != null">
+				publish_time = #{publishTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="delStatus != null">
+				del_status = #{delStatus,jdbcType=INTEGER},
+			</if>
+			<if test="lastOperateTime != null">
+				last_operate_time =
+				#{lastOperateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updateTime != null">
+				update_time = #{updateTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="content != null">
+				content = #{content,jdbcType=LONGVARCHAR},
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKeyWithBLOBs" parameterType="com.quanmin.model.Information">
+		update
+		t_information
+		set title = #{title,jdbcType=VARCHAR},
+		body_title =
+		#{bodyTitle,jdbcType=VARCHAR},
+		user_id = #{userId,jdbcType=VARCHAR},
+		comment = #{comment,jdbcType=VARCHAR},
+		scannum =
+		#{scannum,jdbcType=INTEGER},
+		collectionsum =
+		#{collectionsum,jdbcType=INTEGER},
+		cover_url =
+		#{coverUrl,jdbcType=VARCHAR},
+		publish = #{publish,jdbcType=INTEGER},
+		publish_url = #{publishUrl,jdbcType=VARCHAR},
+		publish_time =
+		#{publishTime,jdbcType=TIMESTAMP},
+		del_status =
+		#{delStatus,jdbcType=INTEGER},
+		last_operate_time =
+		#{lastOperateTime,jdbcType=TIMESTAMP},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		update_time =
+		#{updateTime,jdbcType=TIMESTAMP},
+		content =
+		#{content,jdbcType=LONGVARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.quanmin.model.Information">
+		update
+		t_information
+		set title = #{title,jdbcType=VARCHAR},
+		body_title =
+		#{bodyTitle,jdbcType=VARCHAR},
+		user_id = #{userId,jdbcType=VARCHAR},
+		comment = #{comment,jdbcType=VARCHAR},
+		scannum =
+		#{scannum,jdbcType=INTEGER},
+		collectionsum =
+		#{collectionsum,jdbcType=INTEGER},
+		cover_url =
+		#{coverUrl,jdbcType=VARCHAR},
+		publish = #{publish,jdbcType=INTEGER},
+		publish_url = #{publishUrl,jdbcType=VARCHAR},
+		publish_time =
+		#{publishTime,jdbcType=TIMESTAMP},
+		del_status =
+		#{delStatus,jdbcType=INTEGER},
+		last_operate_time =
+		#{lastOperateTime,jdbcType=TIMESTAMP},
+		create_time =
+		#{createTime,jdbcType=TIMESTAMP},
+		update_time =
+		#{updateTime,jdbcType=TIMESTAMP}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+
+
+	<sql id="Base_Info_Column_List">
+		ti.id AS id,
+		ti.body_title bodyTitle,
+		ti.collectionsum AS
+		collectionsum,
+		ti.`comment` AS COMMENT,
+		ti.content AS content,
+		ti.cover_url AS
+		coverUrl,
+		ti.create_time AS createTime,
+		ti.del_status AS
+		delStatus,
+		tli.featured,
+		ti.last_operate_time AS lastOperateTime,
+		ti.publish AS
+		publish,
+		ti.publish_url AS publishUrl,
+		ti.scannum AS scannum,
+		ti.title AS
+		title,
+		ti.user_id AS userId,
+		tl. NAME
+		AS labelName,
+		tl.id AS labelId,
+		 <![CDATA[  
+		CASE
+		WHEN TO_DAYS(NOW()) - TO_DAYS(publish_time) >= 3 THEN
+		DATE_FORMAT(publish_time, "%Y-%m-%d")
+		WHEN TO_DAYS(NOW()) - TO_DAYS(publish_time) >= 2 THEN
+		CONCAT(
+		"前天",
+		DATE_FORMAT(publish_time, "%H:%i")
+		)
+		WHEN TO_DAYS(NOW()) - TO_DAYS(publish_time) >= 1 THEN
+		CONCAT(
+		"昨天",
+		DATE_FORMAT(publish_time, "%H:%i")
+		)
+		WHEN TO_DAYS(NOW()) - TO_DAYS(publish_time) >= 0
+		AND publish_time - date_sub(NOW(), INTERVAL 60 MINUTE) < 0 THEN
+		CONCAT(
+		"今天",
+		DATE_FORMAT(publish_time, "%H:%i")
+		)
+		WHEN publish_time - date_sub(NOW(), INTERVAL 60 MINUTE) > 0 THEN
+		CONCAT(
+		CEIL(
+		DATE_FORMAT(
+		timediff(NOW(), publish_time),
+		"%i"
+		)
+		),
+		"分钟以前"
+		)
+		END publishTime
+		 ]]>
+	</sql>
+
+	<!-- 查询资讯列表 -->
+	<select id="showIndexInformation" resultMap="ShowIndexInformationResultMap"
+		parameterType="com.quanmin.model.custom.SearchCondition">
+		SELECT
+		<include refid="Base_Info_Column_List" />
+		FROM
+		`t_label` AS tl
+		LEFT OUTER JOIN t_label_information tli ON tl.id =
+		tli.label_id
+		LEFT OUTER JOIN t_information ti ON ti.id =
+		tli.information_id
+
+		WHERE 1=1
+		and ti.publish=1
+		AND ti.del_status=0
+		AND
+		tli.popular=0
+
+		<if test="id != null and id != ''">
+			and ti.id = #{id,jdbcType=INTEGER}
+		</if>
+		GROUP BY
+		ti.id
+		ORDER BY
+		ti.create_time DESC
+
+	</select>
+
+
+	<!-- 根据条件查询消息列表 -->
+	<select id="showInformationListByCondition" resultMap="ShowIndexInformationResultMap"
+		parameterType="com.quanmin.model.custom.SearchCondition">
+		SELECT
+		<include refid="Base_Info_Column_List" />
+		FROM
+		`t_label` AS tl
+		LEFT OUTER JOIN t_label_information tli ON tl.id =
+		tli.label_id
+		LEFT OUTER JOIN t_information ti ON ti.id =
+		tli.information_id
+
+		WHERE 1=1
+		and ti.publish=1
+		AND ti.del_status=0
+		<if test="type != null and type ==1">
+			AND
+			tli.popular=0
+		</if>
+		<if test="type != null and type !=1">
+			AND tl.id=#{type,jdbcType=VARCHAR}
+		</if>
+		<if test="informationId != null and informationId != ''">
+			and ti.id != #{informationId,jdbcType=INTEGER}
+		</if>
+		GROUP BY
+		ti.id
+		ORDER BY
+		ti.create_time DESC
+
+	</select>
+
+
+	<!-- 查看消息的详细信息 -->
+	<select id="showIndexInformationDetail" resultMap="ShowIndexInformationResultMap"
+		parameterType="com.quanmin.model.custom.SearchCondition">
+		SELECT
+		<include refid="Base_Info_Column_List" />
+		FROM
+		t_information AS ti
+		LEFT OUTER JOIN t_label_information tli ON
+		ti.id = tli.information_id
+		LEFT OUTER JOIN t_label tl ON tl.id =
+		tli.label_id
+		WHERE
+		ti.id IS NOT NULL
+		<if test="informationId != null and informationId != ''">
+			and ti.id = #{informationId,jdbcType=INTEGER}
+		</if>
+		GROUP BY
+		ti.id
+		ORDER BY
+		ti.create_time DESC
+		<if test="startNum != null">limit
+			#{startNum,jdbcType=INTEGER},#{size,jdbcType=INTEGER}
+		</if>
+	</select>
+
+	<!-- 查询精选条目 -->
+	<select id="selectFeaturedByCondition" resultMap="ShowIndexInformationResultMap"
+		parameterType="com.quanmin.model.custom.SearchCondition">
+		SELECT
+		<include refid="Base_Info_Column_List" />
+		FROM
+		t_label_information tli
+		LEFT OUTER JOIN
+		t_information ti ON
+		tli.information_id = ti.id
+		LEFT OUTER JOIN t_label
+		tl ON tl.id =
+		tli.label_id
+		WHERE
+		ti.id IS NOT NULL
+		AND tli.featured = 0
+		AND  ti.publish=1
+		AND
+		ti.del_status=0
+		<if test="type != 1">
+			AND tli.label_id
+			= #{type,jdbcType=INTEGER}
+		</if>
+		ORDER BY
+		tli.create_time
+		DESC
+		LIMIT 1
+	</select>
+
+	<!-- 查询用户id查询用户收藏 -->
+	<select id="showCollectionByUserId" resultMap="ShowIndexInformationResultMap">
+		SELECT
+		<include refid="Base_Info_Column_List" />
+		FROM
+		t_collection tc
+		LEFT
+		OUTER JOIN
+		t_information ti ON
+		ti.id=tc.information_id
+		LEFT OUTER JOIN
+		t_label_information tli ON ti.id
+		= tli.information_id
+		LEFT OUTER JOIN
+		t_label tl on tl.id = tli.label_id
+		WHERE
+		tc.del_status=0
+		AND ti.id IS NOT
+		NULL
+		AND
+		tc.user_id=#{userId,jdbcType=INTEGER}
+		GROUP BY
+		ti.id
+		ORDER BY
+		ti.create_time DESC
+	</select>
+
+
+
+	<!-- cms查询资讯列表 -->
+	<select id="selectInfoListByCondition" resultMap="CMSBaseResultMap"
+		parameterType="com.quanmin.model.custom.SearchCondition">
+
+		SELECT
+		i.id ,
+		i.title,
+		i.body_title ,
+		i.content,
+		i.user_id,
+		i.`comment`,
+		i.scannum,
+		i.collectionsum,
+		i.cover_url ,
+		i.publish,
+		i.publish_url ,
+		i.publish_time ,
+		DATE_FORMAT(i.create_time, "%Y-%m-%d") AS createTime
+		FROM
+		`t_information` i
+		LEFT OUTER JOIN t_label_information tli ON
+		tli.information_id = i.id
+		WHERE
+		i.del_status = 0
+		<if test="popular != null and popular != ''">
+			AND tli.popular = #{popular,jdbcType=VARCHAR}
+		</if>
+		<if test="featured != null and featured != ''">
+			AND tli.featured = #{featured,jdbcType=VARCHAR}
+		</if>
+		<if test="publishStatus != null and publishStatus != ''">
+			AND publish = #{publishStatus,jdbcType=VARCHAR}
+		</if>
+		<if test="searchKey != null and searchKey != ''">
+			and title LIKE '%' #{searchKey,jdbcType=VARCHAR} '%'
+		</if>
+		<if test="labelId != null and labelId != ''">
+			and tli.label_id =#{labelId,jdbcType=VARCHAR}
+		</if>
+
+		ORDER BY i.publish_time desc
+
+	</select>
+
+
+</mapper>
