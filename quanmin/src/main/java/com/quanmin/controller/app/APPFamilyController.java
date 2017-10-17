@@ -42,9 +42,9 @@ public class APPFamilyController {
     @Deprecated
     @RequestMapping(value = "/savefamily")
     @ResponseBody
-    public String saveFamily(Family family, Integer userId, String appellation) {
+    public ResultUtils saveFamily(Family family, Integer userId, String appellation) {
         ResultUtils result = familyService.saveFamily(family, userId, appellation);
-        return JsonUtils.objectToJson(result);
+        return result;
     }
 
     /**
@@ -59,9 +59,9 @@ public class APPFamilyController {
      */
     @PostMapping(value = "/savefamilymember")
     @ResponseBody
-    public String saveFamilyMember(Family family, Integer userId, String appellation, Integer type) {
+    public ResultUtils saveFamilyMember(Family family, Integer userId, String appellation, Integer type) {
         ResultUtils result = familyService.saveFamilyMember(family, userId, appellation, type);
-        return JsonUtils.objectToJson(result);
+        return result;
     }
 
     @Deprecated
@@ -73,9 +73,9 @@ public class APPFamilyController {
      */
     @RequestMapping(value = "/showfamily")
     @ResponseBody
-    public String showFamily(Integer id) {
+    public ResultUtils showFamily(Integer id) {
         ResultUtils result = familyService.showFamilyByUserId(id);
-        return JsonUtils.objectToJson(result);
+        return result;
     }
 
     /**
@@ -87,9 +87,9 @@ public class APPFamilyController {
      */
     @RequestMapping(value = "/deletefamily")
     @ResponseBody
-    public String deleteFamily(Integer id, Integer familyId) {
+    public ResultUtils deleteFamily(Integer id, Integer familyId) {
         ResultUtils result = familyService.deleteFamily(id, familyId);
-        return JsonUtils.objectToJson(result);
+        return result;
     }
 
 

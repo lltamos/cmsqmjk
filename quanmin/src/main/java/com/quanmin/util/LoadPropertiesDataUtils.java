@@ -19,8 +19,9 @@ public class LoadPropertiesDataUtils {
 	}
 
 	public static String getValue(String key) {
-		if (mProperties == null)
-			return "";
+		if (mProperties == null) {
+            return "";
+        }
 		return mProperties.getProperty(key, "");
 	}
 }

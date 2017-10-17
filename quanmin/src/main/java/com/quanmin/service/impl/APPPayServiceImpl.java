@@ -1,5 +1,6 @@
 package com.quanmin.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alipay.api.AlipayApiException;
 import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
@@ -12,6 +13,7 @@ import com.quanmin.model.jpapo.*;
 import com.quanmin.service.APPPayService;
 import com.quanmin.util.Commons;
 import com.quanmin.util.JsonUtils;
+import com.quanmin.util.LoadPropertiesDataUtils;
 import com.quanmin.util.ResultUtils;
 import com.quanmin.util.alipayutil.PayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -33,6 +35,7 @@ import java.util.Map;
 /**
  * Created by yang on 2017/8/22.
  */
+@SuppressWarnings("ALL")
 @Service
 @Transactional
 public class APPPayServiceImpl implements APPPayService {
@@ -78,16 +81,26 @@ public class APPPayServiceImpl implements APPPayService {
             //微信支付
             case 2:
                 break;
+            default:
+                return ResultUtils.returnFail();
         }
         return resultUtils;
     }
 
     public ResultUtils orderAliPay(String orderNum, Double price, String body, String desc) throws AlipayApiException {
         ShopOrder order=shopOrderDao.findByOrderNumEquals(orderNum);
-        if (order == null) return ResultUtils.returnException();
-        if (price == null) ResultUtils.returnFail("订单异常，为设置金额");
-        String response=PayUtils.aliPay(orderNum, price, body, desc);
-        System.out.println("支付信息：" + JsonUtils.objectToJson(response));//就是orderString 可以直接给客户端请求，无需再做处理。
+        if (order == null) {
+            return ResultUtils.returnException();
+        }
+        if (price == null) {
+            ResultUtils.returnFail("订单异常，为设置金额");
+        }
+        String notifyURLNo=LoadPropertiesDataUtils.getValue("alipay.product.notifyURLNo");
+        String response=PayUtils.aliPay(orderNum, price, body, desc, notifyURLNo);
+        if (response == null) {
+            return ResultUtils.returnFail("支付失败");
+        }
+        System.out.println("支付信息：" + JSON.toJSONString(response));//就是orderString 可以直接给客户端请求，无需再做处理。
         return ResultUtils.returnSucess(response);
     }
 
@@ -102,8 +115,9 @@ public class APPPayServiceImpl implements APPPayService {
         if (payApliyNotifyInfo.getTradeStatus().contains("TRADE_SUCCESS")) {
             ShopOrder shopOrder=shopOrderDao.findByOrderNumEquals(tradeNo);
 
-            if (shopOrder.getIsCallBack() == 1)
+            if (shopOrder.getIsCallBack() == 1) {
                 return;
+            }
 
             shopOrder.setPayStatus(1);
             shopOrder.setIsCallBack(1);
@@ -134,7 +148,7 @@ public class APPPayServiceImpl implements APPPayService {
             }
 
             shopCommidityOrderDao.save(shopCommodityOrders);
-            System.out.println("支付回调修改成功：" + JsonUtils.objectToJson(shopOrder));
+            System.out.println("支付回调修改成功：" + JSON.toJSONString(shopOrder));
             //保存到支付信息表中
             apliyNotifyInfoDao.save(payApliyNotifyInfo);
             response.getWriter().write("success");
@@ -149,15 +163,14 @@ public class APPPayServiceImpl implements APPPayService {
         AlipayTradeRefundRequest request=new AlipayTradeRefundRequest();
 
         Map<String, Object> map=new HashMap<>();
-        map.put("out_trade_no", refundRecord.getShopOrderNum());
         map.put("refund_amount", refundRecord.getBackMoney());
         map.put("refund_reason", "正常退款");
         map.put("out_request_no", refundRecord.getRefundNum());
         map.put("out_trade_no", refundRecord.getShopOrderNum());
-        request.setBizContent(JsonUtils.objectToJson(map));
+        request.setBizContent(JSON.toJSONString(map));
         AlipayTradeRefundResponse response=alipayClient.execute(request);
 
-        System.out.println("退款参数：" + JsonUtils.objectToJson(request));
+        System.out.println("退款参数：" + JSON.toJSONString(request));
         if (response.isSuccess()) {
             System.out.println("调用成功");
             return ResultUtils.returnSucess();
@@ -165,6 +178,5 @@ public class APPPayServiceImpl implements APPPayService {
             System.out.println("调用失败");
             return ResultUtils.returnFail(response.getSubMsg());
         }
-
     }
 }

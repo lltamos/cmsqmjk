@@ -20,6 +20,7 @@ import java.util.List;
 /**
  * 用户报告列表
  */
+@SuppressWarnings("ALL")
 public class UserReportListInfo {
 	public static List<HashMap<String, Object>> getUserReportListInfoByPhoneOrIdNo(SysUser user, String type,
 			String hraid) {
@@ -48,7 +49,7 @@ public class UserReportListInfo {
 				// 解析数据
 				JSONObject rootjsonBean = JSONObject.parseObject(result);
 				Object rescode = rootjsonBean.get("code");
-				if (rescode.toString().equals("200")) {
+				if ("200".equals(rescode.toString())) {
 					Object data = rootjsonBean.get("data");
 					System.out.println(data.toString());
 					JSONArray parseArray = JSONObject.parseArray(data.toString());

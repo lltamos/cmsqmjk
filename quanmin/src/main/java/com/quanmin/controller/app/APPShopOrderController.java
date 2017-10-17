@@ -57,9 +57,6 @@ public class APPShopOrderController {
         return shopOrderService.productionOrder(warpList);
     }
 
-
-
-
     /**
      * 取消订单
      *@param orderId

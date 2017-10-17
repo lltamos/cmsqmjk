@@ -1,8 +1,19 @@
 package com.quanmin.qmmq.mq;
 
+import com.quanmin.service.impl.AppointOrderServiceImpl;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.validation.constraints.NotNull;
 
+@Data
+@NoArgsConstructor
 public abstract class CmsHandler<T extends CmsQueue<? extends CmsJob>> implements Runnable {
+
+    protected final Logger logger=LoggerFactory.getLogger(AppointOrderServiceImpl.class);
+
     private T cmsQueue;
 
     private boolean smark=true;
@@ -10,28 +21,31 @@ public abstract class CmsHandler<T extends CmsQueue<? extends CmsJob>> implement
     private Long interval=1000L;
 
     @NotNull
-    private Class<? extends CmsJob> bindClass;
+    private Class<? extends CmsJob> bindClass=getBindClass();
 
     @Override
     public void run() {
         while (smark && !Thread.currentThread().isInterrupted()) {
-            Object cmsJob=cmsQueue.get();
-            if (cmsJob != null)
-                hander(cmsJob);
-            interval();
+            try {
+                Object cmsJob=cmsQueue.get();
+                if (cmsJob != null) {
+                    handler(cmsJob);
+                }
+                interval();
+            } catch (InterruptedException e) {
+                System.out.println(1);
+                break;//捕获到异常之后，执行break跳出循环。
+            }
+
         }
     }
 
-    public void interval() {
-        try {
-            Thread.sleep(interval);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+    private void interval() throws InterruptedException {
+        Thread.sleep(interval);
     }
 
 
-    public abstract void hander(Object job);
+    public abstract void handler(Object job);
 
     public void toggle() {
         smark=!smark;
@@ -41,12 +55,8 @@ public abstract class CmsHandler<T extends CmsQueue<? extends CmsJob>> implement
         this.interval=interval;
     }
 
-    public CmsHandler(T cmsQueue, Class<? extends CmsJob> bindClass) {
-        this.cmsQueue=cmsQueue;
-        this.bindClass=bindClass;
-    }
 
-    public T getCmsQueue() {
+    protected T getCmsQueue() {
         return cmsQueue;
     }
 
@@ -54,11 +64,6 @@ public abstract class CmsHandler<T extends CmsQueue<? extends CmsJob>> implement
         this.cmsQueue=cmsQueue;
     }
 
-    public Class<?> getBindClass() {
-        return bindClass;
-    }
+    public abstract Class<? extends CmsJob> getBindClass();
 
-    public void setBindClass(Class<? extends CmsJob> bindClass) {
-        this.bindClass=bindClass;
-    }
 }

@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("ALL")
 @Controller
 @RequestMapping("/cms/1/")
 public class CMSLoginController {
@@ -49,7 +50,6 @@ public class CMSLoginController {
                                  String userName, String password) {
         ResultUtils resultUtils = new ResultUtils();
         Map<String, Object> map = new HashMap<>();
-        Jedis jedis = jedisPool.getResource();
         SysUser userLogin = userService.userLogin(userName, EncryptUtils.md5(password));
         if (null != userLogin && userLogin.getDelStatus() == 0) {
             String token = "c" + EncryptUtils.md5(userLogin.getPassword() + userLogin.getId());
@@ -59,8 +59,10 @@ public class CMSLoginController {
                 List<SysPermission> list = syspermissionService.selectPermissionByRoleId(sysRole.getId());
                 map.put("permissionlist", list);
                 map.put("rolelist",sysRole);
+                Jedis jedis = jedisPool.getResource();
                 jedis.set("cmsUserToken" + token, token+","+userLogin.getId());
                 jedis.expire("cmsUserToken" + token, 12000);
+                jedis.close();
                 System.out.println(token);
                 map.put("token", token);
             }
@@ -78,7 +80,7 @@ public class CMSLoginController {
             resultUtils.setSuccess(false);
             resultUtils.setValue("");
         }
-        jedis.close();
+
         return resultUtils;
     }
 
@@ -92,7 +94,7 @@ public class CMSLoginController {
      */
     @RequestMapping("/checkpassword")
     @ResponseBody
-    public String checkPassword(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+    public ResultUtils checkPassword(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                                 String password, String id) {
         ResultUtils resultUtils = new ResultUtils();
         Integer res = userService.checkPassword(password, id);
@@ -105,7 +107,7 @@ public class CMSLoginController {
             resultUtils.setResultCode("200");
             resultUtils.setSuccess(true);
         }
-        return JsonUtils.objectToJson(resultUtils);
+        return resultUtils;
     }
 
     /**
@@ -119,7 +121,7 @@ public class CMSLoginController {
      */
     @RequestMapping("/updatepassword")
     @ResponseBody
-    public String updatePassword(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+    public ResultUtils updatePassword(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                                  String newpassword, String userId) {
         ResultUtils resultUtils = new ResultUtils();
         Integer i = userService.updatePassword(EncryptUtils.md5(newpassword), userId);
@@ -132,7 +134,7 @@ public class CMSLoginController {
             resultUtils.setResultCode("200");
             resultUtils.setSuccess(true);
         }
-        return JsonUtils.objectToJson(resultUtils);
+        return resultUtils;
     }
 
     /**

@@ -18,13 +18,14 @@ import org.springframework.web.multipart.MultipartFile;
 import com.quanmin.util.LoadPropertiesDataUtils;
 import com.quanmin.util.RandomUtils;
 import com.quanmin.util.StringUtil;
+@SuppressWarnings("ALL")
 @Controller
 @RequestMapping(value="/resource/upload") 
 public class UploadImageController {
 	/**
 	 * 百度编辑器单文件上传图片
 	 * 
-	 * @param file
+	 * @param
 	 * @param request
 	 * @param response
 	 * @return

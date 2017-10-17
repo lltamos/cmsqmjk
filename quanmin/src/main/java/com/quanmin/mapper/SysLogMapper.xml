@@ -476,45 +476,70 @@
 
 
     <select id="activeUserCount" resultMap="userCountResultMap">
-    SELECT 'oneday' as title ,COUNT(1) as number FROM (SELECT user_id FROM sys_log WHERE  TO_DAYS(create_time) =TO_DAYS(NOW()) and user_id IS NOT NULL  GROUP BY user_id) as t
+    SELECT 'oneday' as title ,COUNT(1) as number FROM (SELECT user_id FROM sys_log WHERE  TO_DAYS(create_time) =TO_DAYS(NOW()) and user_id IS NOT NULL  AND type = 1 GROUP BY user_id) as t
     UNION
-    SELECT 'yesterday' as title, COUNT(1) as number  FROM (SELECT user_id FROM sys_log WHERE  TO_DAYS(create_time) =TO_DAYS(NOW())-1 and user_id IS NOT NULL  GROUP BY user_id) as t
+    SELECT 'yesterday' as title, COUNT(1) as number  FROM (SELECT user_id FROM sys_log WHERE  TO_DAYS(create_time) =TO_DAYS(NOW())-1 and user_id IS NOT NULL AND type = 1  GROUP BY user_id) as t
     UNION
-    SELECT 'sevenday' as title,COUNT(1) as number FROM  (SELECT user_id FROM sys_log WHERE  YEARWEEK(date_format(create_time,'%Y-%m-%d')) = YEARWEEK(now()) and user_id IS NOT NULL  GROUP BY user_id) as t
+    SELECT 'sevenday' as title,COUNT(1) as number FROM  (SELECT user_id FROM sys_log WHERE  YEARWEEK(date_format(create_time,'%Y-%m-%d')) = YEARWEEK(now()) AND type = 1 and user_id IS NOT NULL  GROUP BY user_id) as t
     UNION
-    select 'onemonth' as title, COUNT(1) as number from  (SELECT user_id FROM sys_log WHERE  date_format(create_time,'%Y-%m')=date_format(now(),'%Y-%m')and user_id IS NOT NULL  GROUP BY user_id) as t
+    select 'onemonth' as title, COUNT(1) as number from  (SELECT user_id FROM sys_log WHERE  date_format(create_time,'%Y-%m')=date_format(now(),'%Y-%m') AND type = 1 and user_id IS NOT NULL  GROUP BY user_id) as t
     UNION
-    select 'allday' as title, COUNT(1) as number from   (SELECT user_id FROM sys_log WHERE  user_id IS NOT NULL  GROUP BY user_id) as t
+    select 'allday' as title, COUNT(1) as number from   (SELECT user_id FROM sys_log WHERE  user_id IS NOT NULL AND type = 1  GROUP BY user_id) as t
 
   </select>
 
     <select id="addUserStatisticsCount" resultType="java.lang.String">
         <if test="type==1">
-            SELECT date_format(t.create_time,'%H') from (SELECT create_time FROM sys_log WHERE user_id IS NOT NULL GROUP
+           <!-- SELECT date_format(t.create_time,'%H') from (SELECT create_time FROM sys_log WHERE user_id IS NOT NULL GROUP
             BY user_id) as t where t.create_time is NOT NULL and
             date_format(t.create_time,'%Y-%m-%d')=date_format(#{data,jdbcType=VARCHAR},'%Y-%m-%d') GROUP BY
-            date_format(t.create_time,'%H') ;
+            date_format(t.create_time,'%H') and type =1 ; -->
+            SELECT
+            date_format(t.create_time, '%H')
+            FROM
+            (
+            SELECT
+            create_time,
+            user_id
+            FROM
+            sys_log
+            WHERE
+            user_id IS NOT NULL
+            AND type = 1
+            AND date_format(create_time, '%Y-%m-%d') = date_format(NOW(), '%Y-%m-%d')
+            GROUP BY
+            date_format(create_time, '%Y-%m-%d  %h'),
+            user_id
+            ) AS t
+            WHERE
+            t.create_time IS NOT NULL
+            AND date_format(t.create_time, '%Y-%m-%d') = date_format(NOW(), '%Y-%m-%d')
+            GROUP BY
+            date_format(t.create_time, '%H')
         </if>
 
         <if test="type==2">
 
-            SELECT date_format(t.create_time,'%d') from (SELECT create_time FROM sys_log WHERE user_id IS NOT NULL GROUP
+           <!--SELECT date_format(t.create_time,'%d') from (SELECT create_time FROM sys_log WHERE user_id IS NOT NULL GROUP
             BY user_id) as t where t.create_time is NOT NULL and
             date_format(t.create_time,'%Y-%m')=date_format(#{data,jdbcType=VARCHAR},'%Y-%m') GROUP BY
             date_format(t.create_time,'%d');
+           -->
+            SELECT	date_format(t.create_time, '%d') FROM	(		SELECT	create_time,user_id	FROM		sys_log		WHERE			user_id IS NOT NULL	and type =1	GROUP BY	date_format(create_time, '%Y-%m-%d'),user_id	) AS t WHERE
+            t.create_time IS NOT NULL   AND date_format(t.create_time, '%Y-%m') = date_format(#{data,jdbcType=VARCHAR}, '%Y-%m') GROUP BY 	date_format(create_time, '%Y-%m-%d')
         </if>
 
         <if test="type==3">
-            SELECT date_format(t.create_time,'%m') from (SELECT create_time FROM sys_log WHERE user_id IS NOT NULL GROUP
-            BY user_id) as t where t.create_time is NOT NULL and
+            SELECT date_format(t.create_time,'%m') from (SELECT create_time,type FROM sys_log WHERE user_id IS NOT NULL GROUP
+            BY user_id) as t where t.create_time is NOT NULL and t.type =1 and
             date_format(t.create_time,'%Y')=date_format(#{data,jdbcType=VARCHAR},'%Y') GROUP BY
             date_format(t.create_time,'%m');
 
         </if>
 
         <if test="type==4">
-            SELECT date_format(t.create_time,'%Y') from (SELECT create_time FROM sys_log WHERE user_id IS NOT NULL GROUP
-            BY user_id) as t where t.create_time is NOT NULL GROUP BY date_format(t.create_time,'%Y');
+            SELECT date_format(t.create_time,'%Y') from (SELECT create_time,type FROM sys_log WHERE user_id IS NOT NULL GROUP
+            BY user_id) as t where t.create_time is NOT NULL and t.type =1 GROUP BY date_format(t.create_time,'%Y');
 
         </if>
     </select>
@@ -522,26 +547,53 @@
     <select id="addUserStatisticsMap" resultType="java.lang.Integer">
         <!--查询小时-->
         <if test="type==1">
-            SELECT COUNT(date_format(t.create_time,'%H')) from (SELECT create_time FROM sys_log WHERE user_id IS NOT
-            NULL GROUP BY user_id) as t where t.create_time is NOT NULL and
+            <!-- SELECT COUNT(date_format(t.create_time,'%H')) from (SELECT create_time FROM sys_log WHERE user_id IS NOT
+            NULL GROUP BY user_id) as t where t.create_time is NOT NULL and type =1 and
             date_format(t.create_time,'%Y-%m-%d')=date_format(#{data,jdbcType=VARCHAR},'%Y-%m-%d') GROUP BY
-            date_format(t.create_time,'%H') ;
+            date_format(t.create_time,'%H') ;-->
+
+            SELECT
+            count(
+            date_format(t.create_time, '%H')
+            )
+            FROM
+            (
+            SELECT
+            create_time,
+            user_id
+            FROM
+            sys_log
+            WHERE
+            user_id IS NOT NULL
+            AND type = 1
+            AND date_format(create_time, '%Y-%m-%d') = date_format(NOW(), '%Y-%m-%d')
+            GROUP BY
+            date_format(create_time, '%Y-%m-%d  %h'),
+            user_id
+            ) AS t
+            WHERE
+            t.create_time IS NOT NULL
+            AND date_format(t.create_time, '%Y-%m-%d') = date_format(NOW(), '%Y-%m-%d')
+            GROUP BY
+            date_format(t.create_time, '%H')
         </if>
         <!--查询天-->
         <if test="type==2">
-            SELECT count(date_format(t.create_time,'%d')) from (SELECT create_time FROM sys_log WHERE user_id IS NOT
+           <!-- SELECT count(date_format(t.create_time,'%d')) from (SELECT create_time FROM sys_log WHERE user_id IS NOT
             NULL GROUP BY user_id) as t where t.create_time is NOT NULL and
             date_format(t.create_time,'%Y-%m')=date_format(#{data,jdbcType=VARCHAR},'%Y-%m') GROUP BY
-            date_format(t.create_time,'%d');
+            date_format(t.create_time,'%d');-->
+            SELECT	count(date_format(t.create_time, '%d'))FROM	(		SELECT	create_time,user_id	FROM		sys_log		WHERE			user_id IS NOT NULL and type =1		GROUP BY	date_format(create_time, '%Y-%m-%d'),user_id	) AS t WHERE
+            t.create_time IS NOT NULL AND date_format(t.create_time, '%Y-%m') = date_format(#{data,jdbcType=VARCHAR}, '%Y-%m') GROUP BY 	date_format(create_time, '%Y-%m-%d')
         </if>
         <if test="type==3">
-            SELECT count(date_format(t.create_time,'%m')) from (SELECT create_time FROM sys_log WHERE user_id IS NOT
-            NULL GROUP BY user_id, date_format(create_time, '%m')) as t where t.create_time is NOT NULL GROUP BY
+            SELECT count(date_format(t.create_time,'%m')) from (SELECT create_time,type FROM sys_log WHERE user_id IS NOT
+            NULL and type =1 GROUP BY user_id, date_format(create_time, '%m')) as t where t.create_time is NOT NULL GROUP BY
             date_format(t.create_time,'%m');
         </if>
         <if test="type==4">
-            SELECT count(date_format(t.create_time,'%Y')) from (SELECT create_time FROM sys_log WHERE user_id IS NOT
-            NULL GROUP BY user_id) as t where t.create_time is NOT NULL GROUP BY date_format(t.create_time,'%Y');
+            SELECT count(date_format(t.create_time,'%Y')) from (SELECT create_time,type FROM sys_log WHERE user_id IS NOT
+            NULL and type =1 GROUP BY user_id) as t where t.create_time is NOT NULL GROUP BY date_format(t.create_time,'%Y');
         </if>
     </select>
 

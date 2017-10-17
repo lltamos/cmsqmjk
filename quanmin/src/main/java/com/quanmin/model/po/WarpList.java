@@ -14,9 +14,7 @@ import java.util.List;
 public class WarpList {
     private ShopOrder shopOrder;
     private List<ShopCommodityOrder> shopCommodityOrders;
-
     private List<Long> shopCartIds;
-
 
 
     public List<ShopCommodityOrder> getShopCommodityOrders() {

@@ -8,6 +8,7 @@ import org.apache.http.util.EntityUtils;
 
 import com.quanmin.util.HttpUtils;
 
+@SuppressWarnings("ALL")
 public class UserIpInfo {
 	/**
 	 * 通过ip地址获取所在的省市区

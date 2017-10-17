@@ -7,6 +7,7 @@ import com.quanmin.model.custom.SearchCondition;
 import com.quanmin.model.jpapo.ShopCommodity;
 import com.quanmin.model.jpapo.ShopDict;
 import com.quanmin.service.CMSShopCommodityService;
+import com.quanmin.util.ResultUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import java.util.Map;
 /**
  * Created by yang on 2017/7/25.
  */
+@SuppressWarnings("ALL")
 @Service
 @Transactional
 public class CMSShopCommodityServiceImpl implements CMSShopCommodityService {
@@ -50,9 +52,9 @@ public class CMSShopCommodityServiceImpl implements CMSShopCommodityService {
         shopCommodity.setDelStatus(0);
         shopCommodity.setTotalSalesNum(0);
 
-        if (shopCommodity.getType() == 1)
+        if (shopCommodity.getType() == 1) {
             shopCommodity.setPublicCommodityHardUrl("/shop/htmlupload/views/harddetails.html");
-        else {
+        } else {
             shopCommodity.setPublicCommodityMedicineUrl("/shop/htmlupload/views/medicinedetails.html");
         }
         switch (shopCommodity.getStatus()) {
@@ -61,6 +63,8 @@ public class CMSShopCommodityServiceImpl implements CMSShopCommodityService {
                 break;
             case 2:
                 shopCommodity.setUpdateTime(new Date());
+                break;
+            default:
                 break;
         }
         if (null != commondityId) {

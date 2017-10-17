@@ -48,7 +48,7 @@ public class CMSUserInfoManagerController {
      */
     @RequestMapping("/userlist")
     @ResponseBody
-    public String userListBySearchCondition(HttpServletRequest httpServletRequest,
+    public ResultUtils userListBySearchCondition(HttpServletRequest httpServletRequest,
                                             HttpServletResponse httpServletResponse, SearchCondition condition) {
         ResultUtils resultUtils = new ResultUtils();
         TreeMap<String, Object> map = new TreeMap<>();
@@ -69,7 +69,7 @@ public class CMSUserInfoManagerController {
             resultUtils.setResultCode("500");
             resultUtils.setSuccess(false);
         }
-        return JsonUtils.objectToJson(resultUtils);
+        return resultUtils;
     }
 
     /**
@@ -77,7 +77,7 @@ public class CMSUserInfoManagerController {
      */
     @RequestMapping("/userdetailinfo")
     @ResponseBody
-    public String userDetailInfoById(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
+    public ResultUtils userDetailInfoById(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse,
                                      String id) {
         ResultUtils resultUtils = new ResultUtils();
         TreeMap<String, Object> map = new TreeMap<>();
@@ -110,7 +110,7 @@ public class CMSUserInfoManagerController {
         resultUtils.setSuccess(true);
         resultUtils.setValue(map);
 
-        return JsonUtils.objectToJson(resultUtils);
+        return resultUtils;
     }
 
 

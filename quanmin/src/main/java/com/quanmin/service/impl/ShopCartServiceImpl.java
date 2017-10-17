@@ -44,7 +44,7 @@ public class ShopCartServiceImpl implements IShopCartService {
         }
 
         Long commodityId=shopCart.getCommodityId();
-        ShopCart cart=shopCartDao.findByUserIdEqualsAndCommodityIdEquals(shopCart.getUserId(), shopCart.getCommodityId());
+        ShopCart cart=shopCartDao.findByUserIdEqualsAndCommodityIdEquals(shopCart.getUserId(), commodityId);
 
         if (cart != null) {
             cart.setAmount(cart.getAmount() + shopCart.getAmount());
@@ -69,7 +69,9 @@ public class ShopCartServiceImpl implements IShopCartService {
         }
         for (Long shopCart : shopCartsId) {
 
-            if (shopCart == null) continue;
+            if (shopCart == null) {
+                continue;
+            }
 
             try {
                 shopCartDao.deleteByUserIdAndIdEquals(userId, shopCart);
@@ -92,16 +94,19 @@ public class ShopCartServiceImpl implements IShopCartService {
      */
     @Override
     public ResultUtils addProduceNum(ShopCart mapList) {
-        if (mapList == null)
+        if (mapList == null) {
             return ResultUtils.returnFail(Commons.DATA_EXCPTION_STR);
+        }
         Long pid=mapList.getId();
         Integer offset=mapList.getAmount();
 
-        if (pid == null && offset == null && offset > 0)
+        if (pid == null && offset == null && offset > 0) {
             return ResultUtils.returnFail("请输入正确数量");
+        }
         ShopCart shopCart=shopCartDao.findOne(pid);
-        if (shopCart==null)
+        if (shopCart==null) {
             return ResultUtils.returnFail();
+        }
         shopCart.setAmount(offset);
         shopCart.setUpdateTime(new Date());
         return ResultUtils.returnSucess();

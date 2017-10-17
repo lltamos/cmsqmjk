@@ -49,8 +49,8 @@ public class APPCollectionController {
      */
     @RequestMapping(value = "/collectionorcancelinformation")
     @ResponseBody
-    public ResultUtils SaveOrUpdateCollectionInformation(Integer informationId, Integer userId, String type) {
-        ResultUtils result = collectionService.SaveOrUpdateCollectionInformation(informationId, userId, type);
+    public ResultUtils saveOrUpdateCollectionInformation(Integer informationId, Integer userId, String type) {
+        ResultUtils result = collectionService.saveOrUpdateCollectionInformation(informationId, userId, type);
         return result;
     }
 

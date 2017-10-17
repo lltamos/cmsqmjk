@@ -273,15 +273,18 @@ public class HttpUtils {
 		try {
 			SSLContext ctx = SSLContext.getInstance("TLS");
 			X509TrustManager tm = new X509TrustManager() {
-				public X509Certificate[] getAcceptedIssuers() {
+				@Override
+                public X509Certificate[] getAcceptedIssuers() {
 					return null;
 				}
 
-				public void checkClientTrusted(X509Certificate[] xcs, String str) {
+				@Override
+                public void checkClientTrusted(X509Certificate[] xcs, String str) {
 
 				}
 
-				public void checkServerTrusted(X509Certificate[] xcs, String str) {
+				@Override
+                public void checkServerTrusted(X509Certificate[] xcs, String str) {
 
 				}
 			};

@@ -13,10 +13,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 @Service
-@Transactional
+@Transactional(rollbackFor=Exception.class)
 public class AccountBlogServiceImpl implements AccountBlogService {
     @Resource
     private BusinessAccountDao accountDao;
@@ -25,13 +26,15 @@ public class AccountBlogServiceImpl implements AccountBlogService {
     public ResultUtils inAccount(Integer type, Integer size, Integer page, String queryStr) {
         String parseFix=StringUtil.parseFix(queryStr);
         if (type == 0) {
-            if (page < 1) return ResultUtils.returnFail();
+            if (page < 1) {
+                return ResultUtils.returnFail();
+            }
             Pageable pageable=new PageRequest(page - 1, size, SortUtils.DESCCreateTime());
             Page<BusinessAccount> businessAccountPage=accountDao.findByTypeLikes(parseFix, 1, pageable);
             return ResultUtils.returnSucess(businessAccountPage);
         }
         if (type == 1) {
-            List<BusinessAccount> businessAccountPage=accountDao.findByTypeLikes(parseFix, 1,SortUtils.DESCCreateTime());
+            List<BusinessAccount> businessAccountPage=accountDao.findByTypeLikes(parseFix, 1, SortUtils.DESCCreateTime());
             return ResultUtils.returnSucess(businessAccountPage);
         }
 
@@ -42,15 +45,32 @@ public class AccountBlogServiceImpl implements AccountBlogService {
     public ResultUtils outAccount(Integer type, Integer size, Integer page, String queryStr) {
         String parseFix=StringUtil.parseFix(queryStr);
         if (type == 0) {
-            if (page < 1) return ResultUtils.returnFail();
-            Pageable pageable=new PageRequest(page-1, size, SortUtils.DESCCreateTime());
+            if (page < 1) {
+                return ResultUtils.returnFail();
+            }
+            Pageable pageable=new PageRequest(page - 1, size, SortUtils.DESCCreateTime());
             Page<BusinessAccount> businessAccountPage=accountDao.findByTypeLikes(parseFix, 2, pageable);
             return ResultUtils.returnSucess(businessAccountPage);
         }
         if (type == 1) {
-            List<BusinessAccount> businessAccountPage=accountDao.findByTypeLikes(parseFix, 2,SortUtils.DESCCreateTime());
+            List<BusinessAccount> businessAccountPage=accountDao.findByTypeLikes(parseFix, 2, SortUtils.DESCCreateTime());
             return ResultUtils.returnSucess(businessAccountPage);
         }
         return ResultUtils.returnFail();
+    }
+
+    public boolean saveRecord(Integer type, String fromType, double money, String userNikeName, Integer userId, String userPhone) {
+        BusinessAccount account=new BusinessAccount();
+        account.setFromType(fromType);
+        account.setMoney(money);
+        account.setType(type);
+        account.setUserId(userId);
+        account.setUserNickName(userNikeName);
+        account.setUserPhone(userPhone);
+        account.setCreateTime(new Date());
+        account.setUpdateTime(new Date());
+        account.setBookedTime(new Date());
+        BusinessAccount save=accountDao.save(account);
+        return save != null;
     }
 }

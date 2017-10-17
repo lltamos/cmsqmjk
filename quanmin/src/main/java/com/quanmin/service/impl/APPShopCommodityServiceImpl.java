@@ -25,6 +25,7 @@ import java.util.*;
 /**
  * Created by yang on 2017/7/25.
  */
+@SuppressWarnings("ALL")
 @Service
 public class APPShopCommodityServiceImpl implements APPShopCommodityService {
     @Autowired
@@ -152,8 +153,9 @@ public class APPShopCommodityServiceImpl implements APPShopCommodityService {
             hs = new HashSet<Map<String, Object>>(colorList);
             modelMap.put(shopCommodity.getModelName(), hs);
         }
-        if (null != modelMap && modelMap.size() > 0)
+        if (null != modelMap && modelMap.size() > 0) {
             colorSet.add(modelMap);
+        }
 
         map.put("commodityInfo", colorSet);
         return map;

@@ -1,35 +1,60 @@
 package com.quanmin.test;
 
+import com.mchange.v1.util.ArrayUtils;
+import com.quanmin.util.RandomUtils;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Random;
+
+/**
+ * @Author: By heasy.
+ * @Date: 2017/10/12.
+ * @Contcat: yz972641975@gmail.com.
+ * @Description:
+ * @Modified By:
+ */
+@SuppressWarnings("ALL")
 public class Test {
+
     public static void main(String[] args) {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("a", "a");
+        map.put("b", "b");
+        map.put("c", "a");
+        System.out.println(map);
+//        System.out.println(Integer.MAX_VALUE);
+//        System.out.println(Integer.MAX_VALUE/4);
+//        System.out.println(Integer.MAX_VALUE>>2);
+
+//        String[] tab = new String[128];
+//        tab[15&"a".hashCode()] = "a";
+//        tab[15&"b".hashCode()] = "b";
+//        tab[15&"c".hashCode()] = "c";
+//
+//        System.out.println(Arrays.toString(tab));
+//
+//        String output = "l";
+//       if( tab[8&output.hashCode()]!=null){
+//           System.out.println("存在");
+//       }else{
+//           System.out.println("不存在");
+//       }
 
 
-
-//  /*运行前内存*/
-//        long beforeMemory = Runtime.getRuntime().totalMemory();
-//        long start1=System.currentTimeMillis();
-//        BitSet set = new BitSet(2000000000);
-//        for (int i = 0; i < 2000000000; i++) {
-//   /*假设898989这个数不在20亿个数里面*/
-//            if (i != 898989) {
-//                set.set(i, true);
+//        for (int a =0;a<i.length;a++){
+//            if(i[a]==5){
+//                System.out.println(111111111);
 //            }
 //        }
-//  /*创建20亿个数后所占内存*/
-//        long afterMemory = Runtime.getRuntime().totalMemory();
-//        long end1=System.currentTimeMillis();
-//        System.out.println("总共内存使用:" + (afterMemory - beforeMemory) / 1024 / 1024 + "MB");
-//        System.out.println("存入内存耗时:"+(end1-start1)+"毫秒");
-//        long start2 = System.currentTimeMillis();
-//        boolean isExit1=set.get(898989);
-//        boolean isExit2=set.get(900000);
 //
-//        long end2 = System.currentTimeMillis();
-//  /*输出在20亿个数中判断898989是否包含在里面*/
-//        System.out.println(isExit1);
-//        System.out.println("20个亿中"+(isExit1?"包含":"不包含")+898989);
-//        System.out.println("20个亿中"+(isExit2?"包含":"不包含")+900000);
-//        System.out.println("查询用时:"+(end2 - start2)+"毫秒");
-    }
+//        Integer p,n=8,b;
+//        Integer[] tab=i;
+//        p = tab[b = (n - 1) & 1];
+//        if(p==null){
+//            System.out.println(222222222);
+//        }
+//        System.out.println(p);
 
+    }
 }

@@ -18,5 +18,6 @@ public class PageArgs {
     @NotNull
     private Integer page;
     private String queryStr;
-    private boolean disPart;
+    private boolean disPart; //false分页 true不分页
+
 }

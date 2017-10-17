@@ -80,6 +80,8 @@ public class  CMSShopCommodityController {
                 basePath = LoadPropertiesDataUtils.getValue("qm.shop.parameter.uploading.parmeterurl");
                 visit = LoadPropertiesDataUtils.getValue("qm.shop.parameter.visit.parmeterurl");
                 break;
+            default:
+                return ResultUtils.returnFail();
         }
 
         MultipartHttpServletRequest httpServletRequest = (MultipartHttpServletRequest) request;

@@ -1,5 +1,6 @@
 package com.quanmin.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.quanmin.dao.mapper.*;
@@ -22,6 +23,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+@SuppressWarnings("ALL")
 @Service
 public class CMSContentServiceImpl implements CMSContentService {
 
@@ -57,7 +59,7 @@ public class CMSContentServiceImpl implements CMSContentService {
 
         String labelIds = labelInformation.getLabelId();
         // 类型等于1，发布文章
-        if (type.equals("1")) {
+        if ("1".equals(type)) {
             information.setPublishTime(new Date());
             information.setPublish(1);
             information.setPublishUrl(labelInformation.getPublishUrl());
@@ -75,7 +77,7 @@ public class CMSContentServiceImpl implements CMSContentService {
                 label.setInformationId(information.getId());
                 label.setLabelId(Integer.parseInt(labelIds));
                 label.setFeatured(labelInformation.getFeatured());
-                if (popular.equals("0")) {
+                if ("0".equals(popular)) {
                     label.setPopular(popular);
                 }
                 int k = labelInformationMapper.insertSelective(label);
@@ -99,7 +101,7 @@ public class CMSContentServiceImpl implements CMSContentService {
             label.setInformationId(information.getId());
             label.setLabelId(Integer.parseInt(labelIds));
             label.setFeatured(labelInformation.getFeatured());
-            if (popular.equals("0")) {
+            if ("0".equals(popular)) {
                 label.setPopular(popular);
             }
             labelInformationMapper.insertSelective(label);
@@ -190,6 +192,7 @@ public class CMSContentServiceImpl implements CMSContentService {
              * 返回0 表示：o1和o2相等，
              * 返回正数表示：o1大于o2。
              */
+            @Override
             public int compare(String o1, String o2) {
 
                 //指定排序器按照降序排列
@@ -204,9 +207,9 @@ public class CMSContentServiceImpl implements CMSContentService {
         for (CMSLableInformation lableInformation : list) {
             String s = map.get(lableInformation.getCreateTime());
             if (s == null) {
-                map.put(lableInformation.getCreateTime(), JsonUtils.objectToJson(lableInformation));
+                map.put(lableInformation.getCreateTime(), JSON.toJSONString(lableInformation));
             } else {
-                map.put(lableInformation.getCreateTime(), s + JsonUtils.objectToJson(lableInformation));
+                map.put(lableInformation.getCreateTime(), s + JSON.toJSONString(lableInformation));
             }
             System.out.println(map);
         }

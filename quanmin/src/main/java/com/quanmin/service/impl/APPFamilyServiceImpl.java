@@ -5,17 +5,19 @@ import com.quanmin.dao.mapper.*;
 import com.quanmin.model.*;
 import com.quanmin.model.UserFamilyExample.Criteria;
 import com.quanmin.model.custom.FamilyInfo;
-import com.quanmin.model.custom.ReportInfoDTO;
 import com.quanmin.service.APPFamilyService;
-import com.quanmin.util.*;
-import com.sun.org.apache.bcel.internal.generic.LREM;
+import com.quanmin.util.Commons;
+import com.quanmin.util.RandomUtils;
+import com.quanmin.util.ResultUtils;
+import com.quanmin.util.SendSmsUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.criteria.From;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 @Service
 public class APPFamilyServiceImpl implements APPFamilyService {
@@ -65,8 +67,7 @@ public class APPFamilyServiceImpl implements APPFamilyService {
     @Override
     @Transactional
     public ResultUtils saveFamilyMember(Family family, Integer userId, String appellation, Integer type) {
-        ResultUtils resultUtils = new ResultUtils();
-
+        int i = 0;
         family.setCreateTime(new Date());
         int insertSelective = familyMapper.insertSelective(family);
 
@@ -78,8 +79,10 @@ public class APPFamilyServiceImpl implements APPFamilyService {
             record.setCreateTime(new Date());
             if (type == 1) {
                 record.setCheckGreen(1);
+            } else {
+                record.setCheckGreen(0);
             }
-            int i = userFamilyMapper.insertSelective(record);
+            i = userFamilyMapper.insertSelective(record);
             if (i > 0 && type == 1) {
                 SysUser sysUser = sysUserMapper.selectByPrimaryKey(userId);
                 int code = RandomUtils.getRandom4();
@@ -88,20 +91,20 @@ public class APPFamilyServiceImpl implements APPFamilyService {
                 for (int x = 3; x < chars.length - 3; x++) {
                     chars[x] = '*';
                 }
-                String[] parm = {code + "", "10", sysUser.getNickname(), family.getName(), new String(chars)};
-                 resultUtils = smsCodeUtils(family.getPhone(), code, parm);
-                 if (resultUtils.getResultCode().equals("200")){
-                     return ResultUtils.returnSucess(record.getId());
-                 }
+                String[] parm = {code + "", "10", family.getName(), sysUser.getNickname(), new String(chars)};
+                ResultUtils resultUtils = smsCodeUtils(family.getPhone(), code, parm);
+                if ("200".equals(resultUtils.getResultCode())) {
+                    return ResultUtils.returnSucess(record.getId());
+                }
 
             }
         }
-        return resultUtils;
+        return i > 0 ? ResultUtils.returnSucess() : ResultUtils.returnFail();
     }
 
     @Override
     @Transactional
-    public ResultUtils checkReportCode(String idNo,String phone, String code, Integer userFamilyId) {
+    public ResultUtils checkReportCode(String idNo, String phone, String code, Integer userFamilyId) {
         SmscodeExample example = new SmscodeExample();
         example.setOrderByClause("timestamp DESC");
         SmscodeExample.Criteria criteria = example.createCriteria();
@@ -117,7 +120,7 @@ public class APPFamilyServiceImpl implements APPFamilyService {
             // 10分钟的时间
             long tenMinute = (timestamp.getTime() + (10 * 60 * 60 * 1000));
             if (System.currentTimeMillis() >= tenMinute) {
-                return ResultUtils.returnSucess(Commons.SMS_CODE_EXPIRED_STR, Commons.SMS_CODE_EXPRIED_STR, "");
+                return ResultUtils.returnSucess(Commons.SMS_CODE_EXPIRED_CODE, Commons.SMS_CODE_EXPRIED_STR, "");
             }
             // 修改短信验证码状态
             Smscode smscode = new Smscode();
@@ -129,8 +132,9 @@ public class APPFamilyServiceImpl implements APPFamilyService {
             userFamily.setCheckGreen(2);
             userFamily.setId(userFamilyId);
             ResultUtils resultUtils = checkFamilymembersReportByUserFamilyId(phone, idNo);
-            List<HashMap<String, Object>> res = (List<HashMap<String, Object>>) resultUtils.getValue();;
-            if(null!= res&&res.size()>0) {
+            List<HashMap<String, Object>> res = (List<HashMap<String, Object>>) resultUtils.getValue();
+            ;
+            if (null != res && res.size() > 0) {
                 userFamily.setAreThereReport(1);
             }
             userFamilyMapper.updateByPrimaryKeySelective(userFamily);
@@ -232,10 +236,10 @@ public class APPFamilyServiceImpl implements APPFamilyService {
             chars[x] = '*';
         }
 
-        String[] parm = {code + "", "10", sysUser.getNickname(), family.getName(), new String(chars)};
+        String[] parm = {code + "", "10", family.getName(), sysUser.getNickname(), new String(chars)};
 
         ResultUtils resultUtils = smsCodeUtils(family.getPhone(), code, parm);
-        if (resultUtils.getResultCode().equals("200")) {
+        if ("200".equals(resultUtils.getResultCode())) {
             userFamily.setCheckGreen(1);
             int i = userFamilyMapper.updateByPrimaryKeySelective(userFamily);
             return ResultUtils.returnSucess();
@@ -254,7 +258,7 @@ public class APPFamilyServiceImpl implements APPFamilyService {
         smscode.setPhone(phone);
         smscode.setType(2);
         smscode.setTimestamp(new Date());
-        Integer result = SendSMSUtil.sendSMS(phone, "205789", parm);
+        Integer result = SendSmsUtil.sendSMS(phone, "205789", parm);
         switch (result) {
             case 0:
                 // 插入到数据库中
@@ -274,7 +278,7 @@ public class APPFamilyServiceImpl implements APPFamilyService {
                 resultUtils.setResultCode(Commons.SMS_CODE_OVER_STR);
                 resultUtils.setSuccess(Commons.DATA_FALSE);
                 break;
-            case 3:
+            default:
                 return ResultUtils.returnFail("发送失败");
         }
         return resultUtils;

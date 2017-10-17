@@ -20,6 +20,7 @@ import java.util.Map;
 /**
  * Created by yang on 2017/7/3.
  */
+@SuppressWarnings("ALL")
 @Service
 public class SystemUserServiceImpl implements SystemUserService {
 

@@ -20,6 +20,7 @@ import java.util.Map;
 /**
  * Created by yang on 2017/6/30.
  */
+@SuppressWarnings("ALL")
 @Service
 public class SysRoleServiceImpl implements SysRoleService {
     @Autowired

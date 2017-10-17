@@ -5,7 +5,7 @@ import com.cloopen.rest.sdk.CCPRestSmsSDK;
 import java.util.HashMap;
 import java.util.Set;
 
-public class SendSMSUtil {
+public class SendSmsUtil {
     public static Integer sendSMS(String phone, String templateId, String[] datas)  {
         HashMap<String, Object> result = null;
         String accountSid = LoadPropertiesDataUtils.getValue("qm.sms.account.sid");
@@ -58,7 +58,6 @@ public class SendSMSUtil {
         //*result = restAPI.sendTemplateSMS("13800000000","1" ,new String[]{"6532","5"});																		  *
         //*则13800000000手机号收到的短信内容是：【云通讯】您使用的是云通讯短信模板，您的验证码是6532，请于5分钟内正确输入     *
         //*********************************************************************************************************************
-//        result = restAPI.sendTemplateSMS(phone, "167058", new String[]{code, "5"});
         result = restAPI.sendTemplateSMS(phone, templateId, datas);
 
         System.out.println("SDKTestGetSubAccounts result=" + result);
@@ -88,7 +87,7 @@ public class SendSMSUtil {
 
     public static void main(String[] args) {
         ResultUtils resultUtils = new ResultUtils();
-        Integer result = SendSMSUtil.sendSMS("17778067291", "167058",new String[]{1324+"", "5"});
+        Integer result = SendSmsUtil.sendSMS("17778067291", "167058",new String[]{1324+"", "5"});
         switch (result) {
             case 0:
                 // 插入到数据库中
@@ -106,7 +105,7 @@ public class SendSMSUtil {
                 resultUtils.setMsg(Commons.SMS_CODE_OVER_CODE);
                 resultUtils.setResultCode(Commons.SMS_CODE_OVER_STR);
                 break;
-            case 3:
+            default: break;
 //                return ResultUtils.returnFail("发送失败");
         }
 

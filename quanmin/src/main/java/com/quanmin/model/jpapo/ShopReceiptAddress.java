@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Required;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * Created by yang on 2017/7/24.
@@ -156,24 +157,51 @@ public class ShopReceiptAddress {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         ShopReceiptAddress that = (ShopReceiptAddress) o;
 
-        if (id != that.id) return false;
-        if (receiptName != null ? !receiptName.equals(that.receiptName) : that.receiptName != null) return false;
-        if (receiptAddress != null ? !receiptAddress.equals(that.receiptAddress) : that.receiptAddress != null)
+        if (!Objects.equals(id, that.id)) {
             return false;
-        if (receiptPhone != null ? !receiptPhone.equals(that.receiptPhone) : that.receiptPhone != null) return false;
-        if (type != null ? !type.equals(that.type) : that.type != null) return false;
-        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
-        if (delStatus != null ? !delStatus.equals(that.delStatus) : that.delStatus != null) return false;
-        if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
-        if (updateTime != null ? !updateTime.equals(that.updateTime) : that.updateTime != null) return false;
-        if (ext1 != null ? !ext1.equals(that.ext1) : that.ext1 != null) return false;
-        if (ext2 != null ? !ext2.equals(that.ext2) : that.ext2 != null) return false;
-        if (ext3 != null ? !ext3.equals(that.ext3) : that.ext3 != null) return false;
+        }
+        if (receiptName != null ? !receiptName.equals(that.receiptName) : that.receiptName != null) {
+            return false;
+        }
+        if (receiptAddress != null ? !receiptAddress.equals(that.receiptAddress) : that.receiptAddress != null) {
+            return false;
+        }
+        if (receiptPhone != null ? !receiptPhone.equals(that.receiptPhone) : that.receiptPhone != null) {
+            return false;
+        }
+        if (type != null ? !type.equals(that.type) : that.type != null) {
+            return false;
+        }
+        if (userId != null ? !userId.equals(that.userId) : that.userId != null) {
+            return false;
+        }
+        if (delStatus != null ? !delStatus.equals(that.delStatus) : that.delStatus != null) {
+            return false;
+        }
+        if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) {
+            return false;
+        }
+        if (updateTime != null ? !updateTime.equals(that.updateTime) : that.updateTime != null) {
+            return false;
+        }
+        if (ext1 != null ? !ext1.equals(that.ext1) : that.ext1 != null) {
+            return false;
+        }
+        if (ext2 != null ? !ext2.equals(that.ext2) : that.ext2 != null) {
+            return false;
+        }
+        if (ext3 != null ? !ext3.equals(that.ext3) : that.ext3 != null) {
+            return false;
+        }
 
         return true;
     }

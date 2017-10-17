@@ -28,14 +28,17 @@ public class ShopReceiptAddressServiceImpl implements IShopReceiptAddressService
 
     @Override
     public ResultUtils addAddress(ShopReceiptAddress receiptAddress) {
-        if (receiptAddress == null || receiptAddress.getUserId() == null || receiptAddress.getReceiptPhone() == null || receiptAddress.getReceiptName() == null || receiptAddress.getReceiptAddress() == null)
+        if (receiptAddress == null || receiptAddress.getUserId() == null || receiptAddress.getReceiptPhone() == null || receiptAddress.getReceiptName() == null || receiptAddress.getReceiptAddress() == null) {
             return ResultUtils.returnException();
+        }
 
-        if (receiptAddress.getId() != null)
+        if (receiptAddress.getId() != null) {
             return ResultUtils.returnFail("已存在不能新增");
+        }
 
-        if (receiptAddress.getArea() == null)
+        if (receiptAddress.getArea() == null) {
             return ResultUtils.returnException();
+        }
 
         if (receiptAddress.getType() == 0) {
             List<ShopReceiptAddress> defaultAdress=shopReceiptAddressDao.findByUserIdEqualsAndTypeEquals(receiptAddress.getUserId(), 0);
@@ -43,8 +46,9 @@ public class ShopReceiptAddressServiceImpl implements IShopReceiptAddressService
                 defaultAdress.get(0).setType(1);
                 defaultAdress.get(0).setUpdateTime(new Date());
             }
-        } else
+        } else {
             receiptAddress.setType(1);
+        }
         receiptAddress.setCreateTime(new Date());
         receiptAddress.setUpdateTime(new Date());
 
@@ -53,10 +57,12 @@ public class ShopReceiptAddressServiceImpl implements IShopReceiptAddressService
     }
 
 
+
     @Override
     public ResultUtils updateAddress(ShopReceiptAddress receiptAddress) {
-        if (receiptAddress == null || receiptAddress.getId() == null || receiptAddress.getUserId() == null || receiptAddress.getReceiptPhone() == null || receiptAddress.getReceiptName() == null || receiptAddress.getReceiptAddress() == null)
+        if (receiptAddress == null || receiptAddress.getId() == null || receiptAddress.getUserId() == null || receiptAddress.getReceiptPhone() == null || receiptAddress.getReceiptName() == null || receiptAddress.getReceiptAddress() == null) {
             return ResultUtils.returnException();
+        }
 
         if (receiptAddress.getType() == 0) {
             List<ShopReceiptAddress> defaultAdress=shopReceiptAddressDao.findByUserIdEqualsAndTypeEquals(receiptAddress.getUserId(), 0);
@@ -66,8 +72,9 @@ public class ShopReceiptAddressServiceImpl implements IShopReceiptAddressService
             }
         }
 
-        if (receiptAddress.getArea() == null)
+        if (receiptAddress.getArea() == null) {
             return ResultUtils.returnException();
+        }
 
         ShopReceiptAddress address=shopReceiptAddressDao.findOne(receiptAddress.getId());
         address.setReceiptAddress(receiptAddress.getReceiptAddress());
@@ -81,8 +88,9 @@ public class ShopReceiptAddressServiceImpl implements IShopReceiptAddressService
 
     @Override
     public ResultUtils deleteAddress(Integer userId, Long[] longs) {
-        if (longs == null || longs.length <= 0)
+        if (longs == null || longs.length <= 0) {
             return ResultUtils.returnException();
+        }
         for (Long l : longs) {
             shopReceiptAddressDao.deleteAllByUserIdAndIdEquals(userId, l);
         }
@@ -92,7 +100,9 @@ public class ShopReceiptAddressServiceImpl implements IShopReceiptAddressService
     @Override
     public ResultUtils findAll(Integer userId) {
 
-        if (userId == null) return ResultUtils.returnFail();
+        if (userId == null) {
+            return ResultUtils.returnFail();
+        }
 
         ShopReceiptAddress receiptAddress=new ShopReceiptAddress();
         receiptAddress.setUserId(userId);
@@ -100,9 +110,10 @@ public class ShopReceiptAddressServiceImpl implements IShopReceiptAddressService
 
         List<ShopReceiptAddress> addressList=shopReceiptAddressDao.findAll(example);
 
-        if (addressList == null || addressList.size() < 1)
+        if (addressList == null || addressList.size() < 1) {
             return ResultUtils.returnFail();
-        else
+        } else {
             return ResultUtils.returnSucess(addressList);
+        }
     }
 }

@@ -16,6 +16,7 @@ import java.util.Map;
  * 全局异常处理器
  */
 
+@SuppressWarnings("ALL")
 public class DefaultExceptionHandler implements HandlerExceptionResolver {
 
     private static Logger log = LoggerFactory.getLogger(DefaultExceptionHandler.class);

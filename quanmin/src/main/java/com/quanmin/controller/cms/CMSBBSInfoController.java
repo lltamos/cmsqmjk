@@ -30,6 +30,7 @@ import java.util.TreeMap;
 /**
  * Created by yang on 2017/6/27.
  */
+@SuppressWarnings("ALL")
 @RestController
 @RequestMapping("/cms/1/")
 public class CMSBBSInfoController {

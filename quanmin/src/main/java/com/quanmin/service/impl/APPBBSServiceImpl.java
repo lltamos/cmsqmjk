@@ -28,6 +28,7 @@ import com.quanmin.service.APPBBSService;
 import com.quanmin.util.ResultUtils;
 import com.quanmin.util.SaveImageUtil;
 
+@SuppressWarnings("ALL")
 @Service
 public class APPBBSServiceImpl implements APPBBSService {
 

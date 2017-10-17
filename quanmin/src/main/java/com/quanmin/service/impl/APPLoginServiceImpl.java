@@ -1,6 +1,7 @@
 package com.quanmin.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.quanmin.call.RecommendInfo;
 import com.quanmin.call.UserInfo;
 import com.quanmin.call.UserIpInfo;
 import com.quanmin.dao.mapper.*;
@@ -8,8 +9,11 @@ import com.quanmin.model.*;
 import com.quanmin.model.SmscodeExample.Criteria;
 import com.quanmin.service.APPLoginService;
 import com.quanmin.util.*;
+import org.apache.commons.lang.time.DateFormatUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
@@ -19,6 +23,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+@SuppressWarnings("ALL")
 @Service
 public class APPLoginServiceImpl implements APPLoginService {
 
@@ -35,6 +40,9 @@ public class APPLoginServiceImpl implements APPLoginService {
     private PushmessageMapper pushmessageMapper;
     @Autowired
     private UserIpMapper userIpMapper;
+
+    @Autowired
+    private RecommendMapper recommendMapper;
 
     @Override
     public Integer getCodeLogin(String phone, int code) {
@@ -54,6 +62,7 @@ public class APPLoginServiceImpl implements APPLoginService {
     }
 
     @Override
+    @Transactional
     public ResultUtils userLogin(String phone, String code, String registrationId, HttpServletRequest request) {
 
         ResultUtils rs = new ResultUtils();
@@ -150,7 +159,7 @@ public class APPLoginServiceImpl implements APPLoginService {
                     // 存在了。需要更新用户信息
                     record.setId(selectByExample.get(0).getId());
                     // record.setName(selectByExample.get(0).getName());
-                    record.setLastLoginIp(request.getRemoteAddr());
+                    record.setLastLoginIp(GetIpUtil.getIpAddr(request));
 
                     if (!StringUtil.isEmpty(selectByExample.get(0).getWeight())) {
                         record.setWeight(selectByExample.get(0).getWeight());
@@ -161,14 +170,32 @@ public class APPLoginServiceImpl implements APPLoginService {
 
                     int i = sysUserMapper.updateByPrimaryKeySelective(record);
 
-                    this.saveUserIpInfo(request.getRemoteAddr(), record.getId());
+                    this.saveUserIpInfo(GetIpUtil.getIpAddr(request), record.getId());
 
                     token = this.saveToken(phone, code, selectByExample.get(0).getId(), registrationId);
                     hs.put("userinfo", selectByExample.get(0));
                 }
-                if (null != record.getName() && !(record.getName().equals(""))) {
+
+                //通知微信平台
+                RecommendExample recommendExample = new RecommendExample();
+                RecommendExample.Criteria recommendExampleCriteria = recommendExample.createCriteria();
+                recommendExampleCriteria.andRefereeEqualTo(phone);
+                recommendExampleCriteria.andDelStatusEqualTo(0);
+                List<Recommend> recommendList = recommendMapper.selectByExample(recommendExample);
+                if (null != recommendList && recommendList.size() > 0) {
+                    Date createTime = recommendList.get(0).getCreateTime();
+                    String format = DateFormatUtils.format(createTime, "yyyy-MM-dd HH:mm:ss");
+                    try {
+                        RecommendInfo.sendRecommendMsgToWeChatp(phone, format);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+
+                if (null != record.getName() && !("".equals(record.getName()))) {
                     member = "1";
                 }
+
             }
             hs.put("token", token);
             hs.put("member", member);
@@ -179,6 +206,7 @@ public class APPLoginServiceImpl implements APPLoginService {
             return rs;
 
         } else {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             rs.setMsg(Commons.DATA_CHECK_STR);
             rs.setResultCode(Commons.DATA_CHECK_CODE);
             rs.setSuccess(Commons.DATA_FALSE);
@@ -242,7 +270,7 @@ public class APPLoginServiceImpl implements APPLoginService {
         ResultUtils rs = new ResultUtils();
         HashMap<String, Object> hs = new HashMap<>();
 //校验身份证是否输入正确
-        if (!IDCardUtil.isIDCard(null == user.getIdNo() || user.getIdNo().equals("") ? "" : user.getIdNo())) {
+        if (!IDCardUtil.isIDCard(null == user.getIdNo() || "".equals(user.getIdNo()) ? "" : user.getIdNo())) {
             rs.setMsg(Commons.DATA_VILIDATE_ID_STR);
             rs.setResultCode(Commons.DATA_VILIDATE_ID_CODE);
             rs.setSuccess(Commons.DATA_FALSE);
@@ -271,7 +299,7 @@ public class APPLoginServiceImpl implements APPLoginService {
             } else {
                 SysUser sysUser = selectByExample.get(0);
                 // 获取是不是同步到了数据。如果同步到了，进行修改
-                if (null != record.getName() && !(record.getName().equals(""))) {
+                if (null != record.getName() && !("".equals(record.getName()))) {
                     sysUser.setName(record.getName());
                     sysUser.setSex(record.getSex());
                     sysUser.setBirthday(record.getBirthday());
@@ -304,7 +332,7 @@ public class APPLoginServiceImpl implements APPLoginService {
             UserIp userip = new UserIp();
             JSONObject rootjsonBean = JSONObject.parseObject(result);
             Object rescode = rootjsonBean.get("code");
-            if (rescode.toString().equals("0")) {
+            if ("0".equals(rescode.toString())) {
                 Object data = rootjsonBean.get("data");
                 JSONObject jsonBean = JSONObject.parseObject(data.toString());
                 userip = JSONObject.toJavaObject(jsonBean, UserIp.class);
@@ -389,9 +417,9 @@ public class APPLoginServiceImpl implements APPLoginService {
         record.setId(selectByExample.get(0).getId());
         record.setLastLoginIp(request.getRemoteAddr());
         int i = sysUserMapper.updateByPrimaryKeySelective(record);
-        this.saveUserIpInfo(request.getRemoteAddr(), record.getId());
+        this.saveUserIpInfo(GetIpUtil.getIpAddr(request), record.getId());
 
-        jedis.set("tokenAndUserIdAndtokenId","f47ae89213514fa79dad5107662e9c24" );
+        jedis.set("f47ae89213514fa79dad5107662e9c24", "f47ae89213514fa79dad5107662e9c24");
         hs.put("userinfo", selectByExample.get(0));
         hs.put("token", "f47ae89213514fa79dad5107662e9c24");
         hs.put("member", member);

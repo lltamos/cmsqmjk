@@ -1,5 +1,6 @@
 package com.quanmin.interceptor;
 
+import com.alibaba.fastjson.JSON;
 import com.quanmin.dao.mapper.SysLogMapper;
 import com.quanmin.dao.mapper.SysUserMapper;
 import com.quanmin.dao.mapper.TokenMapper;
@@ -53,12 +54,12 @@ public class CMSCommonInterceptor extends HandlerInterceptorAdapter {
         String token = request.getHeader("Accept-CMS-Token");
 
 
-        if (!request.getMethod().equals("OPTIONS")) {
+        if (!"OPTIONS".equals(request.getMethod())) {
             //保存日志
             saveLog(request, response);
         }
 
-        if (requestUri.equals("/cms/1/login")) {
+        if ("/cms/1/login".equals(requestUri)) {
             return true;
         } else {
             Jedis jedis = jedisPool.getResource();
@@ -72,7 +73,7 @@ public class CMSCommonInterceptor extends HandlerInterceptorAdapter {
             result.setResultCode("515");
             result.setSuccess(true);
             result.setValue("");
-            String json = JsonUtils.objectToJson(result);
+            String json = JSON.toJSONString(result);
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json; charset=utf-8");
             PrintWriter writer = response.getWriter();

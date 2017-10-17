@@ -1,5 +1,7 @@
 package com.quanmin.controller.swapp;
 
+import com.quanmin.qmmq.job.HttpSenderJob;
+import com.quanmin.qmmq.job.CmsBootstrap;
 import io.swagger.annotations.Api;
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -7,7 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.Resource;
 import java.util.Date;
+import java.util.LinkedList;
 
 
 /**
@@ -20,7 +24,8 @@ import java.util.Date;
 @Api(value = "SayController|一个用来测试swagger注解的控制器")
 @RequestMapping(value = "/app_test")
 public class APPTestController {
-
+	@Resource
+	private CmsBootstrap qmBootstrap;
 
 	/**
 	 * 获取安卓最新版本
@@ -44,9 +49,7 @@ public class APPTestController {
 	@GetMapping(value = "/two")
 	@ResponseBody
 	public String two() {
-		Logger logger = Logger.getLogger(APPTestController.class);
-		logger.info("请求成功");
-		logger.warn(new Date());
-		return "OK";
+		qmBootstrap.addJob(new HttpSenderJob(HttpSenderJob.From.YIHUQUEREN,new LinkedList()));
+		return "ok";
 	}
 }

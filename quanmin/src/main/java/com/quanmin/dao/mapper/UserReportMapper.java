@@ -1,7 +1,6 @@
 package com.quanmin.dao.mapper;
 
-import com.quanmin.model.UserReport;
-import com.quanmin.model.UserReportExample;
+import com.quanmin.model.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -28,4 +27,5 @@ public interface UserReportMapper {
     int updateByPrimaryKeySelective(UserReport record);
 
     int updateByPrimaryKey(UserReport record);
+
 }

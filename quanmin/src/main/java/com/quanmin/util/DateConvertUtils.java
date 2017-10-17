@@ -17,8 +17,9 @@ public class DateConvertUtils {
 
     @SuppressWarnings("unchecked")
     public static <T extends java.util.Date> T parse(String dateString,String dateFormat,Class<T> targetResultType) {
-        if(StringUtils.isEmpty(dateString))
+        if(StringUtils.isEmpty(dateString)) {
             return null;
+        }
         DateFormat df = new SimpleDateFormat(dateFormat);
         try {
             long time = df.parse(dateString).getTime();
@@ -33,8 +34,9 @@ public class DateConvertUtils {
     }
     /* 格式化日期 */
     public static String format(java.util.Date date,String dateFormat) {
-        if(date == null)
+        if(date == null) {
             return null;
+        }
         DateFormat df = new SimpleDateFormat(dateFormat);
         return df.format(date);
     }
@@ -58,10 +60,11 @@ public class DateConvertUtils {
 
     /* 格式化Date为 字符串*/
     public static String formatDateToStr(String formart,Date date) {
-        if(date==null)
+        if(date==null) {
             return "";
-        else
+        } else {
             return new SimpleDateFormat(formart).format(date);
+        }
     }
     /**
      *
@@ -112,22 +115,22 @@ public class DateConvertUtils {
                     .parse(tradeDate);
             Calendar cal = java.util.Calendar.getInstance();
             cal.setTime(date);
-            if ((cal.get(cal.MONTH) + 1) % 3 == 0)// 季度结束月
+            if ((cal.get(Calendar.MONTH) + 1) % 3 == 0)// 季度结束月
             {
-                array[1] = cal.get(cal.YEAR) + "-" + (cal.get(cal.MONTH) + 1) + "-" + cal.getActualMaximum(cal.DATE);// 结束日期
-                cal.add(cal.MONTH, -2);
-                array[0] = cal.get(cal.YEAR) + "-" + (cal.get(cal.MONTH) + 1) + "-" + cal.getActualMinimum(cal.DATE);// 开始日期
-            } else if ((cal.get(cal.MONTH) + 2) % 3 == 0)// 季度中间月
+                array[1] = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.getActualMaximum(Calendar.DATE);// 结束日期
+                cal.add(Calendar.MONTH, -2);
+                array[0] = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.getActualMinimum(Calendar.DATE);// 开始日期
+            } else if ((cal.get(Calendar.MONTH) + 2) % 3 == 0)// 季度中间月
             {
-                cal.add(cal.MONTH, -1);
-                array[0] = cal.get(cal.YEAR) + "-" + (cal.get(cal.MONTH) + 1) + "-" + cal.getActualMinimum(cal.DATE);// 开始日期
-                cal.add(cal.MONTH, +2);
-                array[1] = cal.get(cal.YEAR) + "-" + (cal.get(cal.MONTH) + 1) + "-" + cal.getActualMaximum(cal.DATE);// 结束日期
-            } else if ((cal.get(cal.MONTH) + 3) % 3 == 0)// 季度起始月
+                cal.add(Calendar.MONTH, -1);
+                array[0] = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.getActualMinimum(Calendar.DATE);// 开始日期
+                cal.add(Calendar.MONTH, +2);
+                array[1] = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.getActualMaximum(Calendar.DATE);// 结束日期
+            } else if ((cal.get(Calendar.MONTH) + 3) % 3 == 0)// 季度起始月
             {
-                array[0] = cal.get(cal.YEAR) + "-" + (cal.get(cal.MONTH) + 1) + "-" + cal.getActualMinimum(cal.DATE);// 开始日期
-                cal.add(cal.MONTH, +2);
-                array[1] = cal.get(cal.YEAR) + "-" + (cal.get(cal.MONTH) + 1) + "-" + cal.getActualMaximum(cal.DATE);// 结束日期
+                array[0] = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.getActualMinimum(Calendar.DATE);// 开始日期
+                cal.add(Calendar.MONTH, +2);
+                array[1] = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.getActualMaximum(Calendar.DATE);// 结束日期
             }
         } catch (java.text.ParseException e) {
             e.printStackTrace();
@@ -147,21 +150,21 @@ public class DateConvertUtils {
                     .parse(tradeDate);
             Calendar cal = java.util.Calendar.getInstance();
             cal.setTime(date);
-            if (cal.get(cal.DATE)<= 10)// 上旬
+            if (cal.get(Calendar.DATE)<= 10)// 上旬
             {
-                array[1] = cal.get(cal.YEAR) + "-" + (cal.get(cal.MONTH) + 1) + "-" + "10";// 结束日期
+                array[1] = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + "10";// 结束日期
 
-                array[0] = cal.get(cal.YEAR) + "-" + (cal.get(cal.MONTH) + 1) + "-" + "1";// 开始日期
+                array[0] = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + "1";// 开始日期
             }
-            else if (cal.get(cal.DATE)>10&&cal.get(cal.DATE)<=20)//中旬
+            else if (cal.get(Calendar.DATE)>10&&cal.get(Calendar.DATE)<=20)//中旬
             {
-                array[0] = cal.get(cal.YEAR) + "-" + (cal.get(cal.MONTH) + 1) + "-" + "11"; // 开始日期
-                array[1] = cal.get(cal.YEAR) + "-" + (cal.get(cal.MONTH) + 1) + "-" + "20"; // 结束日期
+                array[0] = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + "11"; // 开始日期
+                array[1] = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + "20"; // 结束日期
             }
-            else if (cal.get(cal.DATE)>20)// 下旬
+            else if (cal.get(Calendar.DATE)>20)// 下旬
             {
-                array[0] = cal.get(cal.YEAR) + "-" + (cal.get(cal.MONTH) + 1) + "-" +"21";// 开始日期
-                array[1] = cal.get(cal.YEAR) + "-" + (cal.get(cal.MONTH) + 1) + "-" + cal.getActualMaximum(cal.DATE);// 结束日期
+                array[0] = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" +"21";// 开始日期
+                array[1] = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.getActualMaximum(Calendar.DATE);// 结束日期
             }
         } catch (java.text.ParseException e) {
             e.printStackTrace();
@@ -182,17 +185,17 @@ public class DateConvertUtils {
                     .parse(tradeDate);
             Calendar cal = java.util.Calendar.getInstance();
             cal.setTime(date);
-            if (cal.get(cal.DATE)<= 15)		// 上半月
+            if (cal.get(Calendar.DATE)<= 15)		// 上半月
             {
-                array[0] = cal.get(cal.YEAR) + "-" + (cal.get(cal.MONTH) + 1) + "-" + "1";// 开始日期
+                array[0] = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + "1";// 开始日期
 
-                array[1] = cal.get(cal.YEAR) + "-" + (cal.get(cal.MONTH) + 1)  + "-" + "15";// 结束日期
+                array[1] = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1)  + "-" + "15";// 结束日期
             }
-            else if (cal.get(cal.DATE)>15)	// 下半月
+            else if (cal.get(Calendar.DATE)>15)	// 下半月
             {
-                array[0] = cal.get(cal.YEAR) + "-" + (cal.get(cal.MONTH) + 1) + "-" +"16";// 开始日期
+                array[0] = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" +"16";// 开始日期
 
-                array[1] = cal.get(cal.YEAR) + "-" + (cal.get(cal.MONTH) + 1) + "-" + cal.getActualMaximum(cal.DATE);// 结束日期
+                array[1] = cal.get(Calendar.YEAR) + "-" + (cal.get(Calendar.MONTH) + 1) + "-" + cal.getActualMaximum(Calendar.DATE);// 结束日期
             }
         } catch (java.text.ParseException e) {
             e.printStackTrace();
@@ -213,8 +216,8 @@ public class DateConvertUtils {
             Calendar cal = java.util.Calendar.getInstance();
             cal.setTime(date);
             String datestr[]=DateConvertUtils.formatDateToStr("yyyy-MM-dd", date).split("-");
-            int firstDay=cal.getActualMinimum(cal.DATE);
-            int lastDay=cal.getActualMaximum(cal.DATE);
+            int firstDay=cal.getActualMinimum(Calendar.DATE);
+            int lastDay=cal.getActualMaximum(Calendar.DATE);
             array[0]=datestr[0]+"-"+datestr[1]+"-"+firstDay;
             array[1]=datestr[0]+"-"+datestr[1]+"-"+lastDay;
         } catch (java.text.ParseException e) {
@@ -282,9 +285,34 @@ public class DateConvertUtils {
     }
 
 
+    /**
+     * 日期转星期
+     *
+     * @param datetime
+     * @return
+     */
+    public static String dateToWeek(String datetime) {
+        SimpleDateFormat f = new SimpleDateFormat("yyyy-MM-dd");
+        String[] weekDays = { "星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六" };
+        Calendar cal = Calendar.getInstance(); // 获得一个日历
+        Date datet = null;
+        try {
+            datet = f.parse(datetime);
+            cal.setTime(datet);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        int w = cal.get(Calendar.DAY_OF_WEEK) - 1; // 指示一个星期中的某天。
+        if (w < 0) {
+            w = 0;
+        }
+        return weekDays[w];
+    }
+
+
     public static void main(String[] args) {
-        String time = new Date().getTime()+"";
-        String time1 = new Date().getTime()+"";
+        System.out.println(dateToWeek("2017-10-31"));
+
 
     }
 }

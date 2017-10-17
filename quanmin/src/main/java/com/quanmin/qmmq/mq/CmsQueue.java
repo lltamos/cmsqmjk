@@ -13,8 +13,8 @@ public class CmsQueue<S extends CmsJob> {
         queue.clear();
     }
 
-    public S get() {
-        return queue.poll();
+    public S get() throws InterruptedException {
+        return queue.take();
     }
 
     public int size() {

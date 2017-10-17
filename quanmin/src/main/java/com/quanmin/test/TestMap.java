@@ -1,5 +1,6 @@
 package com.quanmin.test;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.quanmin.model.custom.PositionInfo;
 import com.quanmin.util.Commons;
@@ -12,7 +13,7 @@ public class TestMap {
         JSONObject jsonObject = JSONObject.parseObject(add);
         JSONObject parseObject = JSONObject.parseObject(jsonObject.get("result").toString());
         String addressComponent = parseObject.get("addressComponent").toString();
-        PositionInfo positionInfo = jsonObject.parseObject(addressComponent, PositionInfo.class);
+        PositionInfo positionInfo = JSON.parseObject(addressComponent, PositionInfo.class);
 
         System.out.println(positionInfo);
         System.out.println(addressComponent);

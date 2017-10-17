@@ -2,8 +2,10 @@ package com.quanmin.controller.app;
 
 import com.quanmin.model.SysUser;
 import com.quanmin.service.APPLoginService;
-import com.quanmin.util.*;
-import org.apache.ibatis.annotations.Case;
+import com.quanmin.util.Commons;
+import com.quanmin.util.RandomUtils;
+import com.quanmin.util.ResultUtils;
+import com.quanmin.util.SendSmsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -21,6 +23,8 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 @RequestMapping(value = "/api/1/")
 public class APPLoginController {
+
+
 
     @Autowired
     private APPLoginService loginService;
@@ -44,7 +48,7 @@ public class APPLoginController {
 
 //        result = restAPI.sendTemplateSMS(phone, "167058", new String[]{code, "5"});
 
-        Integer result = SendSMSUtil.sendSMS(phone, "167058",new String[]{code+"", "5"});
+        Integer result = SendSmsUtil.sendSMS(phone, "167058",new String[]{code+"", "5"});
         switch (result) {
             case 0:
                 // 插入到数据库中
@@ -64,8 +68,8 @@ public class APPLoginController {
                 resultUtils.setResultCode(Commons.SMS_CODE_OVER_STR);
                 resultUtils.setSuccess(Commons.DATA_FALSE);
                 break;
-            case 3:
-                return ResultUtils.returnFail("发送失败");
+            default :
+                return ResultUtils.returnFail();
         }
 
         return resultUtils;

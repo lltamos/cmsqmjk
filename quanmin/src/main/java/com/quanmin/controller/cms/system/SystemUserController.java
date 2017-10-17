@@ -23,6 +23,7 @@ import java.util.Map;
  * Created by yang on 2017/7/3.
  * 用户管理
  */
+@SuppressWarnings("ALL")
 @RestController
 @RequestMapping("/cms/1/")
 public class SystemUserController {

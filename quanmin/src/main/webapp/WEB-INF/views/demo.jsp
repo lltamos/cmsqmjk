@@ -15,7 +15,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <title></title>
 </head>
 <body>
-<form action="/cms/1/savemanyimage"  method="post" enctype="multipart/form-data">
+<form action="/cms/1/savehtmlinfo"  method="post" enctype="multipart/form-data">
+        <input type="hidden" name="type" value="1">
         <input type="file" multiple="multiple" name="upfile">
         <input type="submit">
 </form>

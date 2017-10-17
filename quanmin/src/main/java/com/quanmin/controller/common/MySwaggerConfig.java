@@ -19,16 +19,15 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  */
 @EnableWebMvc
 @EnableSwagger2
-@ComponentScan(basePackages = {"com.quanmin.controller.swapp"})
+@ComponentScan(basePackages = {"com.quanmin.controller.providedtothird"})
 @Configuration
 public class MySwaggerConfig extends WebMvcConfigurationSupport {
-
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.quanmin.controller.swapp"))
+                .apis(RequestHandlerSelectors.basePackage("com.quanmin.controller.providedtothird"))
                 .paths(PathSelectors.any())
 
                 .build().host("");

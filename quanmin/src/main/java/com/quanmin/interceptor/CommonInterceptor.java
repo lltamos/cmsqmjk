@@ -1,5 +1,6 @@
 package com.quanmin.interceptor;
 
+import com.alibaba.fastjson.JSON;
 import com.quanmin.dao.mapper.SysLogMapper;
 import com.quanmin.dao.mapper.SysUserMapper;
 import com.quanmin.dao.mapper.TokenMapper;
@@ -61,15 +62,15 @@ public class CommonInterceptor extends HandlerInterceptorAdapter {
         //保存日志
         saveLog(request, response);
 
-        if (requestUri.equals("/api/1/getcode")
-                || requestUri.equals("generatehtml")
-                || requestUri.equals("/api/1/generatecache")
+        if ("/api/1/getcode".equals(requestUri)
+                || "generatehtml".equals(requestUri)
+                || "/api/1/generatecache".equals(requestUri)
 //                || requestUri.equals("/api/1/getversion")
 //                || requestUri.equals("/api/1/getisoversion")
-                || requestUri.equals("/api/1/loginout")
+                || "/api/1/loginout".equals(requestUri)
 //                || requestUri.equals("/api/1/showanalyze")
-                || requestUri.equals("/api/1/touristslogin")
-                || requestUri.equals("/api/1/order/productionorder")
+                || "/api/1/touristslogin".equals(requestUri)
+                || "/api/1/order/productionorder".equals(requestUri)
 //                || requestUri.contains("/api/1/findbycommodityid")
 //                || requestUri.contains("/api/1/showpersoninfo")
 //                || requestUri.contains("/api/1/checkcard")
@@ -78,7 +79,10 @@ public class CommonInterceptor extends HandlerInterceptorAdapter {
 //                || requestUri.contains("/api/1/usersaveorcanncelshopcollection")
 //                || requestUri.contains("/api/1/cart/addshoppingcart")
 //                || requestUri.contains("/api/1/commons/finddictlist")
-                || requestUri.contains("/alipay/callbackalipay")
+                || requestUri.contains("/api/1/alipay/callbackalipay")
+                || requestUri.contains("/api/1/appoint/callbackalipay")
+//                || requestUri.contains("/api/1/informationdetail")
+//                || requestUri.contains("/api/1/collectionorcancelinformation")
 //                || requestUri.contains("/api/1/updatenickname")
                 ) {
             return true;
@@ -87,7 +91,7 @@ public class CommonInterceptor extends HandlerInterceptorAdapter {
         String tokenAndUserIdAndtokenId = jedis.get("tokenAndUserIdAndtokenId" + phone);
 
         // 如果是登录页面接口
-        if (requestUri.equals("/api/1/login")) {
+        if ("/api/1/login".equals(requestUri)) {
             // 根据用户id查询token是否存在,如果存在，移除这token
             if (!StringUtil.isEmpty(tokenAndUserIdAndtokenId)) {
                 String[] tokenAndUserIdAndtokenIds = tokenAndUserIdAndtokenId.split(",");
@@ -110,7 +114,7 @@ public class CommonInterceptor extends HandlerInterceptorAdapter {
                 result.setResultCode("515");
                 result.setSuccess(true);
                 result.setValue("");
-                String json = JsonUtils.objectToJson(result);
+                String json = JSON.toJSONString(result);
                 response.setCharacterEncoding("UTF-8");
                 response.setContentType("application/json; charset=utf-8");
                 PrintWriter writer = response.getWriter();

@@ -18,10 +18,10 @@ public class DateFormatUtil {
      * @return
      * @throws ParseException
      */
-    public static Date StringToDateyyyyMMdd(String dateStr) throws ParseException {
+    public static Date stringToDateyyyyMMdd(String dateStr) throws ParseException {
         return dateFormatyyyyMMdd.parse(dateStr);
     }
-    public static Date StringToDateformatyyyyMMddHHmmss(String dateStr) throws ParseException {
+    public static Date stringToDateformatyyyyMMddHHmmss(String dateStr) throws ParseException {
         return dateFormatyyyyMMdd.parse(dateStr);
     }
 
@@ -61,7 +61,7 @@ public class DateFormatUtil {
      * @throws ParseException
      */
     public static String millisecondFormatTime(Date create) throws ParseException {
-        Long ms = new Date().getTime() - create.getTime();
+        Long ms = System.currentTimeMillis() - create.getTime();
         Integer ss = 1000;
         Integer mi = ss * 60;
         Integer hh = mi * 60;
@@ -79,8 +79,8 @@ public class DateFormatUtil {
                 return sb.append("昨天" + hour + ":" + minute).toString();
             case 0:
                 if (minute < 60) {
-                    return sb.append(minute + "分钟以前").toString();
-                }
+                return sb.append(minute + "分钟以前").toString();
+            }
                 return sb.append("今天" + hour + ":" + minute).toString();
 
             default:

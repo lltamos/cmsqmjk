@@ -67,7 +67,6 @@
 		<spring-data-redis.version>1.7.1.RELEASE</spring-data-redis.version>
 		<jpush-client.version>3.2.17</jpush-client.version>
 		<pinyin4j.version>2.5.1</pinyin4j.version>
-		<commons-httpclient.version>3.1</commons-httpclient.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<freemarker.version>2.3.20</freemarker.version>
 		<shiro-version>1.2.3</shiro-version>
@@ -253,12 +252,6 @@
 			<artifactId>poi</artifactId>
 			<version>${poi.version}</version>
 		</dependency>
-		<!-- httpclient -->
-		<!-- <dependency>
-			<groupId>commons-httpclient</groupId>
-			<artifactId>commons-httpclient</artifactId>
-			<version>${commons-httpclient.version}</version>
-		</dependency> -->
 		<!-- jersey -->
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
@@ -417,14 +410,20 @@
 		</dependency>
 
 
+		<!--<dependency>-->
+			<!--<groupId>io.reactivex.rxjava2</groupId>-->
+			<!--<artifactId>rxjava</artifactId>-->
+			<!--<version>2.1.3</version>-->
+		<!--</dependency>-->
+		<!-- https://mvnrepository.com/artifact/io.reactivex/rxjava -->
 		<dependency>
-			<groupId>io.reactivex.rxjava2</groupId>
+			<groupId>io.reactivex</groupId>
 			<artifactId>rxjava</artifactId>
-			<version>2.1.3</version>
+			<version>1.3.0</version>
 		</dependency>
 
-		
-	</dependencies>
+
+    </dependencies>
 	<build>
 		<!-- 指定build目标文件的文件名 -->
 		<finalName>ROOT</finalName>
@@ -481,7 +480,6 @@
 					<uriEncoding>UTF-8</uriEncoding>
 				</configuration>
 			</plugin>
-
 		</plugins>
 
 		<!-- 加载开发环境配置文件 -->

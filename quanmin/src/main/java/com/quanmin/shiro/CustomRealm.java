@@ -47,7 +47,7 @@ public class CustomRealm extends AuthorizingRealm {
 		SysUser user = (SysUser) SecurityUtils.getSubject().getPrincipal();
 		List<SysPermission> list = null;
 		// 判断角色查询所拥有权限
-		if (user.getUsername().equals("admin")) {
+		if ("admin".equals(user.getUsername())) {
 			// 查询所有权限
 			SysPermissionExample example = new SysPermissionExample();
 			list = sysPermissionMapper.selectByExample(example);

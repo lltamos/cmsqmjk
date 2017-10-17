@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeMap;
 
 @Controller
 @RequestMapping(value = "/api/1/commons")
@@ -18,7 +20,6 @@ public class AppCommonsController {
 
     /**
      * 获取标签列表
-     *
      * @return
      */
     @RequestMapping("/finddictlist")

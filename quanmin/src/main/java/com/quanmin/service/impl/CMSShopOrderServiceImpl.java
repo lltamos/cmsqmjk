@@ -6,7 +6,7 @@ import com.quanmin.dao.mapper.PushmessageMapper;
 import com.quanmin.model.Pushmessage;
 import com.quanmin.model.jpapo.*;
 import com.quanmin.model.po.ExportOrderPo;
-import com.quanmin.qmmq.job.QMBootstrap;
+import com.quanmin.qmmq.job.CmsBootstrap;
 import com.quanmin.qmmq.job.SMSResendJob;
 import com.quanmin.service.APPPayService;
 import com.quanmin.service.CMSIShopOrderService;
@@ -31,6 +31,7 @@ import java.util.*;
  * @author llsmp
  * @date 2017 /7/25
  */
+@SuppressWarnings("ALL")
 @Service
 @Transactional
 public class CMSShopOrderServiceImpl implements CMSIShopOrderService {
@@ -60,32 +61,34 @@ public class CMSShopOrderServiceImpl implements CMSIShopOrderService {
     private PushmessageMapper pushmessageMapper;
 
     @Resource
-    private QMBootstrap qmBootstrap;
+    private CmsBootstrap qmBootstrap;
 
     @Override
     public ResultUtils findAll(Integer page, Integer size, Integer type, String querystr) {
 
-        if (page < 1) return ResultUtils.returnFail();
+        if (page < 1) {
+            return ResultUtils.returnFail();
+        }
         PageRequest pageable=new PageRequest(page - 1, size, SortUtils.DESCCreateTime());
         Page<ShopOrder> shopOrders;
         if (type == null || type == 0) {
-            if (StringUtils.isBlank(querystr))
+            if (StringUtils.isBlank(querystr)) {
                 shopOrders=shopOrderDao.findAll(pageable);
-            else {
+            } else {
                 querystr=StringUtil.parseFix(querystr);
                 shopOrders=shopOrderDao.findByOrderNumLikeOrUserNickNameLikeOrReceiveNameLikeOrReceivePhoneLike(querystr, querystr, querystr, querystr, pageable);
             }
         } else if (type == 4) {
-            if (StringUtils.isBlank(querystr))
+            if (StringUtils.isBlank(querystr)) {
                 shopOrders=shopOrderDao.findByOrderStatusEqualsAndTypeEquals(type, 2, pageable);
-            else {
+            } else {
                 querystr=StringUtil.parseFix(querystr);
                 shopOrders=shopOrderDao.findByOrderStatusAndTypeliked(querystr, type, 2, pageable);
             }
         } else {
-            if (StringUtils.isBlank(querystr))
+            if (StringUtils.isBlank(querystr)) {
                 shopOrders=shopOrderDao.findByOrderStatusEqualsAndTypeEquals(type, 0, pageable);
-            else {
+            } else {
                 querystr=StringUtil.parseFix(querystr);
                 shopOrders=shopOrderDao.findByOrderStatusAndTypeliked(querystr, type, 0, pageable);
             }
@@ -102,11 +105,12 @@ public class CMSShopOrderServiceImpl implements CMSIShopOrderService {
     @Override
     public ResultUtils orderdetails(Long orderId) {
         ShopOrder shopOrder=shopOrderDao.findOne(orderId);
-        if (shopOrder == null)
+        if (shopOrder == null) {
             return ResultUtils.returnException();
+        }
 
         long createTime=shopOrder.getCreateTime().getTime();
-        long time=new Date().getTime();
+        long time=System.currentTimeMillis();
         long ms=time - createTime;
         int ss=1000;
         int mi=ss * 60;
@@ -149,26 +153,26 @@ public class CMSShopOrderServiceImpl implements CMSIShopOrderService {
         Pageable pageable=new PageRequest(page - 1, size, SortUtils.DESCCreateTime());
         Page<ShopRefundRecord> refundOrder;
         if (status == 4) {
-            if (StringUtils.isBlank(querystr))
+            if (StringUtils.isBlank(querystr)) {
                 refundOrder=shopRefundRecordDao.findByBackTypeIs(type, pageable);
-            else {
+            } else {
                 querystr=StringUtil.parseFix(querystr);
                 refundOrder=shopRefundRecordDao.findByBackTypeIsLikes(querystr, type, pageable);
             }
 
         } else if (status == 2) {
 
-            if (StringUtils.isBlank(querystr))
+            if (StringUtils.isBlank(querystr)) {
                 refundOrder=shopRefundRecordDao.findByBackTypeIsAndStatusIsAndAuditStatusIs(type, status, auditStatus, pageable);
-            else {
+            } else {
                 querystr=StringUtil.parseFix(querystr);
                 refundOrder=shopRefundRecordDao.findByBackTypeIsAndStatusIsAndAuditStatusIsLikes(querystr, type, status, auditStatus, pageable);
             }
 
         } else {
-            if (StringUtils.isBlank(querystr))
+            if (StringUtils.isBlank(querystr)) {
                 refundOrder=shopRefundRecordDao.findByBackTypeIsAndStatusIs(type, status, pageable);
-            else {
+            } else {
                 querystr=StringUtil.parseFix(querystr);
                 refundOrder=shopRefundRecordDao.findByReFoundTypeLikes(querystr, type, status, pageable);
             }
@@ -185,19 +189,23 @@ public class CMSShopOrderServiceImpl implements CMSIShopOrderService {
     @Transactional(propagation=Propagation.REQUIRES_NEW)
     public ResultUtils refundAudit(Long refundId, Integer type) throws AlipayApiException {
         ShopRefundRecord refundRecord=shopRefundRecordDao.findOne(refundId);
-        if (refundRecord == null)
+        if (refundRecord == null) {
             return ResultUtils.returnException();
+        }
 
 
-        if (refundRecord.getBackType() != 0)
+        if (refundRecord.getBackType() != 0) {
             return ResultUtils.returnException();
+        }
 
-        if (refundRecord.getAuditStatus() != 0)
+        if (refundRecord.getAuditStatus() != 0) {
             return ResultUtils.returnFail("该订单以处理");
+        }
 
 
-        if (refundRecord.getShopOrderId() == null)
+        if (refundRecord.getShopOrderId() == null) {
             return ResultUtils.returnException();
+        }
 
 
         //允许
@@ -281,25 +289,31 @@ public class CMSShopOrderServiceImpl implements CMSIShopOrderService {
     public ResultUtils refundCargoAudit(Long refundId, Integer type) throws AlipayApiException {
         ShopOrder shopOrder;
         ShopRefundRecord refundRecord=shopRefundRecordDao.findOne(refundId);
-        if (refundRecord == null)
+        if (refundRecord == null) {
             return ResultUtils.returnException();
+        }
 
-        if (refundRecord.getShopOrderId() == null)
+        if (refundRecord.getShopOrderId() == null) {
             return ResultUtils.returnException();
+        }
 
-        if (refundRecord.getBackType() != 1)
+        if (refundRecord.getBackType() != 1) {
             return ResultUtils.returnException();
+        }
 
 
         ShopCommodityOrder shopCommodityOrder=shopCommidityOrderDao.findOne(refundRecord.getShopCommodityOrderId());
 
-        if (shopCommodityOrder == null) return ResultUtils.returnFail();
+        if (shopCommodityOrder == null) {
+            return ResultUtils.returnFail();
+        }
 
         ShopCommodityOrder shopCommodityOrders=shopCommidityOrderDao.findOne(refundRecord.getShopCommodityOrderId());
 
         if (type != 2) {
-            if (refundRecord.getAuditStatus() != 0)
+            if (refundRecord.getAuditStatus() != 0) {
                 return ResultUtils.returnFail("该订单以处理");
+            }
         }
 
         //同意退货申请
@@ -407,23 +421,23 @@ public class CMSShopOrderServiceImpl implements CMSIShopOrderService {
         ExportOrderPo exportOrderPo;
         List<ShopOrder> shopOrders;
         if (type == null || type == 0) {
-            if (StringUtils.isBlank(querystr))
+            if (StringUtils.isBlank(querystr)) {
                 shopOrders=shopOrderDao.findAll(SortUtils.DESCCreateTime());
-            else {
+            } else {
                 querystr=StringUtil.parseFix(querystr);
                 shopOrders=shopOrderDao.findByOrderNumLikeOrUserNickNameLikeOrReceiveNameLikeOrReceivePhoneLike(querystr, querystr, querystr, querystr, SortUtils.DESCCreateTime());
             }
         } else if (type == 4) {
-            if (StringUtils.isBlank(querystr))
+            if (StringUtils.isBlank(querystr)) {
                 shopOrders=shopOrderDao.findByOrderStatusEqualsAndTypeEquals(type, 2, SortUtils.DESCCreateTime());
-            else {
+            } else {
                 querystr=StringUtil.parseFix(querystr);
                 shopOrders=shopOrderDao.findByOrderStatusAndTypeliked(querystr, type, 2, SortUtils.DESCCreateTime());
             }
         } else {
-            if (StringUtils.isBlank(querystr))
+            if (StringUtils.isBlank(querystr)) {
                 shopOrders=shopOrderDao.findByOrderStatusEqualsAndTypeEquals(type, 0, SortUtils.DESCCreateTime());
-            else {
+            } else {
                 querystr=StringUtil.parseFix(querystr);
                 shopOrders=shopOrderDao.findByOrderStatusAndTypeliked(querystr, type, 0, SortUtils.DESCCreateTime());
             }
@@ -457,25 +471,25 @@ public class CMSShopOrderServiceImpl implements CMSIShopOrderService {
 
 
         if (status == 4) {
-            if (StringUtils.isBlank(querystr))
+            if (StringUtils.isBlank(querystr)) {
                 refundOrder=shopRefundRecordDao.findByBackTypeIs(type, SortUtils.DESCCreateTime());
-            else {
+            } else {
                 querystr=StringUtil.parseFix(querystr);
                 refundOrder=shopRefundRecordDao.findByBackTypeIsLikes(querystr, type, SortUtils.DESCCreateTime());
             }
         } else if (status == 2) {
 
-            if (StringUtils.isBlank(querystr))
+            if (StringUtils.isBlank(querystr)) {
                 refundOrder=shopRefundRecordDao.findByBackTypeIsAndStatusIsAndAuditStatusIs(type, status, auditStatus, SortUtils.DESCCreateTime());
-            else {
+            } else {
                 querystr=StringUtil.parseFix(querystr);
                 refundOrder=shopRefundRecordDao.findByBackTypeIsAndStatusIsAndAuditStatusIsLikes(querystr, type, status, auditStatus, SortUtils.DESCCreateTime());
             }
 
         } else {
-            if (StringUtils.isBlank(querystr))
+            if (StringUtils.isBlank(querystr)) {
                 refundOrder=shopRefundRecordDao.findByBackTypeIsAndStatusIs(type, status, SortUtils.DESCCreateTime());
-            else {
+            } else {
                 querystr=StringUtil.parseFix(querystr);
                 refundOrder=shopRefundRecordDao.findByReFoundTypeLikes(querystr, type, status, SortUtils.DESCCreateTime());
             }
@@ -484,6 +498,10 @@ public class CMSShopOrderServiceImpl implements CMSIShopOrderService {
         if (refundOrder == null || refundOrder.size() == 0) {
             return ResultUtils.returnFail();
         }
+        AppointOrder appointOrder= new AppointOrder();
+        appointOrder.setCreateTime(new Date());
+
+
 
         result=new ArrayList<>();
         for (ShopRefundRecord refundRecord : refundOrder) {
@@ -499,16 +517,19 @@ public class CMSShopOrderServiceImpl implements CMSIShopOrderService {
     @Override
     public ResultUtils sendOut(Long orderId, Integer expressCompanyId, String expressCompanyNameSimple, String expressCompanyName, String expressNum, Integer type, String expressSendName) {
 
-        if (expressSendName == null)
+        if (expressSendName == null) {
             return ResultUtils.returnException();
+        }
 
         ShopOrder shopOrder=shopOrderDao.findOne(orderId);
 
-        if (shopOrder == null)
+        if (shopOrder == null) {
             return ResultUtils.returnException();
+        }
 
-        if (shopOrder.getIsRefound() == 1)
+        if (shopOrder.getIsRefound() == 1) {
             return ResultUtils.returnFail("该订单已申请退款");
+        }
 
 
         if (type == 0) {

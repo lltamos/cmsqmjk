@@ -4,29 +4,46 @@
     <select id="factorQueryList" parameterType="com.quanmin.model.jpapo.AppointOrder" resultType="java.util.HashMap">
         SELECT * FROM appoint_order WHERE 1=1
 
-        <if test="null!=hospital and ''!=hospital">
-            AND hospital=#{hospital}
+        <if test="null!=hospitalName and ''!=hospitalName">
+            AND hospital_name=#{hospitalName}
         </if>
-        <if test="null!=office and ''!=office">
-            AND office=#{office}
+        <if test="null!=deptName and ''!=deptName">
+            AND dept_name=#{deptName}
         </if>
         <if test="null!=period and 0!=period">
             AND period=#{period}
         </if>
-        <if test="null!=orderStatus and 0!=orderStatus">
-            AND order_status=#{orderStatus}
+
+        <if test="null!=city and ''!=city">
+            AND city=#{city}
+        </if>
+        <if test="1==lifeType">
+            AND life_type=1
+            <if test="null!=orderStatus and 0!=orderStatus">
+                AND order_status=#{orderStatus}
+            </if>
+        </if>
+        <if test="2==lifeType">
+            AND life_type=2
+        </if>
+        <if test="3==lifeType">
+            AND life_type=3
         </if>
         <if test="null!=ext1 and ''!=ext1">
             AND (
-            appoint_order_num LIKE CONCAT(CONCAT('%',#{ext1}), '%')
+            order_no LIKE CONCAT(CONCAT('%',#{ext1}), '%')
             OR
-            hospital LIKE CONCAT(CONCAT('%',#{ext1}), '%')
+            hospital_name LIKE CONCAT(CONCAT('%',#{ext1}), '%')
             OR
-            doctor LIKE CONCAT(CONCAT('%',#{ext1}), '%')
+            consultant_name LIKE CONCAT(CONCAT('%',#{ext1}), '%')
             OR
-            see_hospital_address LIKE CONCAT(CONCAT('%',#{ext1}), '%')
+            patient_name LIKE CONCAT(CONCAT('%',#{ext1}), '%')
+            OR
+            treatment_hospital_address LIKE CONCAT(CONCAT('%',#{ext1}), '%')
             )
         </if>
-        ORDER BY create_time DESC
+        ORDER BY update_time DESC
+
+
     </select>
 </mapper>

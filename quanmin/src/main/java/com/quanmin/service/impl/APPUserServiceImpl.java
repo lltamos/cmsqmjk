@@ -24,6 +24,7 @@ import com.quanmin.util.ResultUtils;
 import com.quanmin.util.SaveImageUtil;
 import com.quanmin.util.StringUtil;
 
+@SuppressWarnings("ALL")
 @Service
 public class APPUserServiceImpl implements APPUserService {
 
@@ -61,11 +62,11 @@ public class APPUserServiceImpl implements APPUserService {
 		int key = 0;
 
 		// 如果是修改身份证
-		if (user.getIdNo() != null && (!user.equals(""))) {
+		if (user.getIdNo() != null && (!"".equals(user))) {
 			// 根据手机号和身份证号获取用户信息
 			SysUser record = UserInfo.getUserInfoByPhoneAndIdNo(user.getPhone(), user.getIdNo());
 			// 如果通过身份证获取到用户的信息
-			if (null != record.getName() && !(record.getName().equals(""))) {
+			if (null != record.getName() && !("".equals(record.getName()))) {
 				user.setName(record.getName());
 				user.setSex(record.getSex());
 				user.setBirthday(record.getBirthday());

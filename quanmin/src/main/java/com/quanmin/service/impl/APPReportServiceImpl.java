@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+@SuppressWarnings("ALL")
 @Service
 public class APPReportServiceImpl implements APPReportService {
 
@@ -78,21 +79,21 @@ public class APPReportServiceImpl implements APPReportService {
             List<HashMap<String, Object>> list = UserReportInfo.getUserReportInfoByPhoneOrIdNo(sysUser, "1", hraid);
             if (null != list && list.size() > 0) {
                 Jedis jedis = jedisPool.getResource();
-                UserReport jedisReportAndAnalyzeUrl = (UserReport) SerializeUtil.unserialize(jedis.get((null != hraid && !hraid.equals("") ? hraid : list.get(0).get("hraid").toString()).getBytes()));
+                UserReport jedisReportAndAnalyzeUrl = (UserReport) SerializeUtil.unserialize(jedis.get((null != hraid && !"".equals(hraid) ? hraid : list.get(0).get("hraid").toString()).getBytes()));
 //            加入缓存
 
                 if (null == jedisReportAndAnalyzeUrl) {
-                    String generateReportUrl = this.generateReport(sysUser, null != hraid && !hraid.equals("") ? hraid : list.get(0).get("hraid").toString(),list.get(0).get("result").toString());
-                    String generateAnalyzeUrl = this.generateAnalyze(sysUser, null != hraid && !hraid.equals("") ? hraid : list.get(0).get("hraid").toString());
+                    String generateReportUrl = this.generateReport(sysUser, null != hraid && !"".equals(hraid) ? hraid : list.get(0).get("hraid").toString(),list.get(0).get("result").toString());
+                    String generateAnalyzeUrl = this.generateAnalyze(sysUser, null != hraid && !"".equals(hraid) ? hraid : list.get(0).get("hraid").toString());
                     UserReport userReport = new UserReport();
                     userReport.setAnalyzeUrl(null != generateAnalyzeUrl ? generateAnalyzeUrl : "");
                     userReport.setReportUrl(null != generateReportUrl ? generateReportUrl : "");
                     userReport.setCreateTime(new Date());
-                    userReport.setHraId(null != hraid && !hraid.equals("") ? hraid : list.get(0).get("hraid").toString());
+                    userReport.setHraId(null != hraid && !"".equals(hraid) ? hraid : list.get(0).get("hraid").toString());
                     userReport.setUserId(Integer.parseInt(condition.getUserId()));
                     int i = userReportMapper.insertSelective(userReport);
                     //插入redis缓存中
-                    jedis.set((null != hraid && !hraid.equals("") ? hraid : list.get(0).get("hraid").toString()).getBytes(), SerializeUtil.serialize(userReport));
+                    jedis.set((null != hraid && !"".equals(hraid) ? hraid : list.get(0).get("hraid").toString()).getBytes(), SerializeUtil.serialize(userReport));
                     map.put("reporturl", null != generateReportUrl ? generateReportUrl : "");
                 } else {
                     map.put("reporturl", jedisReportAndAnalyzeUrl.getReportUrl());
@@ -100,7 +101,7 @@ public class APPReportServiceImpl implements APPReportService {
                 jedis.close();
             }
 
-            map.put("hraid", null != hraid && !hraid.equals("") ? Integer.parseInt(hraid) : Integer.parseInt(list.get(0).get("hraid").toString()));
+            map.put("hraid", null != hraid && !"".equals(hraid) ? Integer.parseInt(hraid) : Integer.parseInt(list.get(0).get("hraid").toString()));
             map.put("userId", sysUser.getId());
             map.put("username", sysUser.getUsername());
             map.put("idCard", sysUser.getIdNo());
@@ -231,7 +232,7 @@ public class APPReportServiceImpl implements APPReportService {
         sb.append("</section>");
         sb.append("</div>");
         sb.append("</body>");
-        if (null != hraid && !hraid.equals("")) {
+        if (null != hraid && !"".equals(hraid)) {
             hraid = hraid;
         } else {
             hraid = "";
@@ -300,7 +301,7 @@ public class APPReportServiceImpl implements APPReportService {
                 "<section id=\"tuijian\"><h2>推荐的食物</h2><div class=\"sub_div\"><dl class=\"digest\"><dt>【蔬菜】</dt><dd>1.GS-E10477 人(Human)抗α干扰素抗体(IFNα-Ab)ELISA试剂</dd></dl><dl class=\"digest\"><dt>【动物蛋白质】</dt><dd>1.GS-E10477 人(HumaA试剂盒 GS-E10478 人(Human)抗Sc1-70抗体(Sc1-70-Ab)ELISA试剂盒</dd></dl><dl class=\"digest\"><dt>【乳制品】</dt><dd>1.GS-E10477 人(Human)抗α干扰素抗体)ELISA试剂盒</dd></dl><dl class=\"digest\"><dt>【碳水化合物】</dt><dd>1.GS-E10477 人(Human)抗α干扰素抗体(IFNα-Ab)ELISA试剂盒 GS-E10478 人1-70-Ab)ELISA试剂盒</dd></dl><dl class=\"digest\"><dt>【饮料】</dt><dd>1.GS-E10477 人(Human)抗α干扰素抗</dd></dl><dl class=\"digest\"><dt>【水果】</dt><dd>1.GS-E10477 人man)抗Sc1-70抗体(Sc1-70-Ab)ELISA试剂盒</dd></dl><dl class=\"digest\"><dt>【草药】</dt><dd>1.GS-E10477 人(Human8 人(Human)抗Sc1-70抗体(Sc1-70-Ab)ELISA试剂盒</dd></dl><dl class=\"digest\"><dt>【油】</dt><dd>1.GS-E10477 人(Human8 人(Human)抗Sc1-70抗体(Sc1-70-Ab)ELISA试剂盒</dd></dl><dl class=\"digest\"><dt>【其他推荐】</dt><dd>1.GS-E10477 人(Human8 人(Human)抗Sc1-70抗体(Sc1-70-Ab)ELISA试剂盒</dd></dl></div></section>");
         sb.append("</div></body>");
 
-        if (null != hraid && !hraid.equals("")) {
+        if (null != hraid && !"".equals(hraid)) {
             hraid = hraid;
         } else {
             hraid = "";

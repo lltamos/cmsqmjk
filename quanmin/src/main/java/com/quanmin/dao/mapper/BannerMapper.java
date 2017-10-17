@@ -4,6 +4,8 @@ import com.quanmin.model.Banner;
 import com.quanmin.model.BannerExample;
 import com.quanmin.model.BannerWithBLOBs;
 import java.util.List;
+
+import com.quanmin.model.custom.SearchCondition;
 import org.apache.ibatis.annotations.Param;
 
 public interface BannerMapper {
@@ -34,4 +36,6 @@ public interface BannerMapper {
     int updateByPrimaryKeyWithBLOBs(BannerWithBLOBs record);
 
     int updateByPrimaryKey(Banner record);
+
+    List<BannerWithBLOBs> listBannerBySearchCondition(SearchCondition condition);
 }

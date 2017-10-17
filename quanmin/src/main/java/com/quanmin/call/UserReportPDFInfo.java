@@ -53,9 +53,9 @@ public class UserReportPDFInfo {
                 // // 解析数据
                 JSONObject rootjsonBean = JSONObject.parseObject(result);
                 Object rescode = rootjsonBean.get("code");
-                if (rescode.toString().equals("200")) {
+                if ("200".equals(rescode.toString())) {
                     Object value = rootjsonBean.get("value");
-                    if (null != value && !value.equals("")) {
+                    if (null != value && !"".equals(value)) {
                         JSONArray jsonBeans = JSONObject.parseArray(value.toString());
                         for (int i = 0; i < jsonBeans.size(); i++) {
                             Map<String, String> map = new HashMap<>();

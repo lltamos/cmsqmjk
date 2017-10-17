@@ -216,10 +216,10 @@ public class CMSContentController {
      */
     @RequestMapping("/infolist")
     @ResponseBody
-    public String infoListByCondition(SearchCondition condition, HttpServletRequest request,
+    public ResultUtils infoListByCondition(SearchCondition condition, HttpServletRequest request,
                                       HttpServletResponse response, String type) {
         ResultUtils list = contentService.selectInfoListByCondition(condition);
-        return JsonUtils.objectToJson(list);
+        return list;
     }
 
     /**
@@ -227,10 +227,10 @@ public class CMSContentController {
      */
     @RequestMapping("/deleteinfo")
     @ResponseBody
-    public String deleteInfoByInfoId(SearchCondition condition, HttpServletRequest request,
+    public ResultUtils deleteInfoByInfoId(SearchCondition condition, HttpServletRequest request,
                                      HttpServletResponse response) {
         ResultUtils list = contentService.deleteInfoByInfoId(condition);
-        return JsonUtils.objectToJson(list);
+        return list;
     }
 
     /**
@@ -243,10 +243,10 @@ public class CMSContentController {
      */
     @RequestMapping("/selectoneinfo")
     @ResponseBody
-    public String selectInfoByInfoId(SearchCondition condition, HttpServletRequest request,
+    public ResultUtils selectInfoByInfoId(SearchCondition condition, HttpServletRequest request,
                                      HttpServletResponse response) {
         ResultUtils list = contentService.selectInfoByInfoId(condition);
-        return JsonUtils.objectToJson(list);
+        return list;
     }
 
 

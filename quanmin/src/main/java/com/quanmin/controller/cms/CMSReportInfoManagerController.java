@@ -40,7 +40,7 @@ public class CMSReportInfoManagerController {
      */
     @RequestMapping("/reportlist")
     @ResponseBody
-    public String userReportListBySearchCondition(HttpServletRequest httpServletRequest,
+    public ResultUtils userReportListBySearchCondition(HttpServletRequest httpServletRequest,
                                                   HttpServletResponse httpServletResponse, SearchCondition condition) {
         ResultUtils resultUtils = new ResultUtils();
         TreeMap<String, Object> map = new TreeMap<>();
@@ -59,7 +59,7 @@ public class CMSReportInfoManagerController {
             resultUtils.setResultCode("500");
             resultUtils.setSuccess(false);
         }
-        return JsonUtils.objectToJson(resultUtils);
+        return resultUtils;
     }
 
 

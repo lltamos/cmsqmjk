@@ -36,11 +36,11 @@ public class APPCollectionServiceImpl implements APPCollectionService {
     private ShopCollectionDao shopCollectionDao;
 
     @Override
-    public ResultUtils SaveOrUpdateCollectionInformation(Integer informationId, Integer userId, String type) {
+    public ResultUtils saveOrUpdateCollectionInformation(Integer informationId, Integer userId, String type) {
         ResultUtils result = new ResultUtils();
         Information information = informationMapper.selectByPrimaryKey(informationId);
         // 等于0，新增
-        if (type.equals("0")) {
+        if ("0".equals(type)) {
             // 添加到收藏表中
             Collection collection = new Collection();
             collection.setCreateTime(new Date());

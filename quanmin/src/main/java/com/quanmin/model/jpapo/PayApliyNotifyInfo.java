@@ -364,48 +364,111 @@ public class PayApliyNotifyInfo {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         PayApliyNotifyInfo that = (PayApliyNotifyInfo) o;
 
-        if (id != that.id) return false;
-        if (notifyTime != null ? !notifyTime.equals(that.notifyTime) : that.notifyTime != null) return false;
-        if (notifyType != null ? !notifyType.equals(that.notifyType) : that.notifyType != null) return false;
-        if (notifyId != null ? !notifyId.equals(that.notifyId) : that.notifyId != null) return false;
-        if (appId != null ? !appId.equals(that.appId) : that.appId != null) return false;
-        if (charset != null ? !charset.equals(that.charset) : that.charset != null) return false;
-        if (version != null ? !version.equals(that.version) : that.version != null) return false;
-        if (signType != null ? !signType.equals(that.signType) : that.signType != null) return false;
-        if (sign != null ? !sign.equals(that.sign) : that.sign != null) return false;
-        if (tradeNo != null ? !tradeNo.equals(that.tradeNo) : that.tradeNo != null) return false;
-        if (outTradeNo != null ? !outTradeNo.equals(that.outTradeNo) : that.outTradeNo != null) return false;
-        if (outBizNo != null ? !outBizNo.equals(that.outBizNo) : that.outBizNo != null) return false;
-        if (buyerId != null ? !buyerId.equals(that.buyerId) : that.buyerId != null) return false;
-        if (buyerLogonId != null ? !buyerLogonId.equals(that.buyerLogonId) : that.buyerLogonId != null) return false;
-        if (sellerId != null ? !sellerId.equals(that.sellerId) : that.sellerId != null) return false;
-        if (sellerEmail != null ? !sellerEmail.equals(that.sellerEmail) : that.sellerEmail != null) return false;
-        if (tradeStatus != null ? !tradeStatus.equals(that.tradeStatus) : that.tradeStatus != null) return false;
-        if (totalAmount != null ? !totalAmount.equals(that.totalAmount) : that.totalAmount != null) return false;
-        if (receiptAmount != null ? !receiptAmount.equals(that.receiptAmount) : that.receiptAmount != null)
+        if (id != that.id) {
             return false;
-        if (invoiceAmount != null ? !invoiceAmount.equals(that.invoiceAmount) : that.invoiceAmount != null)
+        }
+        if (notifyTime != null ? !notifyTime.equals(that.notifyTime) : that.notifyTime != null) {
             return false;
-        if (buyerPayAmount != null ? !buyerPayAmount.equals(that.buyerPayAmount) : that.buyerPayAmount != null)
+        }
+        if (notifyType != null ? !notifyType.equals(that.notifyType) : that.notifyType != null) {
             return false;
-        if (pointAmount != null ? !pointAmount.equals(that.pointAmount) : that.pointAmount != null) return false;
-        if (refundFee != null ? !refundFee.equals(that.refundFee) : that.refundFee != null) return false;
-        if (subject != null ? !subject.equals(that.subject) : that.subject != null) return false;
-        if (body != null ? !body.equals(that.body) : that.body != null) return false;
-        if (gmtCreate != null ? !gmtCreate.equals(that.gmtCreate) : that.gmtCreate != null) return false;
-        if (gmtPayment != null ? !gmtPayment.equals(that.gmtPayment) : that.gmtPayment != null) return false;
-        if (gmtRefund != null ? !gmtRefund.equals(that.gmtRefund) : that.gmtRefund != null) return false;
-        if (gmtClose != null ? !gmtClose.equals(that.gmtClose) : that.gmtClose != null) return false;
-        if (fundBillList != null ? !fundBillList.equals(that.fundBillList) : that.fundBillList != null) return false;
-        if (passbackParams != null ? !passbackParams.equals(that.passbackParams) : that.passbackParams != null)
+        }
+        if (notifyId != null ? !notifyId.equals(that.notifyId) : that.notifyId != null) {
             return false;
-        if (voucherDetailList != null ? !voucherDetailList.equals(that.voucherDetailList) : that.voucherDetailList != null)
+        }
+        if (appId != null ? !appId.equals(that.appId) : that.appId != null) {
             return false;
+        }
+        if (charset != null ? !charset.equals(that.charset) : that.charset != null) {
+            return false;
+        }
+        if (version != null ? !version.equals(that.version) : that.version != null) {
+            return false;
+        }
+        if (signType != null ? !signType.equals(that.signType) : that.signType != null) {
+            return false;
+        }
+        if (sign != null ? !sign.equals(that.sign) : that.sign != null) {
+            return false;
+        }
+        if (tradeNo != null ? !tradeNo.equals(that.tradeNo) : that.tradeNo != null) {
+            return false;
+        }
+        if (outTradeNo != null ? !outTradeNo.equals(that.outTradeNo) : that.outTradeNo != null) {
+            return false;
+        }
+        if (outBizNo != null ? !outBizNo.equals(that.outBizNo) : that.outBizNo != null) {
+            return false;
+        }
+        if (buyerId != null ? !buyerId.equals(that.buyerId) : that.buyerId != null) {
+            return false;
+        }
+        if (buyerLogonId != null ? !buyerLogonId.equals(that.buyerLogonId) : that.buyerLogonId != null) {
+            return false;
+        }
+        if (sellerId != null ? !sellerId.equals(that.sellerId) : that.sellerId != null) {
+            return false;
+        }
+        if (sellerEmail != null ? !sellerEmail.equals(that.sellerEmail) : that.sellerEmail != null) {
+            return false;
+        }
+        if (tradeStatus != null ? !tradeStatus.equals(that.tradeStatus) : that.tradeStatus != null) {
+            return false;
+        }
+        if (totalAmount != null ? !totalAmount.equals(that.totalAmount) : that.totalAmount != null) {
+            return false;
+        }
+        if (receiptAmount != null ? !receiptAmount.equals(that.receiptAmount) : that.receiptAmount != null) {
+            return false;
+        }
+        if (invoiceAmount != null ? !invoiceAmount.equals(that.invoiceAmount) : that.invoiceAmount != null) {
+            return false;
+        }
+        if (buyerPayAmount != null ? !buyerPayAmount.equals(that.buyerPayAmount) : that.buyerPayAmount != null) {
+            return false;
+        }
+        if (pointAmount != null ? !pointAmount.equals(that.pointAmount) : that.pointAmount != null) {
+            return false;
+        }
+        if (refundFee != null ? !refundFee.equals(that.refundFee) : that.refundFee != null) {
+            return false;
+        }
+        if (subject != null ? !subject.equals(that.subject) : that.subject != null) {
+            return false;
+        }
+        if (body != null ? !body.equals(that.body) : that.body != null) {
+            return false;
+        }
+        if (gmtCreate != null ? !gmtCreate.equals(that.gmtCreate) : that.gmtCreate != null) {
+            return false;
+        }
+        if (gmtPayment != null ? !gmtPayment.equals(that.gmtPayment) : that.gmtPayment != null) {
+            return false;
+        }
+        if (gmtRefund != null ? !gmtRefund.equals(that.gmtRefund) : that.gmtRefund != null) {
+            return false;
+        }
+        if (gmtClose != null ? !gmtClose.equals(that.gmtClose) : that.gmtClose != null) {
+            return false;
+        }
+        if (fundBillList != null ? !fundBillList.equals(that.fundBillList) : that.fundBillList != null) {
+            return false;
+        }
+        if (passbackParams != null ? !passbackParams.equals(that.passbackParams) : that.passbackParams != null) {
+            return false;
+        }
+        if (voucherDetailList != null ? !voucherDetailList.equals(that.voucherDetailList) : that.voucherDetailList != null) {
+            return false;
+        }
 
         return true;
     }

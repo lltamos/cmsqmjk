@@ -70,12 +70,13 @@ public class ResquestAndResponseParmUtils {
 		log.setCreateTime(new Date());
 		log.setLogType(0);
 		log.setMethodName(method);
-		log.setPhonetype(phoneType.equals("0") ? "ios" : "Android");
+		log.setPhonetype("0".equals(phoneType) ? "ios" : "Android");
 		log.setRequestIp(ip);
 		log.setRequestParams(params.toString());
 		log.setRequestUri(requestUri);
-		if (list.size() > 0)
-			log.setUserId(list.get(0).getUserId() != null ? list.get(0).getUserId() + "" : "");
+		if (list.size() > 0) {
+            log.setUserId(list.get(0).getUserId() != null ? list.get(0).getUserId() + "" : "");
+        }
 		log.setVersionId(version);
 		return log;
 	}

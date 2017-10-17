@@ -27,6 +27,8 @@ public class SearchCondition implements Serializable {
     private Integer provinceId;//省id
     private String company;//供应商
 
+    private String bannerStatus;//banner状态
+
     private String startTime;//开始时间
     private String endTime;//结束时间
 

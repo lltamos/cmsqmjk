@@ -5,10 +5,12 @@ public class RecuperateWithBLOBs extends Recuperate {
 
     private String explain;
 
+    @Override
     public String getInfo() {
         return info;
     }
 
+    @Override
     public void setInfo(String info) {
         this.info = info == null ? null : info.trim();
     }

@@ -48,7 +48,7 @@ public class UserReportInfo {
 				// 解析数据
 				JSONObject rootjsonBean = JSONObject.parseObject(result);
 				Object rescode = rootjsonBean.get("code");
-				if (rescode.toString().equals("200")) {
+				if ("200".equals(rescode.toString())) {
 					Object data = rootjsonBean.get("data");
 					System.out.println(data.toString());
 					JSONArray parseArray = JSONObject.parseArray(data.toString());

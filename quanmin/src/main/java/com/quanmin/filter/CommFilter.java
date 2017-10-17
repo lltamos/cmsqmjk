@@ -1,5 +1,6 @@
 package com.quanmin.filter;
 
+import com.alibaba.fastjson.JSON;
 import com.quanmin.dao.mapper.SysLogMapper;
 import com.quanmin.dao.mapper.SysUserMapper;
 import com.quanmin.dao.mapper.TokenMapper;
@@ -15,12 +16,7 @@ import java.util.Set;
 
 public class CommFilter implements Filter {
 
-    @Autowired
-    private TokenMapper tokenMapper;
-    @Autowired
-    private SysUserMapper sysUserMapper;
-    @Autowired
-    private SysLogMapper sysLogMapper;
+
 
     @Override
     public void destroy() {
@@ -34,7 +30,7 @@ public class CommFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) res;
         String uri = request.getRequestURI();
         System.out.println("请求路径:" + uri);
-        System.out.println("请求参数列表："+ JsonUtils.objectToJson(request.getParameterMap()));
+        System.out.println("请求参数列表："+ JSON.toJSON(request.getParameterMap()));
         request.setCharacterEncoding("utf-8");
 
         response.setHeader("Content-type", "text/html;charset=UTF-8");

@@ -9,18 +9,21 @@
 
         <property name="triggers">
             <list>
-                <ref bean="getHRAUserReportEveryDay" />
+                <ref bean="getHRAUserReportEveryDay"/>
                 <ref bean="receiptScanTaskJobCron"/>
+                <ref bean="synUpOrDownBannerEverMinute"/>
             </list>
         </property>
     </bean>
 
     <!-- ================================================================================= -->
     <!-- 定时拉去报告数据-->
-    <!-- 要调用的工作类 -->
-    <bean id="everyDayClearPushMessage" class="com.quanmin.task.SysUserHRAReport" />
+    <bean id="everyDayClearPushMessage" class="com.quanmin.task.SysUserHRAReport"/>
     <!--扫描以超过收货时间的订单-->
-    <bean id="receiptScanTask" class="com.quanmin.task.ReceiptScanTask" />
+    <bean id="receiptScanTask" class="com.quanmin.task.ReceiptScanTask"/>
+    <!--扫描banner图-->
+    <bean id="bannerTask" class="com.quanmin.task.BannerTask"/>
+
 
     <!--定时同步大数据平台项目信息-->
     <!-- <bean id="EveryDayProjectInfoSyn" class="com.quanmin.task.ProjectSynTask" init-method="projectSyncho"></bean>-->
@@ -52,6 +55,16 @@
     <bean id="receiptScanTaskJobCron" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="receiptScanTaskJob"/>
         <property name="cronExpression" value="0 0/2 * * * ? *"/>
+    </bean>
+
+    <!--同步banner图-->
+    <bean id="synUpOrDownBannerEverMinuteJob" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="bannerTask"/>
+        <property name="targetMethod" value="synUpOrDownBanner"/>
+    </bean>
+    <bean id="synUpOrDownBannerEverMinute" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="synUpOrDownBannerEverMinuteJob"/>
+        <property name="cronExpression" value="0 0/1 * * * ? *"/>
     </bean>
 
 </beans>

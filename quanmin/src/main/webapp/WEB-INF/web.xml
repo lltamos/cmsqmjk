@@ -52,84 +52,23 @@
         <url-pattern>/api/1/findbycommodityid</url-pattern>
         <url-pattern>/api/1/cart/addshoppingcart</url-pattern>
         <url-pattern>/api/1/usersaveorcanncelshopcollection</url-pattern>
+        <url-pattern>/third/1/*</url-pattern>
+        <url-pattern>/api/1/getinformationdetail</url-pattern>
+        <url-pattern>/api/1/collectionorcancelinformation</url-pattern>
     </filter-mapping>
 
     <!-- 添加过滤器 -->
-    <filter>
-        <filter-name>CommFilter</filter-name>
-        <filter-class>com.quanmin.filter.CommFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>CommFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-
     <!--<filter>-->
-        <!--<filter-name>post-data-dumper-filter</filter-name>-->
-        <!--<filter-class>com.quanmin.filter.PostDataDumperFilter </filter-class>-->
+        <!--<filter-name>CommFilter</filter-name>-->
+        <!--<filter-class>com.quanmin.filter.CommFilter</filter-class>-->
     <!--</filter>-->
     <!--<filter-mapping>-->
-        <!--<filter-name>post-data-dumper-filter</filter-name>-->
+        <!--<filter-name>CommFilter</filter-name>-->
         <!--<url-pattern>/*</url-pattern>-->
     <!--</filter-mapping>-->
+
     <!-- 过滤静态资源 -->
 
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>*.jpg</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>*.png</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>*.js</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>*.eot</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>*.svg</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>*.ttf</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>*.woff</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>*.otf</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>*.swf</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>*.exe</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>*.gif</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>*.json</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>*.html</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>*.css</url-pattern>
-    </servlet-mapping>
 
     <!-- 配置springmvc -->
     <servlet>
@@ -154,39 +93,102 @@
     </session-config>
 
 
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.jpg</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.png</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.gif</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.ico</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.js</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.css</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.html</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.xls</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.doc</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.json</url-pattern>
+    </servlet-mapping>
+    <!-- 字体相关  开始 -->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.eot</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.svg</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.ttf</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.woff</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.woff2</url-pattern>
+    </servlet-mapping>
+
+
     <!-- web异常页面处理 -->
-    <!--<error-page>-->
-    <!--<exception-type>java.lang.Throwable</exception-type>-->
-    <!--<location>/error_500</location>-->
-    <!--</error-page>-->
-    <!--<error-page>-->
-    <!--<exception-type>java.lang.Exception</exception-type>-->
-    <!--<location>/error_404</location>-->
-    <!--</error-page>-->
-    <!--<error-page>-->
-    <!--<error-code>500</error-code>-->
-    <!--<location>/error_500</location>-->
-    <!--</error-page>-->
-    <!--<error-page>-->
-    <!--<error-code>501</error-code>-->
-    <!--<location>/error_500</location>-->
-    <!--</error-page>-->
-    <!--<error-page>-->
-    <!--<error-code>502</error-code>-->
-    <!--<location>/error_500</location>-->
-    <!--</error-page>-->
-    <!--<error-page>-->
-    <!--<error-code>404</error-code>-->
-    <!--<location>/error_404</location>-->
-    <!--</error-page>-->
-    <!--<error-page>-->
-    <!--<error-code>403</error-code>-->
-    <!--<location>/error_404</location>-->
-    <!--</error-page>-->
-    <!--<error-page>-->
-    <!--<error-code>400</error-code>-->
-    <!--<location>/error_404</location>-->
-    <!--</error-page>-->
+    <error-page>
+    <exception-type>java.lang.Throwable</exception-type>
+    <location>/error_500</location>
+    </error-page>
+    <error-page>
+    <exception-type>java.lang.Exception</exception-type>
+    <location>/error_404</location>
+    </error-page>
+    <error-page>
+    <error-code>500</error-code>
+    <location>/error_500</location>
+    </error-page>
+    <error-page>
+    <error-code>501</error-code>
+    <location>/error_500</location>
+    </error-page>
+    <error-page>
+    <error-code>502</error-code>
+    <location>/error_500</location>
+    </error-page>
+    <error-page>
+    <error-code>404</error-code>
+    <location>/error_404</location>
+    </error-page>
+    <error-page>
+    <error-code>403</error-code>
+    <location>/error_404</location>
+    </error-page>
+    <error-page>
+    <error-code>400</error-code>
+    <location>/error_404</location>
+    </error-page>
 
 
     <!--	<welcome-file-list>

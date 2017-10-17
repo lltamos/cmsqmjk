@@ -15,7 +15,7 @@ public interface APPCollectionService {
 	 * @param type
 	 * @return
 	 */
-	ResultUtils SaveOrUpdateCollectionInformation(Integer informationId, Integer userId, String type);
+	ResultUtils saveOrUpdateCollectionInformation(Integer informationId, Integer userId, String type);
 
 	/**
 	 * 收藏列表

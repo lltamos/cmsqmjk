@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 
 /**
  * Created by llsmp on 2017/7/20.
+ * @author llsmp
  */
 public class ReflectionUtils {
 
@@ -19,7 +20,9 @@ public class ReflectionUtils {
                     if (clazz.getSimpleName().contains( "String" )) {
                         f.setAccessible( true );
                         Object o = f.get( obj );
-                        if (o == null) continue;
+                        if (o == null) {
+                            continue;
+                        }
                         String s = o.toString();
                         if ("".equals( s )) {
                             f.set( obj, null );

@@ -58,8 +58,8 @@ public class BaseRQAndQSParmUtils {
         log.setCreateTime(new Date());
         log.setLogType(0);
         log.setMethodName(method);
-        if (null != phoneType && !phoneType.equals("")) {
-            log.setPhonetype(phoneType.equals("0") ? "ios" : "Android");
+        if (null != phoneType && !"".equals(phoneType)) {
+            log.setPhonetype("0".equals(phoneType) ? "ios" : "Android");
         }
         log.setVersionId(version);
         log.setRequestIp(ip);

@@ -1,5 +1,6 @@
 package com.quanmin.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.quanmin.dao.jpa.*;
 import com.quanmin.dao.mapper.SysUserMapper;
 import com.quanmin.model.SysUser;
@@ -30,6 +31,7 @@ import java.util.*;
  * @author llsmp
  * @date 2017 /7/25
  */
+@SuppressWarnings("ALL")
 @Service
 @Transactional
 public class ShopOrderServiceImpl implements IShopOrderService {
@@ -118,13 +120,18 @@ public class ShopOrderServiceImpl implements IShopOrderService {
     @Transactional
     public ResultUtils productionOrder(WarpList shopCommodityOrders) {
 
-        if (shopCommodityOrders == null || shopCommodityOrders.getShopCommodityOrders().size() <= 0)
+        if (shopCommodityOrders == null || shopCommodityOrders.getShopCommodityOrders().size() <= 0) {
             return ResultUtils.returnException();
+        }
 
         ShopOrder shopOrder=shopCommodityOrders.getShopOrder();
-        if (shopOrder == null || shopOrder.getUserId() == null) return ResultUtils.returnException();
+        if (shopOrder == null || shopOrder.getUserId() == null) {
+            return ResultUtils.returnException();
+        }
 
-        if (shopOrder.getReceiptAddressId() == null) return ResultUtils.returnException();
+        if (shopOrder.getReceiptAddressId() == null) {
+            return ResultUtils.returnException();
+        }
 
         if (shopCommodityOrders.getShopCartIds() != null && shopCommodityOrders.getShopCartIds().size() > 0) {
             for (Long ids : shopCommodityOrders.getShopCartIds()) {
@@ -140,11 +147,15 @@ public class ShopOrderServiceImpl implements IShopOrderService {
 
         ShopReceiptAddress address=shopReceiptAddressDao.findOne(shopOrder.getReceiptAddressId());
 
-        if (address == null) return ResultUtils.returnFail("地址信息不存在");
+        if (address == null) {
+            return ResultUtils.returnFail("地址信息不存在");
+        }
 
         SysUser sysUser=userMapper.selectByPrimaryKey(shopOrder.getUserId());
 
-        if (sysUser == null) return ResultUtils.returnFail("用户不存在");
+        if (sysUser == null) {
+            return ResultUtils.returnFail("用户不存在");
+        }
         double totalPrice=0D;
         int count=0;
 
@@ -219,7 +230,9 @@ public class ShopOrderServiceImpl implements IShopOrderService {
 
         ShopOrder shopOrder=shopOrderDao.findOne(orderId);
         Integer userId1=shopOrder.getUserId();
-        if (userId == null || !userId.equals(userId1)) return ResultUtils.returnFail();
+        if (userId == null || !userId.equals(userId1)) {
+            return ResultUtils.returnFail();
+        }
         if (shopOrder.getOrderStatus() == 1 || shopOrder.getPayStatus() == 0) {
             try {
                 shopOrder.setType(1);
@@ -257,6 +270,7 @@ public class ShopOrderServiceImpl implements IShopOrderService {
             for (ShopCommodityOrder o : lists) {
                 ShopCommodity one=shopCommodityDao.findOne(o.getCommodityId());
                 Map<String, Object> temp=new HashMap<>();
+
                 temp.put("ShopCommodity", one);
                 temp.put("ShopCommodityOrder", o);
                 list.add(temp);
@@ -265,7 +279,8 @@ public class ShopOrderServiceImpl implements IShopOrderService {
             map.put("list", list);
             data.add(map);
         }
-
+        String jsonString=JSON.toJSONString(data);
+        System.out.println(jsonString);
 
         if (data.size() <= 0) {
             return ResultUtils.returnFail();
@@ -277,7 +292,9 @@ public class ShopOrderServiceImpl implements IShopOrderService {
     public ResultUtils deleteOrder(Integer userId, Long orderId) {
         ShopOrder shopOrder=shopOrderDao.findOne(orderId);
         Integer userId1=shopOrder.getUserId();
-        if (userId == null || !userId.equals(userId1)) return ResultUtils.returnFail();
+        if (userId == null || !userId.equals(userId1)) {
+            return ResultUtils.returnFail();
+        }
         try {
             shopOrder.setDelStatus(1);
             return ResultUtils.returnSucess();
@@ -331,11 +348,12 @@ public class ShopOrderServiceImpl implements IShopOrderService {
     @Override
     public ResultUtils orderdetails(Integer userId, Long orderId) {
         ShopOrder shopOrder=shopOrderDao.findOne(orderId);
-        if (shopOrder == null || userId == null || !userId.equals(shopOrder.getUserId()))
+        if (shopOrder == null || userId == null || !userId.equals(shopOrder.getUserId())) {
             return ResultUtils.returnException();
+        }
 
         long createTime=shopOrder.getCreateTime().getTime();
-        long time=new Date().getTime();
+        long time=System.currentTimeMillis();
         long ms=time - createTime;
         int ss=1000;
         int mi=ss * 60;
@@ -374,8 +392,9 @@ public class ShopOrderServiceImpl implements IShopOrderService {
     @Override
     public ResultUtils confirmReceipt(Integer userId, Long orderId) {
         ShopOrder shopOrder=shopOrderDao.findOne(orderId);
-        if (shopOrder == null || userId == null || !userId.equals(shopOrder.getUserId()))
+        if (shopOrder == null || userId == null || !userId.equals(shopOrder.getUserId())) {
             return ResultUtils.returnException();
+        }
 
         if (shopOrder.getPayStatus() == 1 && shopOrder.getOrderStatus() == 3 && shopOrder.getType() == 0) {
             shopOrder.setOrderStatus(4);
@@ -391,18 +410,22 @@ public class ShopOrderServiceImpl implements IShopOrderService {
         ShopOrder shopOrder=shopOrderDao.findOne(orderId);
 
 
-        if (shopOrder == null || userId == null || !userId.equals(shopOrder.getUserId()))
+        if (shopOrder == null || userId == null || !userId.equals(shopOrder.getUserId())) {
             return ResultUtils.returnException();
+        }
 
-        if (shopOrderAndCommodityId == null)
+        if (shopOrderAndCommodityId == null) {
             return ResultUtils.returnException();
+        }
 
         ShopCommodityOrder shopCommodityOrder=commidityOrderDao.findOne(shopOrderAndCommodityId);
-        if (shopCommodityOrder == null)
+        if (shopCommodityOrder == null) {
             return ResultUtils.returnException();
+        }
 
-        if (Double.parseDouble(money) > shopCommodityOrder.getAmount() * shopCommodityOrder.getPrices())
+        if (Double.parseDouble(money) > shopCommodityOrder.getAmount() * shopCommodityOrder.getPrices()) {
             return ResultUtils.returnFail("退款金额超过限制");
+        }
 
 
         if (type == 0) {
@@ -477,7 +500,9 @@ public class ShopOrderServiceImpl implements IShopOrderService {
     public ResultUtils refundexpress(Integer userId, Long refundID, Long backExpressid, String backExpressName, String backExpressNum) {
         ShopRefundRecord refundRecord=shopRefundRecordDao.findOne(refundID);
 
-        if (refundRecord == null || !Objects.equals(refundRecord.getUserId(), userId)) return ResultUtils.returnFail();
+        if (refundRecord == null || !Objects.equals(refundRecord.getUserId(), userId)) {
+            return ResultUtils.returnFail();
+        }
 
         refundRecord.setBackExpressDictId(backExpressid);
         refundRecord.setBackExpressName(backExpressName);
@@ -626,7 +651,6 @@ public class ShopOrderServiceImpl implements IShopOrderService {
     private ParamValue createParamValue(String str, Date date) {
         ParamValue v1=new ParamValue();
         v1.setKey(str);
-
         v1.setValue(date);
         return v1;
     }

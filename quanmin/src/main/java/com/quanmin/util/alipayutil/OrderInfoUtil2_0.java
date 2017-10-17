@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.Random;
 
 
+@SuppressWarnings("ALL")
 public class OrderInfoUtil2_0 {
 	
 	/**

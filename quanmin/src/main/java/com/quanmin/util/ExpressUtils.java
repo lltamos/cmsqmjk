@@ -11,6 +11,7 @@ import java.util.Map;
 /**
  * Created by yang on 2017/8/25.
  */
+@SuppressWarnings("ALL")
 public class ExpressUtils {
 
     /**

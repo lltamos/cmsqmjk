@@ -55,7 +55,7 @@ public class UserInfo {
 				// // 解析数据
 				JSONObject rootjsonBean = JSONObject.parseObject(result);
 				Object rescode = rootjsonBean.get("code");
-				if (rescode.toString().equals("200")) {
+				if ("200".equals(rescode.toString())) {
 					Object value = rootjsonBean.get("value");
 
 					JSONObject jsonBean = JSONObject.parseObject(value.toString());
@@ -66,7 +66,7 @@ public class UserInfo {
 					String height = (String) jsonBean.get("height");
 					String address = (String) jsonBean.get("address");
 					String sex = "1";
-					if (jsonBean.get("sex").equals("男")) {
+					if ("男".equals(jsonBean.get("sex"))) {
 						sex = "0";
 					}
 					String birthDay = (String) jsonBean.get("birthDay");

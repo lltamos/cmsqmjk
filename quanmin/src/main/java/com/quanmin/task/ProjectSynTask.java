@@ -53,7 +53,7 @@ public class ProjectSynTask {
                 List<Project> projectList = projectMapper.selectByExample( projectExample );
 
                 //请求成功
-                if (phpProjectInfo != null && phpProjectInfo.getResultCode().equals( "200" )) {
+                if (phpProjectInfo != null && "200".equals(phpProjectInfo.getResultCode())) {
 
                     List<PhpProjectInfo.ValueBean> phpProjectInfoValue = phpProjectInfo.getValue();
 
@@ -74,8 +74,8 @@ public class ProjectSynTask {
                             project1.setMemberPrice( Float.parseFloat( bean.getMemberprice() ) );
 
                             project1.setDescription( bean.getExplain() );
-                            project1.setCreateTime( DateFormatUtil.StringToDateyyyyMMdd( bean.getCreatetime() ) );
-                            project1.setEffectiveDate( DateFormatUtil.StringToDateyyyyMMdd( bean.getEffectivedate() ) );
+                            project1.setCreateTime( DateFormatUtil.stringToDateyyyyMMdd( bean.getCreatetime() ) );
+                            project1.setEffectiveDate( DateFormatUtil.stringToDateyyyyMMdd( bean.getEffectivedate() ) );
 
 
                             project1.setInfo( StringUtils.isBlank( bean.getInfo() ) ? null : bean.getInfo() );

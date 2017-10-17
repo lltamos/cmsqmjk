@@ -82,16 +82,30 @@ public class ShopCollection {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         ShopCollection that = (ShopCollection) o;
 
-        if (id != null ? !id.equals(that.id) : that.id != null) return false;
-        if (commodityId != null ? !commodityId.equals(that.commodityId) : that.commodityId != null) return false;
-        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
-        if (delStatus != null ? !delStatus.equals(that.delStatus) : that.delStatus != null) return false;
-        if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
+        if (id != null ? !id.equals(that.id) : that.id != null) {
+            return false;
+        }
+        if (commodityId != null ? !commodityId.equals(that.commodityId) : that.commodityId != null) {
+            return false;
+        }
+        if (userId != null ? !userId.equals(that.userId) : that.userId != null) {
+            return false;
+        }
+        if (delStatus != null ? !delStatus.equals(that.delStatus) : that.delStatus != null) {
+            return false;
+        }
+        if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) {
+            return false;
+        }
         return updateTime != null ? updateTime.equals(that.updateTime) : that.updateTime == null;
     }
 

@@ -1,5 +1,6 @@
 package com.quanmin.util;
 
+import lombok.Data;
 import org.springframework.data.domain.Page;
 
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import java.util.List;
  *
  * @author heasy
  */
+@Data
 public class ResultUtils implements Serializable {
 
     private String msg; // 错误信息
@@ -17,47 +19,6 @@ public class ResultUtils implements Serializable {
     private boolean success;// 是否成功
     private Integer count;// 总页数
     private Object value;// 返回数据
-
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public void setMsg(String msg) {
-        this.msg = msg;
-    }
-
-    public String getResultCode() {
-        return resultCode;
-    }
-
-    public void setResultCode(String resultCode) {
-        this.resultCode = resultCode;
-    }
-
-    public Object getValue() {
-        return value;
-    }
-
-    public void setValue(Object value) {
-        this.value = value;
-    }
-
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
-
-    public Integer getCount() {
-        return count;
-    }
-
-    public void setCount(Integer count) {
-        this.count = count;
-    }
 
     public static ResultUtils returnSucess(String msg, Object data) {
         ResultUtils res = new ResultUtils();
@@ -116,6 +77,17 @@ public class ResultUtils implements Serializable {
 
     }
 
+    public static ResultUtils returnFail(Object data) {
+        ResultUtils res = new ResultUtils();
+        res.setMsg( Commons.DATA_ERROR_STR );
+        res.setSuccess( Commons.DATA_FALSE );
+        res.setResultCode( Commons.DATA_ERROR_CODE );
+        res.setValue(data);
+        return res;
+    }
+
+
+
     public static ResultUtils returnSucess() {
 
         return returnSucess( Commons.DATA_SUCCESS_STR, null );
@@ -123,13 +95,18 @@ public class ResultUtils implements Serializable {
     }
 
     public static ResultUtils returnFail(String msg) {
-
         ResultUtils res = new ResultUtils();
         res.setMsg( msg );
         res.setSuccess( Commons.DATA_FALSE );
         res.setResultCode( Commons.DATA_ERROR_CODE );
         return res;
-
+    }
+    public static ResultUtils returnFail(String code,String msg) {
+        ResultUtils res = new ResultUtils();
+        res.setMsg( msg );
+        res.setSuccess( Commons.DATA_FALSE );
+        res.setResultCode( code );
+        return res;
     }
 
     public static ResultUtils returnFail() {

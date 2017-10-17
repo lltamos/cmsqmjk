@@ -3,27 +3,31 @@ package com.quanmin.qmmq.job;
 import com.quanmin.qmmq.mq.CmsHandler;
 import com.quanmin.qmmq.mq.CmsJob;
 import com.quanmin.qmmq.mq.CmsQueue;
-import com.quanmin.util.SendSMSUtil;
+import com.quanmin.util.SendSmsUtil;
+import org.springframework.stereotype.Service;
 
-public class SMSResendHandler extends CmsHandler<CmsQueue<SMSResendJob>> {
-
-
-    public SMSResendHandler(CmsQueue<SMSResendJob> cmsQueue, Class<? extends CmsJob> bindClass) {
-        super(cmsQueue, bindClass);
-    }
-
+/**
+ * @author DELL
+ */
+@Service
+public class SmsResendHandler extends CmsHandler<CmsQueue<SMSResendJob>> {
     @Override
-    public void hander(Object job) {
-        if (job instanceof CmsJob) {
+    public void handler(Object job) {
+        if (job instanceof SMSResendJob) {
             SMSResendJob smsJob=(SMSResendJob) job;
             String phone=smsJob.getPhone();
             String templateId=smsJob.getTemplateId();
             String[] strings=smsJob.getStrings();
-            Integer sendSMS=SendSMSUtil.sendSMS(phone, templateId, strings);
+            Integer sendSMS=SendSmsUtil.sendSMS(phone, templateId, strings);
             if (sendSMS != 0) {
                 getCmsQueue().put(smsJob);
             }
         }
+    }
+
+    @Override
+    public Class<? extends CmsJob> getBindClass() {
+        return SMSResendJob.class;
     }
 
 

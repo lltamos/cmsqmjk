@@ -46,7 +46,9 @@ public class RedisUtils {
         try {
             ValueOperations<String, String> valueOps = redisTemplate.opsForValue();
             valueOps.set(key, v);
-            if (time > 0) redisTemplate.expire(key, time, TimeUnit.SECONDS);
+            if (time > 0) {
+                redisTemplate.expire(key, time, TimeUnit.SECONDS);
+            }
             return true;
         } catch (Throwable t) {
             logger.error("缓存[" + key + "]失败, value[" + v + "]", t);
@@ -168,7 +170,9 @@ public class RedisUtils {
         try {
             SetOperations<String, String> valueOps = redisTemplate.opsForSet();
             valueOps.add(key, v);
-            if (time > 0) redisTemplate.expire(key, time, TimeUnit.SECONDS);
+            if (time > 0) {
+                redisTemplate.expire(key, time, TimeUnit.SECONDS);
+            }
             return true;
         } catch (Throwable t) {
             logger.error("缓存[" + key + "]失败, value[" + v + "]", t);
@@ -200,7 +204,9 @@ public class RedisUtils {
         try {
             SetOperations<String, String> setOps = redisTemplate.opsForSet();
             setOps.add(key, v.toArray(new String[v.size()]));
-            if (time > 0) redisTemplate.expire(key, time, TimeUnit.SECONDS);
+            if (time > 0) {
+                redisTemplate.expire(key, time, TimeUnit.SECONDS);
+            }
             return true;
         } catch (Throwable t) {
             logger.error("缓存[" + key + "]失败, value[" + v + "]", t);
@@ -248,7 +254,9 @@ public class RedisUtils {
         try {
             ListOperations<String, String> listOps = redisTemplate.opsForList();
             listOps.rightPush(key, v);
-            if (time > 0) redisTemplate.expire(key, time, TimeUnit.SECONDS);
+            if (time > 0) {
+                redisTemplate.expire(key, time, TimeUnit.SECONDS);
+            }
             return true;
         } catch (Throwable t) {
             logger.error("缓存[" + key + "]失败, value[" + v + "]", t);
@@ -280,7 +288,9 @@ public class RedisUtils {
         try {
             ListOperations<String, String> listOps = redisTemplate.opsForList();
             long l = listOps.rightPushAll(key, v);
-            if (time > 0) redisTemplate.expire(key, time, TimeUnit.SECONDS);
+            if (time > 0) {
+                redisTemplate.expire(key, time, TimeUnit.SECONDS);
+            }
             return true;
         } catch (Throwable t) {
             logger.error("缓存[" + key + "]失败, value[" + v + "]", t);
@@ -425,5 +435,17 @@ public class RedisUtils {
         return null;
     }
 
+    public String setValue(String key,String value){
+        Jedis jedis = jedisPool.getResource();
 
+        try {
+            String s=jedis.set(Commons.REDIS_KEY_ORDERNUMBER, value);
+            jedis.close();
+            return s;
+        } catch (Throwable t) {
+            logger.error("保存key[" + key + "]"+value);
+        }
+
+        return null;
+    }
 }

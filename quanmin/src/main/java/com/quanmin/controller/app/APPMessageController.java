@@ -24,6 +24,7 @@ import java.util.List;
  *
  * @author heasy
  */
+@SuppressWarnings("ALL")
 @Controller
 @RequestMapping(value = "/api/1/")
 public class APPMessageController {
@@ -85,7 +86,7 @@ public class APPMessageController {
         try {
             HashMap<String,Object> map = new HashMap<>();
             Integer result = messageService.countMessageByUserId(userId);
-            map.put("countunreadmessage",result);
+            map.put("countunreadmessage",null!=result?result:0);
             return null!=map&&map.size() > 0 ? ResultUtils.returnSucess(map) : ResultUtils.returnFail();
         } catch (Exception e) {
             e.printStackTrace();

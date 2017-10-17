@@ -18,14 +18,16 @@ public class StringUtil {
      * @return
      */
     public static String getExt(String name) {
-        if (name == null || "".equals(name) || !name.contains("."))
+        if (name == null || "".equals(name) || !name.contains(".")) {
             return "";
+        }
         return name.substring(name.lastIndexOf(".") + 1);
     }
 
     public static String parseFix(String str) {
-        if (str == null)
+        if (str == null) {
             str="";
+        }
         return "%" + str + "%";
     }
 }

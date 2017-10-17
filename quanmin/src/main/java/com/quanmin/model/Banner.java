@@ -5,6 +5,8 @@ import java.util.Date;
 public class Banner {
     private Integer id;
 
+    private String title;
+
     private Integer type;
 
     private String typeName;
@@ -39,6 +41,14 @@ public class Banner {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title == null ? null : title.trim();
     }
 
     public Integer getType() {

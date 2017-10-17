@@ -135,30 +135,51 @@ public class ShopCart {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         ShopCart shopCart = (ShopCart) o;
 
-        if (id != shopCart.id) return false;
-        if (commodityId != null ? !commodityId.equals(shopCart.commodityId) : shopCart.commodityId != null)
+        if (id != null ? !id.equals(shopCart.id) : shopCart.id != null) {
             return false;
-        if (type != null ? !type.equals(shopCart.type) : shopCart.type != null) return false;
-        if (userId != null ? !userId.equals(shopCart.userId) : shopCart.userId != null) return false;
-        if (amount != null ? !amount.equals(shopCart.amount) : shopCart.amount != null) return false;
-        if (delStatus != null ? !delStatus.equals(shopCart.delStatus) : shopCart.delStatus != null) return false;
-        if (createTime != null ? !createTime.equals(shopCart.createTime) : shopCart.createTime != null) return false;
-        if (updateTime != null ? !updateTime.equals(shopCart.updateTime) : shopCart.updateTime != null) return false;
-        if (ext1 != null ? !ext1.equals(shopCart.ext1) : shopCart.ext1 != null) return false;
-        if (ext2 != null ? !ext2.equals(shopCart.ext2) : shopCart.ext2 != null) return false;
-        if (ext3 != null ? !ext3.equals(shopCart.ext3) : shopCart.ext3 != null) return false;
-
-        return true;
+        }
+        if (commodityId != null ? !commodityId.equals(shopCart.commodityId) : shopCart.commodityId != null) {
+            return false;
+        }
+        if (type != null ? !type.equals(shopCart.type) : shopCart.type != null) {
+            return false;
+        }
+        if (userId != null ? !userId.equals(shopCart.userId) : shopCart.userId != null) {
+            return false;
+        }
+        if (amount != null ? !amount.equals(shopCart.amount) : shopCart.amount != null) {
+            return false;
+        }
+        if (delStatus != null ? !delStatus.equals(shopCart.delStatus) : shopCart.delStatus != null) {
+            return false;
+        }
+        if (createTime != null ? !createTime.equals(shopCart.createTime) : shopCart.createTime != null) {
+            return false;
+        }
+        if (updateTime != null ? !updateTime.equals(shopCart.updateTime) : shopCart.updateTime != null) {
+            return false;
+        }
+        if (ext1 != null ? !ext1.equals(shopCart.ext1) : shopCart.ext1 != null) {
+            return false;
+        }
+        if (ext2 != null ? !ext2.equals(shopCart.ext2) : shopCart.ext2 != null) {
+            return false;
+        }
+        return ext3 != null ? ext3.equals(shopCart.ext3) : shopCart.ext3 == null;
     }
 
     @Override
     public int hashCode() {
-        int result = (int) (id ^ (id >>> 32));
+        int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (commodityId != null ? commodityId.hashCode() : 0);
         result = 31 * result + (type != null ? type.hashCode() : 0);
         result = 31 * result + (userId != null ? userId.hashCode() : 0);

@@ -16,6 +16,7 @@ import redis.clients.jedis.JedisPool;
 
 import java.util.*;
 
+@SuppressWarnings("ALL")
 @Service
 public class APPTelemedicineServiceImpl implements APPTelemedicineService {
 
@@ -117,7 +118,7 @@ public class APPTelemedicineServiceImpl implements APPTelemedicineService {
     public ResultUtils getStoreByuserIdAndPosition(PositionHistory positionHistory, Integer medicalTypeId, Integer cityId) {
         ResultUtils result = new ResultUtils();
 
-        if (null != positionHistory.getPositionId() && positionHistory.getPositionId().equals( "" )) {
+        if (null != positionHistory.getPositionId() && "".equals(positionHistory.getPositionId())) {
 //        添加缓存历史位置
             Jedis jedis = jedisPool.getResource();
             String positionUserIds = jedis.get( "position" + positionHistory.getUserId() );
@@ -173,8 +174,9 @@ public class APPTelemedicineServiceImpl implements APPTelemedicineService {
 
             m = HttpRequestUtils.httpPost( Commons.API_GET_USER_ID, param );
             Object pUserId = m.get( "userid" );
-            if (userId == null)
-                ResultUtils.returnFail( Commons.DATA_EXCPTION_STR );
+            if (userId == null) {
+                ResultUtils.returnFail(Commons.DATA_EXCPTION_STR);
+            }
 
             ext1 = pUserId.toString();
             sysUser.setExt1( ext1 );

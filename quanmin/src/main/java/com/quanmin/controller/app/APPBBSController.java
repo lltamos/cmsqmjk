@@ -30,7 +30,7 @@ public class APPBBSController {
 
 	/**
 	 * 论坛列表
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping(value = "/showbbslist")

@@ -17,7 +17,7 @@ public class Smscode {
 
     private Integer smsid;
 
-    private Integer type;
+    private Integer type; //1,登录验证码，2，申请查看报告 3，邀请验证
 
     public Integer getId() {
         return id;

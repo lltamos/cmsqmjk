@@ -57,7 +57,7 @@ public class RecuperateSynTask {
                 List<Recuperate> recuperates = recuperateMapper.selectByExample( recuperateExample );
 
                 //请求成功
-                if (phpRecuperateInfo != null && phpRecuperateInfo.getResultCode().equals( "200" )) {
+                if (phpRecuperateInfo != null && "200".equals(phpRecuperateInfo.getResultCode())) {
 
                     List<PhpRecuperateInfo.ValueBean> phpRecuperateInfoValue = phpRecuperateInfo.getValue();
 
@@ -79,8 +79,8 @@ public class RecuperateSynTask {
                             recuperate1.setMemberPrice( Float.parseFloat( bean.getMemberprice() ) );
 
                             recuperate1.setDescription( bean.getExplain() );
-                            recuperate1.setCreateTime( DateFormatUtil.StringToDateyyyyMMdd( bean.getCreatetime() ) );
-                            recuperate1.setEffectiveDate( DateFormatUtil.StringToDateyyyyMMdd( bean.getEffectivedate() ) );
+                            recuperate1.setCreateTime( DateFormatUtil.stringToDateyyyyMMdd( bean.getCreatetime() ) );
+                            recuperate1.setEffectiveDate( DateFormatUtil.stringToDateyyyyMMdd( bean.getEffectivedate() ) );
                             recuperate1.setInfo( StringUtils.isBlank( bean.getInfo() ) ? null : bean.getInfo() );
                             recuperate1.setCoverUrl( bean.getCoverUrl() );
 
